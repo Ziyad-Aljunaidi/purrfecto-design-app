@@ -25,7 +25,7 @@ export default async function MainHeader() {
           </Link>
         </nav>
         <ThemeToggle  currentTheme={currentTheme}/>
-        <Button className="rounded-full">Get Started</Button>
+        <Button className="rounded-full font-[family-name:var(--font-geist-mono)]">Get Started</Button>
       </div>
     </header>
   );

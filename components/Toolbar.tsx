@@ -7,7 +7,13 @@ import {
   Italic,
   List,
   ListOrdered,
+
   Heading2,
+
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+
 } from "lucide-react";
 import { Toggle } from "./ui/toggle";
 
@@ -29,6 +35,7 @@ export default function Toolbar({ editor }: Props) {
       >
         <Heading2 className="h-4 w-4"/>
       </Toggle>
+
       <Toggle
         size="sm"
         pressed={editor.isActive("bold")}
@@ -74,6 +81,34 @@ export default function Toolbar({ editor }: Props) {
       >
         <ListOrdered className="h-4 w-4"/>
       </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("AlignLeft")}
+        onPressedChange={() =>
+          editor.chain().focus().setTextAlign("left").run()
+        }
+      >
+        <AlignLeft className="h-4 w-4"/>
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("AlignCenter")}
+        onPressedChange={() =>
+          editor.chain().focus().setTextAlign("center").run()
+        }
+      >
+        <AlignCenter className="h-4 w-4"/>
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("AlignRight")}
+        onPressedChange={() =>
+          editor.chain().focus().setTextAlign("right").run()
+        }
+      >
+        <AlignRight className="h-4 w-4"/>
+      </Toggle>
+
     </div>
   );
 }

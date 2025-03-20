@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 // import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -16,6 +17,7 @@ import {
 import Tiptap from "./Tiptap";
 
 
+
 const formSchema = z.object({
   Title: z
     .string()
@@ -25,11 +27,11 @@ const formSchema = z.object({
     .regex(/^[A-Za-z0-9\s]+$/, {
       message: "Only alphabets and spaces are allowed",
     }),
-  // media: z.string().url(),
   Description: z.string().nonempty().trim().min(17).max(200),
 });
 
 export default function CreateProjectForm() {
+  const [filesErrorMessages, setFilesErrorMessages] = useState<string[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
@@ -40,6 +42,7 @@ export default function CreateProjectForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    // values.Files = onFilesSelected;
     console.log(values);
   }
 
@@ -47,7 +50,7 @@ export default function CreateProjectForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 font-[family-name:var(--font-geist-mono)]"
+        className="space-y-4 font-[family-name:var(--font-jetbrains-mono)]"
       >
         <FormField
           control={form.control}
@@ -71,20 +74,17 @@ export default function CreateProjectForm() {
             </FormItem>
           )}
         />
+        
         <FormField
           control={form.control}
           name="Description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-2xl">
-               Description
-              </FormLabel>
+              <FormLabel className="text-2xl">Description</FormLabel>
               <FormControl>
                 <Tiptap description={field.value} onChange={field.onChange} />
               </FormControl>
-              <FormDescription>
-
-              </FormDescription>
+              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}

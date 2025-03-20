@@ -6,6 +6,10 @@ import Heading from "@tiptap/extension-heading";
 import ListItem from "@tiptap/extension-list-item";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
+import Text from "@tiptap/extension-text";
+import TextAlign from "@tiptap/extension-text-align";
+
+
 
 
 export default function Tiptap({
@@ -19,7 +23,7 @@ export default function Tiptap({
     extensions: [
       StarterKit.configure({}),
       Heading.configure({
-        HTMLAttributes: { class: "text-xl font-bold" },
+        HTMLAttributes: { class: "text-4xl font-bold" },
         levels: [2],
       }),
       ListItem,
@@ -31,6 +35,12 @@ export default function Tiptap({
           class: "list-decimal ml-6",
         },
       }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        alignments: ["left", "center", "right"],
+        defaultAlignment: "left",
+      }),
+      
     ],
     content: description,
     immediatelyRender: false,

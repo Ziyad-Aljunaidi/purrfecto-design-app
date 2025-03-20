@@ -13,3 +13,9 @@ export type PrProject = {
   status: "draft" | "published";
   visibility: "public" | "private";
 }
+
+// demo sortable list
+export type Item = {
+  id: number;
+  content: string;
+}

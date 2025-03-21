@@ -58,7 +58,7 @@ export default function MediaPicker() {
       if (acceptedFiles?.length > 0) {
         setFiles((prevFiles: AcceptedFile[]) => [
           ...prevFiles,
-          ...acceptedFiles.map((file: File, index: number) =>
+          ...acceptedFiles.map((file: File) =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
             })
@@ -76,7 +76,7 @@ export default function MediaPicker() {
       }
     },
     
-    [setFiles, setRejectedFiles, setThumbnail, removeFile]
+    [setFiles, setRejectedFiles, rejectedFiles, setThumbnail,thumbnail]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -111,13 +111,13 @@ export default function MediaPicker() {
           {isDragActive ? (
             <p>Drop the files here ...</p>
           ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
+            <p>Drag &#39;n&#39; drop some files here, or click to select files</p>
           )}
           <span className="text-sm text-gray-500">Max file size: 10MB</span>
         </div>
       </div>
       <ul className="mt-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-        {files.map((file, index) => (
+        {files.map((file) => (
 
               <li key={file.name} className={`relative h-52 rounded-lg ${clsx({ "outline-4 outline-primary ": file === thumbnail })}`}>
             <div onClick={() => setThumbnailHandler(file)} >

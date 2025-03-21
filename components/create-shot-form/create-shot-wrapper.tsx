@@ -1,11 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import ShotTitle from "./shot-title";
 import MediaPicker from "./media-picker";
-import { AcceptedFile } from "@/lib/types";
 import { Button } from "../ui/button";
-import Image from "next/image";
-import { set } from "react-hook-form";
+
 
 type Errors = {
   shotTitleError: string;

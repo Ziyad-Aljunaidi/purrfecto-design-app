@@ -26,7 +26,7 @@ export default function ThemeToggle({
       }
       debouncedSetTheme(theme);
     }
-  }, [theme]);
+  }, [theme, currentTheme, debouncedSetTheme]);
 
   const themeToggler = useCallback(() => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));

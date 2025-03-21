@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { X, ImageUp } from "lucide-react";
@@ -8,8 +8,8 @@ import { AcceptedFile } from "@/lib/types";
 import clsx from "clsx";
 
 
-export default function MediaPicker({mediaFiles}: {mediaFiles: AcceptedFile[]}) {
-  const [files, setFiles] = useState<AcceptedFile[]>(mediaFiles);
+export default function MediaPicker() {
+  const [files, setFiles] = useState<AcceptedFile[]>([]);
   const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
@@ -40,11 +40,12 @@ export default function MediaPicker({mediaFiles}: {mediaFiles: AcceptedFile[]}) 
   const removeFile = (name: string) => {
     setFiles((files) => {
       const updatedFiles = files.filter((file) => file.name !== name);
-      if(thumbnail?.name === name) {
-        setThumbnail(updatedFiles.length > 0 ? updatedFiles[0] : null);
-      }
       return updatedFiles;
     });
+    if(thumbnail?.name === name) {
+      setThumbnailHandler(files[0]);
+      console.log("thumbnail removed");
+    }
   };
 
   const setThumbnailHandler = (file: AcceptedFile) => {
@@ -53,7 +54,7 @@ export default function MediaPicker({mediaFiles}: {mediaFiles: AcceptedFile[]}) 
 
   
   const onDrop = useCallback(
-    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
+    (acceptedFiles: File[]) => {
       if (acceptedFiles?.length > 0) {
         setFiles((prevFiles: AcceptedFile[]) => [
           ...prevFiles,
@@ -123,7 +124,8 @@ export default function MediaPicker({mediaFiles}: {mediaFiles: AcceptedFile[]}) 
               <Image
                 src={file.preview}
                 alt={file.name}
-                fill={true}
+                width={500}
+                height={500}
                 className="h-full w-full object-cover rounded-lg aspect-[4/3] absolute"
                 onLoad={() => {
                   // URL.revokeObjectURL(file.preview);
@@ -138,7 +140,7 @@ export default function MediaPicker({mediaFiles}: {mediaFiles: AcceptedFile[]}) 
               >
                 <X size={16} />
               </button>
-              {file === thumbnail && (
+              {file.name === thumbnail?.name && (
                 <Badge className="absolute bottom-2 right-2 bg-lime-400 text-black">
                   Thumbnail
                 </Badge>

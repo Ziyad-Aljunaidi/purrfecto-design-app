@@ -6,7 +6,6 @@ import Heading from "@tiptap/extension-heading";
 import ListItem from "@tiptap/extension-list-item";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
-import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 
 

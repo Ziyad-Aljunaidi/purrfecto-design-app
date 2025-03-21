@@ -4,5 +4,5 @@ export interface AcceptedFile extends File {
   // size: number;
   // type: string;
   preview: string;
-  thumbnail: boolean;
+  // thumbnail: boolean;
 }

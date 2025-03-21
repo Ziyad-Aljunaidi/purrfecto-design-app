@@ -1,6 +1,4 @@
-import CreateProjectForm from "@/components/create-project-form";
 import CreateShotWrapper from "@/components/create-shot-form/create-shot-wrapper";
-import MediaPicker from "@/components/create-shot-form/media-picker";
 
 export default function CreatePage() {
   return (

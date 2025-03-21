@@ -5,11 +5,53 @@ import Image from "next/image";
 import { X, ImageUp } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { AcceptedFile } from "@/lib/types";
+import clsx from "clsx";
 
 
-export default function MediaPicker() {
-  const [files, setFiles] = useState<AcceptedFile[]>([]);
+export default function MediaPicker({mediaFiles}: {mediaFiles: AcceptedFile[]}) {
+  const [files, setFiles] = useState<AcceptedFile[]>(mediaFiles);
+  const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
+
+  function filesValidator(file: File) {
+    const isDuplicate = files.some((f) => f.name === file.name);
+    if (isDuplicate) {
+      return {
+        code: "duplicate-file",
+        message: "File with the same name already exists.",
+      };
+    }
+    if(file.size > 10 * 1024 * 1024) {
+      return {
+        code: "file-size",
+        message: "File size exceeds 10MB limit.",
+      };
+    }
+
+    if(files.length >= 5) {
+      return {
+        code: "max-files",
+        message: "Maximum 5 files allowed.",
+      };
+    }
+    return null;
+  }
+
+  const removeFile = (name: string) => {
+    setFiles((files) => {
+      const updatedFiles = files.filter((file) => file.name !== name);
+      if(thumbnail?.name === name) {
+        setThumbnail(updatedFiles.length > 0 ? updatedFiles[0] : null);
+      }
+      return updatedFiles;
+    });
+  };
+
+  const setThumbnailHandler = (file: AcceptedFile) => {
+    setThumbnail(file);
+  };
+
+  
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (acceptedFiles?.length > 0) {
@@ -18,22 +60,22 @@ export default function MediaPicker() {
           ...acceptedFiles.map((file: File, index: number) =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
-              thumbnail: false,
             })
           ),
         ]);
 
-        setFiles((currentFiles) => {
-          currentFiles[0].thumbnail = true;
-          return currentFiles;
-        });
       }
-
+      if (thumbnail === null && acceptedFiles.length > 0) {
+        setThumbnail(Object.assign(acceptedFiles[0]));
+        console.log(thumbnail);
+      }
       if (rejectedFiles?.length > 0) {
         setRejectedFiles(rejectedFiles);
+        console.log(rejectedFiles);
       }
     },
-    []
+    
+    [setFiles, setRejectedFiles, setThumbnail, removeFile]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -49,24 +91,13 @@ export default function MediaPicker() {
     },
     maxFiles: 5,
     maxSize: 10 * 1024 * 1024, // 10MB
+    validator: filesValidator,
   });
 
-  const removeFile = (name: string) => {
-    setFiles((files) => {
-      const updatedFiles = files.filter((file) => file.name !== name);
-      if (updatedFiles.length > 0) {
-        updatedFiles[0].thumbnail = true;
-      }
-      return updatedFiles;
-    });
-  };
+
   return (
     <div>
-      <h1
-        className={`text-2xl text-primary font-bold mb-2`}
-      >
-        Upload Media
-      </h1>
+      <h1 className={`text-2xl text-primary font-bold mb-2`}>Upload Media</h1>
       <div
         {...getRootProps({
           className:
@@ -75,7 +106,7 @@ export default function MediaPicker() {
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center space-y-2">
-          <ImageUp size={48} />
+          <ImageUp className="text-primary/80" size={48} />
           {isDragActive ? (
             <p>Drop the files here ...</p>
           ) : (
@@ -84,29 +115,35 @@ export default function MediaPicker() {
           <span className="text-sm text-gray-500">Max file size: 10MB</span>
         </div>
       </div>
-      <ul className="mt-6 grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
+      <ul className="mt-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
         {files.map((file, index) => (
-          <li key={file.name} className="relative h-52 rounded-lg shadow-lg ">
-            <Image
-              src={file.preview}
-              alt={file.name}
-              fill={true}
-              className="h-full w-full object-cover rounded-md aspect-[4/3]"
-              onLoad={() => {
-                URL.revokeObjectURL(file.preview);
-              }}
-            />
-            {/* {file.name} */}
-            <button
-              type="button"
-              className="absolute top-2 right-2 bg-input rounded-full p-1 cursor-pointer"
-              onClick={() => removeFile(file.name)}
-            >
-              <X size={16} />
-            </button>
-            <Badge className="absolute bottom-2 right-2 font-[family-name:var(--font-jetbrains-mono)]">
-              {file.thumbnail ? "Thumbnail" : "Not Thumbnail"}
-            </Badge>
+
+              <li key={file.name} className={`relative h-52 rounded-lg ${clsx({ "outline-4 outline-primary ": file === thumbnail })}`}>
+            <div onClick={() => setThumbnailHandler(file)} >
+              <Image
+                src={file.preview}
+                alt={file.name}
+                fill={true}
+                className="h-full w-full object-cover rounded-lg aspect-[4/3] absolute"
+                onLoad={() => {
+                  // URL.revokeObjectURL(file.preview);
+                  console.log("Image loaded");
+                }}
+              />
+              {/* {file.name} */}
+              <button
+                type="button"
+                className="absolute top-2 right-2 bg-lime-100 rounded-full p-1 cursor-pointer"
+                onClick={() => removeFile(file.name)}
+              >
+                <X size={16} />
+              </button>
+              {file === thumbnail && (
+                <Badge className="absolute bottom-2 right-2 bg-lime-400 text-black">
+                  Thumbnail
+                </Badge>
+              )}
+            </div>
           </li>
         ))}
       </ul>

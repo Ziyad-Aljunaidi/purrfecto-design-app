@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { X, ImageUp } from "lucide-react";
@@ -8,10 +8,15 @@ import { AcceptedFile } from "@/lib/types";
 import clsx from "clsx";
 
 
-export default function MediaPicker() {
+
+export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React.Dispatch<React.SetStateAction<AcceptedFile[]>>}) {
   const [files, setFiles] = useState<AcceptedFile[]>([]);
   const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
+
+  useEffect(() =>{
+    mediaFilesSetter(files);
+  },[files, mediaFilesSetter]);
 
   function filesValidator(file: File) {
     const isDuplicate = files.some((f) => f.name === file.name);
@@ -21,7 +26,7 @@ export default function MediaPicker() {
         message: "File with the same name already exists.",
       };
     }
-    if(file.size > 10 * 1024 * 1024) {
+    if( file.size > 10 * 1024 * 1024) {
       return {
         code: "file-size",
         message: "File size exceeds 10MB limit.",
@@ -37,20 +42,7 @@ export default function MediaPicker() {
     return null;
   }
 
-  const removeFile = (name: string) => {
-    setFiles((files) => {
-      const updatedFiles = files.filter((file) => file.name !== name);
-      return updatedFiles;
-    });
-    if(thumbnail?.name === name) {
-      setThumbnailHandler(files[0]);
-      console.log("thumbnail removed");
-    }
-  };
 
-  const setThumbnailHandler = (file: AcceptedFile) => {
-    setThumbnail(file);
-  };
 
   
   const onDrop = useCallback(
@@ -67,18 +59,39 @@ export default function MediaPicker() {
 
       }
       if (thumbnail === null && acceptedFiles.length > 0) {
-        setThumbnail(Object.assign(acceptedFiles[0]));
-        console.log(thumbnail);
+        setThumbnailHandler(Object.assign(acceptedFiles[0]));
+        console.log("rand");
       }
+
       if (rejectedFiles?.length > 0) {
         setRejectedFiles(rejectedFiles);
         console.log(rejectedFiles);
       }
     },
     
-    [setFiles, setRejectedFiles, rejectedFiles, setThumbnail,thumbnail]
+    [setFiles, setRejectedFiles, rejectedFiles,thumbnail]
   );
 
+  const removeFile = (name: string) => {
+    console.log(name === thumbnail?.name);
+    setFiles((files) => {
+      const updatedFiles = files.filter((file) => file.name !== name);
+      if(updatedFiles.length > 0 && thumbnail?.name === name) {
+        setThumbnail(Object.assign(updatedFiles[0]));
+        console.log("thumbnail removed");
+      }
+
+      if(updatedFiles.length === 0) {
+        setThumbnail(null);
+      }
+      return updatedFiles;
+    });
+
+  };
+
+  const setThumbnailHandler = (file: AcceptedFile) => {
+    setThumbnail(file);
+  };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -114,6 +127,7 @@ export default function MediaPicker() {
             <p>Drag &#39;n&#39; drop some files here, or click to select files</p>
           )}
           <span className="text-sm text-gray-500">Max file size: 10MB</span>
+          <span className="text-sm text-gray-500">Recommended Ratio 4:3</span>
         </div>
       </div>
       <ul className="mt-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -135,7 +149,7 @@ export default function MediaPicker() {
               {/* {file.name} */}
               <button
                 type="button"
-                className="absolute top-2 right-2 bg-lime-100 rounded-full p-1 cursor-pointer"
+                className="absolute top-2 bg-input right-2 rounded-full p-1 cursor-pointer"
                 onClick={() => removeFile(file.name)}
               >
                 <X size={16} />
@@ -149,6 +163,7 @@ export default function MediaPicker() {
           </li>
         ))}
       </ul>
+      <button onClick={()=>console.log(thumbnail, files)}>Clickme</button>
     </div>
   );
 }

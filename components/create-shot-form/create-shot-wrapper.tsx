@@ -3,6 +3,8 @@ import {useState } from "react";
 import ShotTitle from "./shot-title";
 import MediaPicker from "./media-picker";
 import { Button } from "../ui/button";
+import { AcceptedFile } from "@/lib/types";
+import Image from "next/image";
 
 
 type Errors = {
@@ -12,6 +14,7 @@ type Errors = {
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
   const [shotTitleSlug, setShotTitleSlug] = useState<string>("");
+  const [mediaFiles, setMediaFiles] = useState<AcceptedFile[]>([]);
 
   const [errors, setErrors] = useState<Errors | null>(null);
   function handleShotTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -45,7 +48,19 @@ export default function CreateShotWrapper() {
         ShotTitleHandler={handleShotTitleChange}
         ShotTitleError={errors?.shotTitleError || ""}
       />
-      <MediaPicker/>
+      <MediaPicker mediaFilesSetter={setMediaFiles}/>
+      {mediaFiles.length > 0 && (
+        mediaFiles.map((file: AcceptedFile) => (
+          <Image
+            key={file.name}
+            src={file.preview}
+            alt={file.name}
+            width={"200"}
+            height={200}
+            className="rounded-lg w-full h-auto"
+          />
+        ))
+      )}
       <Button className="font-[family-name:var(--font-jetbrains-mono)] rounded-full" onClick={handleShotSubmit}>Create Shot</Button>
     </div>
   );

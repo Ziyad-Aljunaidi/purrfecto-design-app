@@ -1,8 +1,11 @@
 export interface AcceptedFile extends File {
-  // path: string;
-  // name: string;
-  // size: number;
-  // type: string;
+
   preview: string;
-  // thumbnail: boolean;
+}
+
+
+export interface ShotItem {
+  id: number
+  type: 'text' | 'image' | 'video';
+  content: AcceptedFile;
 }

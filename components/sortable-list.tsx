@@ -24,6 +24,7 @@ const dummyItems: Item[] = [
 export default function SortableList() {
   const [items, setItems] = useState<Item[]>(dummyItems);
 
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     // console.log("active", active);
@@ -36,9 +37,10 @@ export default function SortableList() {
       });
       
     }
+    // console.log(JSON.stringify(items));
   };
 
-  console.log({items});
+  
   return (
     <div className="max-w-2xl mx-auto grid gap-2 my-10 font-[family-name:var(--font-jetbrains-mono)]">
       <h2 className="text-2xl font-bold mb-4">List of Sortable Items</h2>

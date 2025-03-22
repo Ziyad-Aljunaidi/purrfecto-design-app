@@ -20,12 +20,12 @@ export default function SortableItem({ item }: { item: Item }) {
   };
 
   return (
-    <div className="border-input border-2 bg-white p-8 rounded-lg flex justify-between" ref={setNodeRef} style={style} >
+    <div className="border-input border-2 bg-accent p-8 rounded-lg flex justify-between" ref={setNodeRef} style={style} >
       <div>
         <h3 className="text-lg font-bold">{content}</h3>
         {/* <p className="text-sm text-gray-600">ID: {id}</p> */}
       </div>
-      <button {...attributes} {...listeners} className="cursor-move hover:bg-gray-50 p-2 rounded-full"><GripVertical size={16}/></button>
+      <button {...attributes} {...listeners} className="cursor-move hover:bg-primary hover:text-accent p-2 rounded-full"><GripVertical size={16}/></button>
     </div>
   );
 }

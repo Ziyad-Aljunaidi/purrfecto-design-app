@@ -46,7 +46,7 @@ export default function Tiptap({
     
     editorProps: {
       attributes: {
-        class: "rounded-md border-2 min-h-[200px] p-4 border-input bg-transparent",
+        class: "rounded-xl border-2 min-h-[200px] p-4 border-input bg-transparent",
       },
     },
     onUpdate({ editor }) {

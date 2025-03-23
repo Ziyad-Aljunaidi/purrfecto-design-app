@@ -25,7 +25,7 @@ export default function Toolbar({ editor }: Props) {
   if (!editor) return null;
 
   return (
-    <div className="border-2 border-input bg-transparent rounded-md p-1 my-2 space-x-0.5">
+    <div className="border-2 border-input bg-transparent rounded-xl p-1 my-2 space-x-0.5">
       <Toggle
         size="sm"
         pressed={editor.isActive("heading")}

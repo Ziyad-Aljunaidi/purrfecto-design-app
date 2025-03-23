@@ -1,22 +1,37 @@
 "use client";
-import {useState } from "react";
+import {useState, useEffect } from "react";
 import ShotTitle from "./shot-title";
 import MediaPicker from "./media-picker";
 import { Button } from "../ui/button";
-import { AcceptedFile } from "@/lib/types";
-import Image from "next/image";
+import { AcceptedFile, ShotItem } from "@/lib/types";
+// import Image from "next/image";
+import Tiptap from "../Tiptap";
+import SortableShotList from "./sortable-shot-list";
 
 
 type Errors = {
   shotTitleError: string;
 };
 
+// type CreateShotWrapperProps = {
+//   ShotItems: ShotItem[];
+// };
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
   const [shotTitleSlug, setShotTitleSlug] = useState<string>("");
   const [mediaFiles, setMediaFiles] = useState<AcceptedFile[]>([]);
-
+  const [shotItems, setShotItems] = useState<ShotItem[]>([]);
   const [errors, setErrors] = useState<Errors | null>(null);
+
+  useEffect(() => {
+      const updatedMediaFiles = mediaFiles.map((file, index) => ({
+        id: index,
+        type: file.type.startsWith("image") ? "image" as "image" : "video" as "video",
+        content: file,
+      }));
+      console.log(updatedMediaFiles);
+      setShotItems(updatedMediaFiles);
+    }, [mediaFiles]);
   function handleShotTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setErrors({ shotTitleError: "" });
     const value = e.target.value;
@@ -48,9 +63,14 @@ export default function CreateShotWrapper() {
         ShotTitleHandler={handleShotTitleChange}
         ShotTitleError={errors?.shotTitleError || ""}
       />
+
+      
+
       <MediaPicker mediaFilesSetter={setMediaFiles}/>
-      {mediaFiles.length > 0 && (
+      <Tiptap description="" onChange={() => {}} />
+      {/* {mediaFiles.length > 0 && (
         mediaFiles.map((file: AcceptedFile) => (
+
           <Image
             key={file.name}
             src={file.preview}
@@ -58,9 +78,11 @@ export default function CreateShotWrapper() {
             width={"200"}
             height={200}
             className="rounded-lg w-full h-auto"
+            onLoad={() => URL.revokeObjectURL(file.preview)}
           />
         ))
-      )}
+      )} */}
+      <SortableShotList ShotItems={shotItems} />
       <Button className="font-[family-name:var(--font-jetbrains-mono)] rounded-full" onClick={handleShotSubmit}>Create Shot</Button>
     </div>
   );

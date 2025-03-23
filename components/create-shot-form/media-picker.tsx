@@ -7,16 +7,18 @@ import { Badge } from "../ui/badge";
 import { AcceptedFile } from "@/lib/types";
 import clsx from "clsx";
 
-
-
-export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React.Dispatch<React.SetStateAction<AcceptedFile[]>>}) {
+export default function MediaPicker({
+  mediaFilesSetter,
+}: {
+  mediaFilesSetter: React.Dispatch<React.SetStateAction<AcceptedFile[]>>;
+}) {
   const [files, setFiles] = useState<AcceptedFile[]>([]);
   const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
-  useEffect(() =>{
+  useEffect(() => {
     mediaFilesSetter(files);
-  },[files, mediaFilesSetter]);
+  }, [files, mediaFilesSetter]);
 
   function filesValidator(file: File) {
     const isDuplicate = files.some((f) => f.name === file.name);
@@ -26,14 +28,14 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
         message: "File with the same name already exists.",
       };
     }
-    if( file.size > 10 * 1024 * 1024) {
+    if (file.size > 10 * 1024 * 1024) {
       return {
         code: "file-size",
         message: "File size exceeds 10MB limit.",
       };
     }
 
-    if(files.length >= 5) {
+    if (files.length >= 5) {
       return {
         code: "max-files",
         message: "Maximum 5 files allowed.",
@@ -42,9 +44,6 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
     return null;
   }
 
-
-
-  
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles?.length > 0) {
@@ -56,7 +55,6 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
             })
           ),
         ]);
-
       }
       if (thumbnail === null && acceptedFiles.length > 0) {
         setThumbnailHandler(Object.assign(acceptedFiles[0]));
@@ -67,26 +65,26 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
         setRejectedFiles(rejectedFiles);
         console.log(rejectedFiles);
       }
+      console.log("hehe");
     },
-    
-    [setFiles, setRejectedFiles, rejectedFiles,thumbnail]
+
+    [setFiles, setRejectedFiles, rejectedFiles, thumbnail]
   );
 
   const removeFile = (name: string) => {
     console.log(name === thumbnail?.name);
     setFiles((files) => {
       const updatedFiles = files.filter((file) => file.name !== name);
-      if(updatedFiles.length > 0 && thumbnail?.name === name) {
+      if (updatedFiles.length > 0 && thumbnail?.name === name) {
         setThumbnail(Object.assign(updatedFiles[0]));
         console.log("thumbnail removed");
       }
 
-      if(updatedFiles.length === 0) {
+      if (updatedFiles.length === 0) {
         setThumbnail(null);
       }
       return updatedFiles;
     });
-
   };
 
   const setThumbnailHandler = (file: AcceptedFile) => {
@@ -108,7 +106,6 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
     validator: filesValidator,
   });
 
-
   return (
     <div>
       <h1 className={`text-2xl text-primary font-bold mb-2`}>Upload Media</h1>
@@ -124,7 +121,9 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
           {isDragActive ? (
             <p>Drop the files here ...</p>
           ) : (
-            <p>Drag &#39;n&#39; drop some files here, or click to select files</p>
+            <p>
+              Drag &#39;n&#39; drop some files here, or click to select files
+            </p>
           )}
           <span className="text-sm text-gray-500">Max file size: 10MB</span>
           <span className="text-sm text-gray-500">Recommended Ratio 4:3</span>
@@ -132,9 +131,13 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
       </div>
       <ul className="mt-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
         {files.map((file) => (
-
-              <li key={file.name} className={`relative h-52 rounded-lg ${clsx({ "outline-4 outline-primary ": file === thumbnail })}`}>
-            <div onClick={() => setThumbnailHandler(file)} >
+          <li
+            key={file.name}
+            className={`relative h-52 rounded-lg ${clsx({
+              "outline-4 outline-primary ": file === thumbnail,
+            })}`}
+          >
+            <div onClick={() => setThumbnailHandler(file)}>
               <Image
                 src={file.preview}
                 alt={file.name}
@@ -147,23 +150,24 @@ export default function MediaPicker({mediaFilesSetter}: {mediaFilesSetter: React
                 }}
               />
               {/* {file.name} */}
-              <button
-                type="button"
-                className="absolute top-2 bg-input right-2 rounded-full p-1 cursor-pointer"
-                onClick={() => removeFile(file.name)}
-              >
-                <X size={16} />
-              </button>
+
               {file.name === thumbnail?.name && (
                 <Badge className="absolute bottom-2 right-2 bg-lime-400 text-black">
                   Thumbnail
                 </Badge>
               )}
             </div>
+            <button
+              type="button"
+              className="absolute top-2 bg-input right-2 rounded-full p-1 cursor-pointer"
+              onClick={() => removeFile(file.name)}
+            >
+              <X size={16} />
+            </button>
           </li>
         ))}
       </ul>
-      <button onClick={()=>console.log(thumbnail, files)}>Clickme</button>
+      {/* <button onClick={() => console.log(thumbnail, files)}>Clickme</button> */}
     </div>
   );
 }

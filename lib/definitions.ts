@@ -1,3 +1,5 @@
+import { JSX } from 'react';
+
 export type PrProject = {
   id: string;
   title: string;
@@ -17,5 +19,5 @@ export type PrProject = {
 // demo sortable list
 export type Item = {
   id: number;
-  content: string;
+  content: string | JSX.Element;
 }

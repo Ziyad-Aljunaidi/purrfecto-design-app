@@ -24,11 +24,14 @@ export default function CreateShotWrapper() {
   const [errors, setErrors] = useState<Errors | null>(null);
 
   useEffect(() => {
-      const updatedMediaFiles = mediaFiles.map((file, index) => ({
-        id: index,
-        type: file.type.startsWith("image") ? "image" as "image" : "video" as "video",
-        content: file,
-      }));
+      const updatedMediaFiles = mediaFiles.map((file, index) => {
+        const type = file.type.startsWith("image") ? "image" as const : "video" as const;
+        return {
+          id: index,
+          type,
+          content: file,
+        };
+      });
       console.log(updatedMediaFiles);
       setShotItems(updatedMediaFiles);
     }, [mediaFiles]);

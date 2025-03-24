@@ -6,6 +6,7 @@ import { X, ImageUp } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { AcceptedFile } from "@/lib/types";
 import clsx from "clsx";
+import { toast } from "sonner";
 
 export default function MediaPicker({
   mediaFilesSetter,
@@ -14,7 +15,7 @@ export default function MediaPicker({
 }) {
   const [files, setFiles] = useState<AcceptedFile[]>([]);
   const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
-  const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
+  const [errors, setErrors] = useState<string | null>(null);
 
   useEffect(() => {
     mediaFilesSetter(files);
@@ -23,12 +24,14 @@ export default function MediaPicker({
   function filesValidator(file: File) {
     const isDuplicate = files.some((f) => f.name === file.name);
     if (isDuplicate) {
+      setErrors("File with the same name already exists.");
       return {
         code: "duplicate-file",
         message: "File with the same name already exists.",
       };
     }
     if (file.size > 10 * 1024 * 1024) {
+      setErrors("File size exceeds 10MB limit.");
       return {
         code: "file-size",
         message: "File size exceeds 10MB limit.",
@@ -36,6 +39,7 @@ export default function MediaPicker({
     }
 
     if (files.length >= 5) {
+      setErrors("Maximum 5 files allowed.");
       return {
         code: "max-files",
         message: "Maximum 5 files allowed.",
@@ -45,8 +49,11 @@ export default function MediaPicker({
   }
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles?.length > 0) {
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      if (
+        acceptedFiles?.length > 0 &&
+        files.length + acceptedFiles.length <= 5
+      ) {
         setFiles((prevFiles: AcceptedFile[]) => [
           ...prevFiles,
           ...acceptedFiles.map((file: File) =>
@@ -55,29 +62,37 @@ export default function MediaPicker({
             })
           ),
         ]);
+
+        setErrors(null);
+      } else {
+        setErrors("Maximum 5 files allowed.");
       }
+
       if (thumbnail === null && acceptedFiles.length > 0) {
         setThumbnailHandler(Object.assign(acceptedFiles[0]));
-        console.log("rand");
       }
 
-      if (rejectedFiles?.length > 0) {
-        setRejectedFiles(rejectedFiles);
-        console.log(rejectedFiles);
+      if (fileRejections?.length > 0) {
+        toast.error("Some files were rejected", {
+          description: (
+            <span className="text-primary">
+              {fileRejections[0].errors[0].message}
+            </span>
+          ),
+        });
       }
-      console.log("hehe");
     },
 
-    [setFiles, setRejectedFiles, rejectedFiles, thumbnail]
+    [setFiles, thumbnail, files.length]
   );
 
   const removeFile = (name: string) => {
-    console.log(name === thumbnail?.name);
+    // console.log(name === thumbnail?.name);
     setFiles((files) => {
       const updatedFiles = files.filter((file) => file.name !== name);
       if (updatedFiles.length > 0 && thumbnail?.name === name) {
         setThumbnail(Object.assign(updatedFiles[0]));
-        console.log("thumbnail removed");
+        // console.log("thumbnail removed");
       }
 
       if (updatedFiles.length === 0) {
@@ -88,6 +103,14 @@ export default function MediaPicker({
   };
 
   const setThumbnailHandler = (file: AcceptedFile) => {
+    if (file.type.startsWith("video")) {
+      toast.error("Video files cannot be set as thumbnails", {
+        description: (
+          <span className="text-primary">Please select an image file</span>
+        ),
+      });
+      return;
+    }
     setThumbnail(file);
   };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -108,7 +131,14 @@ export default function MediaPicker({
 
   return (
     <div>
-      <h1 className={`text-2xl text-primary font-bold mb-2`}>Upload Media</h1>
+      <h1
+        className={`text-2xl text-primary font-bold mb-2 ${clsx(
+          errors && "text-red-500"
+        )}`}
+      >
+        Upload Media
+      </h1>
+
       <div
         {...getRootProps({
           className:
@@ -116,7 +146,7 @@ export default function MediaPicker({
         })}
       >
         <input {...getInputProps()} />
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col text-center items-center space-y-2">
           <ImageUp className="text-primary/80" size={48} />
           {isDragActive ? (
             <p>Drop the files here ...</p>
@@ -129,34 +159,55 @@ export default function MediaPicker({
           <span className="text-sm text-gray-500">Recommended Ratio 4:3</span>
         </div>
       </div>
-      <ul className="mt-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+
+      {errors && <p className="text-red-500 my-2">{errors}</p>}
+
+      <ul className="mt-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
         {files.map((file) => (
           <li
             key={file.name}
             className={`relative h-52 rounded-lg ${clsx({
-              "outline-4 outline-primary ": file === thumbnail,
+              "outline-4 outline-lime-400 outline-offset-4 ":
+                file === thumbnail,
             })}`}
           >
-            <div onClick={() => setThumbnailHandler(file)}>
-              <Image
-                src={file.preview}
-                alt={file.name}
-                width={500}
-                height={500}
-                className="h-full w-full object-cover rounded-lg aspect-[4/3] absolute"
-                onLoad={() => {
-                  // URL.revokeObjectURL(file.preview);
-                  console.log("Image loaded");
-                }}
-              />
-              {/* {file.name} */}
+            {file.type.startsWith("image") && (
+              <div onClick={() => setThumbnailHandler(file)}>
+                <Image
+                  src={file.preview}
+                  alt={file.name}
+                  width={500}
+                  height={500}
+                  className="h-full w-full object-cover rounded-lg aspect-[4/3] absolute"
+                  onLoad={() => {
+                    // URL.revokeObjectURL(file.preview);
+                    console.log("Image loaded");
+                  }}
+                />
 
-              {file.name === thumbnail?.name && (
-                <Badge className="absolute bottom-2 right-2 bg-lime-400 text-black">
-                  Thumbnail
-                </Badge>
-              )}
-            </div>
+                {file.name === thumbnail?.name && (
+                  <Badge className="absolute bottom-2 right-2 bg-lime-400 text-black">
+                    Thumbnail
+                  </Badge>
+                )}
+              </div>
+            )}
+            {file.type.startsWith("video") && (
+              <div onClick={() => setThumbnailHandler(file)}>
+                <video
+                  src={file.preview}
+                  className="h-full w-full object-cover rounded-lg aspect-[4/3] absolute"
+                  autoPlay={true}
+                  loop={true}
+                />
+
+                {file.name === thumbnail?.name && (
+                  <Badge className="absolute bottom-2 right-2 bg-lime-400 text-black">
+                    Thumbnail
+                  </Badge>
+                )}
+              </div>
+            )}
             <button
               type="button"
               className="absolute top-2 bg-input right-2 rounded-full p-1 cursor-pointer"

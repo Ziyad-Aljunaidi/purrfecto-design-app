@@ -5,7 +5,7 @@ import MediaPicker from "./media-picker";
 import { Button } from "../ui/button";
 import { AcceptedFile, ShotItem } from "@/lib/types";
 // import Image from "next/image";
-import Tiptap from "../Tiptap";
+// import Tiptap from "../Tiptap";
 import SortableShotList from "./sortable-shot-list";
 
 
@@ -70,23 +70,9 @@ export default function CreateShotWrapper() {
       
 
       <MediaPicker mediaFilesSetter={setMediaFiles}/>
-      <Tiptap description="" onChange={() => {}} />
-      {/* {mediaFiles.length > 0 && (
-        mediaFiles.map((file: AcceptedFile) => (
-
-          <Image
-            key={file.name}
-            src={file.preview}
-            alt={file.name}
-            width={"200"}
-            height={200}
-            className="rounded-lg w-full h-auto"
-            onLoad={() => URL.revokeObjectURL(file.preview)}
-          />
-        ))
-      )} */}
+      {/* <Tiptap description="" onChange={() => {}} /> */}
       <SortableShotList ShotItems={shotItems} />
-      <Button className="font-[family-name:var(--font-jetbrains-mono)] rounded-full" onClick={handleShotSubmit}>Create Shot</Button>
+      <Button className="font-[family-name:var(--font-geist-sans)] rounded-full w-full md:w-auto p-6 text-md" onClick={handleShotSubmit}>Create Shot</Button>
     </div>
   );
 }

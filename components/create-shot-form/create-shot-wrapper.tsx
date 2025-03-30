@@ -1,5 +1,5 @@
 "use client";
-import {useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ShotTitle from "./shot-title";
 import MediaPicker from "./media-picker";
 import { Button } from "../ui/button";
@@ -7,72 +7,84 @@ import { AcceptedFile, ShotItem } from "@/lib/types";
 // import Image from "next/image";
 // import Tiptap from "../Tiptap";
 import SortableShotList from "./sortable-shot-list";
+import clsx from "clsx";
+import { CreateShotErrors } from "@/lib/types";
+import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
 
-
-type Errors = {
-  shotTitleError: string;
-};
-
-// type CreateShotWrapperProps = {
-//   ShotItems: ShotItem[];
-// };
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
   const [shotTitleSlug, setShotTitleSlug] = useState<string>("");
   const [mediaFiles, setMediaFiles] = useState<AcceptedFile[]>([]);
+  const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
   const [shotItems, setShotItems] = useState<ShotItem[]>([]);
-  const [errors, setErrors] = useState<Errors | null>(null);
+  const [errors, setErrors] = useState<CreateShotErrors | null>(null);
+  const [isStepOne, setIsStepOne] = useState<boolean>(true);
 
   useEffect(() => {
-      const updatedMediaFiles = mediaFiles.map((file, index) => {
-        const type = file.type.startsWith("image") ? "image" as const : "video" as const;
-        return {
-          id: index,
-          type,
-          content: file,
-        };
-      });
-      console.log(updatedMediaFiles);
-      setShotItems(updatedMediaFiles);
-    }, [mediaFiles]);
-  function handleShotTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setErrors({ shotTitleError: "" });
-    const value = e.target.value;
-    if (!value) {
-      setErrors({ shotTitleError: "Shot title is required" });
-    }
-    if(value.trim().length < 3 || value.trim().length > 50) {
-      setErrors({ shotTitleError: "Shot title must be between 3 and 50 characters" });
-    }
-    const slug = value
-      .toLowerCase()
-      .replace(/ /g, "-")
-      .replace(/[^a-zA-Z0-9-]/g, "");
-    // const slugId = slug + "-" + (Date.now() * Math.floor(Math.random() * 1000)).toString();
-    // console.log(slugId);
+    const updatedMediaFiles = mediaFiles.map((file, index) => {
+      const type = file.type.startsWith("image")
+        ? ("image" as const)
+        : ("video" as const);
+      return {
+        id: index,
+        type,
+        content: file,
+      };
+    });
+    console.log(updatedMediaFiles);
+    setShotItems(updatedMediaFiles);
+  }, [mediaFiles]);
 
-    setShotTitle(value);
-    setShotTitleSlug(slug);
+
+
+  function ToggleSteps() {
+    setIsStepOne(!isStepOne);
   }
-
-  function handleShotSubmit(){
+  function handleShotSubmit() {
     console.log("Shot Title: ", shotTitle);
     console.log("Shot Slug: ", shotTitleSlug);
   }
 
   return (
-    <div className="space-y-8">
-      <ShotTitle
-        ShotTitleHandler={handleShotTitleChange}
-        ShotTitleError={errors?.shotTitleError || ""}
-      />
+    <main>
+      <div className={`space-y-8 ${clsx(isStepOne ? 'block' : 'hidden')}`}>
+        <ShotTitle
+          // ShotTitleHandler={handleShotTitleChange}
+          // ShotTitleError={errors?.shotTitleError || ""}
+          shotTitleSetter={setShotTitle}
+          shotTitleSlugSetter={setShotTitleSlug}
+          errorsSetter={setErrors}
+          errorsGetter={errors}
+        />
 
-      
+        <MediaPicker
+          mediaFilesSetter={setMediaFiles}
+          thumbnailSetter={setThumbnail}
+          errorsSetter={setErrors}
+          errorsGetter={errors}
+        />
+        {/* <Tiptap description="" onChange={() => {}} /> */}
+        <SortableShotList ShotItems={shotItems} />
+      </div>
 
-      <MediaPicker mediaFilesSetter={setMediaFiles}/>
-      {/* <Tiptap description="" onChange={() => {}} /> */}
-      <SortableShotList ShotItems={shotItems} />
-      <Button className="font-[family-name:var(--font-geist-sans)] rounded-full w-full md:w-auto p-6 text-md" onClick={handleShotSubmit}>Create Shot</Button>
-    </div>
+      <div className={`space-y-8 ${clsx(isStepOne ? 'hidden' : 'block')}`}>
+        {thumbnail && <CreateShotStepTwo thumbnailImage={thumbnail} thumbnailSetter={setThumbnail} />}
+      </div>
+      <nav className={`flex flex-wrap gap-4 md:flex-nowrap ${(isStepOne ? 'justify-end' : 'justify-between')}`}>
+        <Button
+          className="font-[family-name:var(--font-jetbrains-mono)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer"
+          onClick={ToggleSteps}
+          disabled={!!errors?.shotTitleError || !!errors?.mediaFilesError || !!errors?.thumbnailError || !shotTitle || !mediaFiles.length || !thumbnail}
+        >
+          {isStepOne ? "Next" : "Back"}
+        </Button>
+        <Button
+          className={`font-[family-name:var(--font-jetbrains-mono)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(isStepOne ? 'hidden' : 'flex')}`}
+          onClick={handleShotSubmit}
+        >
+          Submit
+        </Button>
+      </nav>
+    </main>
   );
 }

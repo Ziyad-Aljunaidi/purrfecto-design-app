@@ -2,36 +2,47 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
-import { X, ImageUp } from "lucide-react";
+import { X, ImageUp} from "lucide-react";
 import { Badge } from "../ui/badge";
 import { AcceptedFile } from "@/lib/types";
 import clsx from "clsx";
 import { toast } from "sonner";
+import { CreateShotErrors } from "@/lib/types";
 
 export default function MediaPicker({
   mediaFilesSetter,
+  thumbnailSetter,
+  errorsSetter,
+  errorsGetter,
 }: {
   mediaFilesSetter: React.Dispatch<React.SetStateAction<AcceptedFile[]>>;
+  thumbnailSetter: React.Dispatch<React.SetStateAction<AcceptedFile | null>>;
+  errorsSetter: React.Dispatch<React.SetStateAction<CreateShotErrors | null>>;
+  errorsGetter: CreateShotErrors | null;
 }) {
   const [files, setFiles] = useState<AcceptedFile[]>([]);
   const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
-  const [errors, setErrors] = useState<string | null>(null);
+  // const [errors, setErrors] = useState<string | null>(null);
 
   useEffect(() => {
     mediaFilesSetter(files);
-  }, [files, mediaFilesSetter]);
+    thumbnailSetter(thumbnail);
+    // console.log(thumbnail)
+  }, [files, mediaFilesSetter, thumbnail, thumbnailSetter]);
 
   function filesValidator(file: File) {
     const isDuplicate = files.some((f) => f.name === file.name);
     if (isDuplicate) {
-      setErrors("File with the same name already exists.");
+      // setErrors("File with the same name already exists.");
+      errorsSetter({ mediaFilesError: "File with the same name already exists." });
       return {
         code: "duplicate-file",
         message: "File with the same name already exists.",
       };
     }
     if (file.size > 10 * 1024 * 1024) {
-      setErrors("File size exceeds 10MB limit.");
+      // setErrors("File size exceeds 10MB limit.");
+      errorsSetter({ mediaFilesError: "File size exceeds 10MB limit." });
       return {
         code: "file-size",
         message: "File size exceeds 10MB limit.",
@@ -39,7 +50,8 @@ export default function MediaPicker({
     }
 
     if (files.length >= 5) {
-      setErrors("Maximum 5 files allowed.");
+      // setErrors("Maximum 5 files allowed.");
+      errorsSetter({ mediaFilesError: "Maximum 5 files allowed." });
       return {
         code: "max-files",
         message: "Maximum 5 files allowed.",
@@ -63,9 +75,12 @@ export default function MediaPicker({
           ),
         ]);
 
-        setErrors(null);
+        // setErrors(null);
+        errorsSetter({ mediaFilesError: "" });
       } else {
-        setErrors("Maximum 5 files allowed.");
+
+        // setErrors("Maximum 5 files allowed.");
+        errorsSetter({ mediaFilesError: "Maximum 5 files allowed." });
       }
 
       if (thumbnail === null && acceptedFiles.length > 0) {
@@ -83,7 +98,7 @@ export default function MediaPicker({
       }
     },
 
-    [setFiles, thumbnail, files.length]
+    [setFiles, thumbnail, files.length, errorsSetter]
   );
 
   const removeFile = (name: string) => {
@@ -133,7 +148,7 @@ export default function MediaPicker({
     <div>
       <h1
         className={`text-2xl text-primary font-bold mb-2 ${clsx(
-          errors && "text-red-500"
+          errorsGetter?.mediaFilesError && "text-red-500"
         )}`}
       >
         Upload Media
@@ -160,7 +175,7 @@ export default function MediaPicker({
         </div>
       </div>
 
-      {errors && <p className="text-red-500 my-2">{errors}</p>}
+      {errorsGetter?.mediaFilesError && <p className="text-red-500 my-2">{errorsGetter.mediaFilesError}</p>}
 
       <ul className="mt-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
         {files.map((file) => (
@@ -186,9 +201,14 @@ export default function MediaPicker({
                 />
 
                 {file.name === thumbnail?.name && (
-                  <Badge className="absolute bottom-2 right-2 bg-lime-400 text-black">
+                  <div>
+                  <Badge className="absolute top-2 left-2 bg-lime-400 text-black">
                     Thumbnail
                   </Badge>
+                  {/* <button type="button" className="absolute top-10 right-2 bg-white hover:bg-lime-400 rounded-md p-1 cursor-pointer">
+                    <Pen size={16} className="text-black" />
+                  </button> */}
+                  </div>
                 )}
               </div>
             )}
@@ -210,15 +230,16 @@ export default function MediaPicker({
             )}
             <button
               type="button"
-              className="absolute top-2 bg-input right-2 rounded-full p-1 cursor-pointer"
+              className="absolute top-2 bg-white hover:bg-red-500 right-2 rounded-md p-1 cursor-pointer"
               onClick={() => removeFile(file.name)}
             >
-              <X size={16} />
+              <X size={16} className="text-black"/>
             </button>
           </li>
         ))}
       </ul>
       {/* <button onClick={() => console.log(thumbnail, files)}>Clickme</button> */}
+      {/* <CropThumbnailModal thumbnailImage={thumbnail} /> */}
     </div>
   );
 }

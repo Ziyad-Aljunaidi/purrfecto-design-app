@@ -9,3 +9,16 @@ export interface ShotItem {
   type: 'text' | 'image' | 'video';
   content: AcceptedFile;
 }
+
+export interface CreateShotErrors {
+  shotTitleError?: string;
+  mediaFilesError?: string;
+  thumbnailError?: string;
+}
+
+export interface CreateShotTag {
+  tags: string[];
+  addTag: (tag: string) => void;
+  removeTag: (tag: string) => void;
+  maxTags: number;
+}

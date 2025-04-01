@@ -22,7 +22,7 @@ export default function Tiptap({
     extensions: [
       StarterKit.configure({}),
       Heading.configure({
-        HTMLAttributes: { class: "text-4xl font-bold" },
+        HTMLAttributes: { class: "text-4xl" },
         levels: [2],
       }),
       ListItem,

@@ -9,7 +9,7 @@ export const TagField = ({ tags, addTag, removeTag, maxTags }: CreateShotTag) =>
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" || e.key === "," || e.key === " ") {
       e.preventDefault(); // Prevent form submission or new line creation
 
       if (
@@ -46,7 +46,7 @@ export const TagField = ({ tags, addTag, removeTag, maxTags }: CreateShotTag) =>
         {tags.map((tag: string, index: number) => (
           <span
             key={`${index}-${tag}`}
-            className="inline-flex items-start justify-start px-3 py-2 rounded-lg text-sm shadow-sm font-medium bg-blue-100 text-blue-600 mr-2"
+            className="inline-flex items-start justify-start px-4 py-2 rounded-full text-md shadow-sm font-medium bg-primary text-secondary mr-2"
           >
             {tag}
             <button

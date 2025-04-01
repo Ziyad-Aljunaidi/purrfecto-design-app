@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 export default function CropThumbnail({
   thumbnailImage,
   thumbnailSetter,
-  handleToggleCrop
+  handleToggleCrop,
 }: {
   thumbnailImage: AcceptedFile;
   thumbnailSetter: React.Dispatch<React.SetStateAction<AcceptedFile | null>>;
@@ -23,7 +23,10 @@ export default function CropThumbnail({
   } | null>(null);
 
   const onCropComplete = useCallback(
-    (_croppedArea: { x: number; y: number; width: number; height: number }, croppedAreaPixels: { x: number; y: number; width: number; height: number }) => {
+    (
+      _croppedArea: { x: number; y: number; width: number; height: number },
+      croppedAreaPixels: { x: number; y: number; width: number; height: number }
+    ) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
     []
@@ -69,13 +72,14 @@ export default function CropThumbnail({
         thumbnailSetter({ ...croppedFile, preview: croppedPreview });
       }, "image/jpeg");
     };
+    handleToggleCrop(false);
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-accent rounded-xl shadow-lg w-[90%] max-w-2xl p-6 relative">
         <h2 className="text-xl font-semibold mb-2">Crop Thumbnail</h2>
-        <div className="relative aspect-[4/3] bg-gray-300 rounded-xl overflow-hidden">
+        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
           <Cropper
             image={thumbnailImage?.preview || ""}
             crop={crop}
@@ -86,35 +90,37 @@ export default function CropThumbnail({
             onZoomChange={setZoom}
             objectFit="horizontal-cover"
             showGrid={false}
+            style={{
+              containerStyle: {
+                border: "none",
+              },
+            }}
           />
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-zinc-500/50 rounded-lg p-2 shadow-md">
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-zinc-500/50 rounded-lg p-2 shadow-md">
             <Slider
               value={[zoom]}
               min={1}
-              max={10}
-              step={0.1}
+              max={3}
+              step={0.01}
               onValueChange={(value) => setZoom(value[0])}
               className="w-64 bg-amber-500"
               aria-label="Zoom"
             />
-            </div>
-        </div>
-        <div className="flex  justify-between items-center mt-4">
-
-          <div className="flex space-x-2">
-            <Button
-              className="cursor-pointer bg-primary rounded-full px-6 py-2 hover:bg-gray-400 transition duration-200"
-              onClick={() => handleToggleCrop(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="cursor-pointer bg-primary rounded-full px-6 py-2 hover:bg-lime-500 transition duration-200"
-              onClick={handleCropImage}
-            >
-              Crop
-            </Button>
           </div>
+        </div>
+        <div className="flex justify-between items-center mt-4 flex-wrap gap-2 md:flex-nowrap">
+          <Button
+            className="cursor-pointer bg-primary text-md rounded-full px-6 py-2 flex-1 sm:flex-none sm:w-auto"
+            onClick={() => handleToggleCrop(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="cursor-pointer bg-primary text-md rounded-full px-6 py-2 flex-1 sm:flex-none sm:w-auto"
+            onClick={handleCropImage}
+          >
+            Crop
+          </Button>
         </div>
       </div>
     </div>

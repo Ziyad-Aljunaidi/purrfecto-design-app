@@ -205,9 +205,6 @@ export default function MediaPicker({
                   <Badge className="absolute top-2 left-2 bg-lime-400 text-black">
                     Thumbnail
                   </Badge>
-                  {/* <button type="button" className="absolute top-10 right-2 bg-white hover:bg-lime-400 rounded-md p-1 cursor-pointer">
-                    <Pen size={16} className="text-black" />
-                  </button> */}
                   </div>
                 )}
               </div>
@@ -219,6 +216,7 @@ export default function MediaPicker({
                   className="h-full w-full object-cover rounded-lg aspect-[4/3] absolute"
                   autoPlay={true}
                   loop={true}
+                  muted={true}
                 />
 
                 {file.name === thumbnail?.name && (

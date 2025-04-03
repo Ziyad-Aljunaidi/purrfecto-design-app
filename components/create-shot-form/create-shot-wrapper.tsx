@@ -10,6 +10,7 @@ import SortableShotList from "./sortable-shot-list";
 import clsx from "clsx";
 import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
+import { uploadFile } from "@/lib/do-spaces-operations";
 
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
@@ -40,13 +41,16 @@ export default function CreateShotWrapper() {
   function ToggleSteps() {
     setIsStepOne(!isStepOne);
   }
-  function handleShotSubmit() {
+  async function handleShotSubmit() {
     console.log("Shot Title: ", shotTitle);
     console.log("Shot Slug: ", shotTitleSlug);
+    const url = await uploadFile(thumbnail!);
+    
+    console.log("Thumbnail URL: ", url);
   }
 
   return (
-    <main>
+    <main className="font-[family-name:var(--font-noto-sans)]">
       <div className={`space-y-8 ${clsx(isStepOne ? 'block' : 'hidden')}`}>
         <ShotTitle
           // ShotTitleHandler={handleShotTitleChange}
@@ -72,14 +76,14 @@ export default function CreateShotWrapper() {
       </div>
       <nav className={`flex flex-wrap gap-4 md:flex-nowrap ${(isStepOne ? 'justify-end' : 'justify-between')}`}>
         <Button
-          className="font-[family-name:var(--font-jetbrains-mono)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer"
+          className="font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer"
           onClick={ToggleSteps}
           disabled={!!errors?.shotTitleError || !!errors?.mediaFilesError || !!errors?.thumbnailError || !shotTitle || !mediaFiles.length || !thumbnail}
         >
           {isStepOne ? "Next" : "Back"}
         </Button>
         <Button
-          className={`font-[family-name:var(--font-jetbrains-mono)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(isStepOne ? 'hidden' : 'flex')}`}
+          className={`font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(isStepOne ? 'hidden' : 'flex')}`}
           onClick={handleShotSubmit}
         >
           Submit

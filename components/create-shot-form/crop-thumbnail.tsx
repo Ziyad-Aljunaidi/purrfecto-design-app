@@ -32,7 +32,7 @@ export default function CropThumbnail({
     []
   );
 
-  const handleCropImage = async () => {
+  const handleCropImage = () => {
     if (!thumbnailImage || !croppedAreaPixels) return;
 
     const image = new Image();
@@ -60,16 +60,27 @@ export default function CropThumbnail({
       );
 
       canvas.toBlob((blob) => {
-        if (!blob) return;
+        if (!blob) {
+          console.error("Eror Occured while cropping the image.");
+          return;
+        }
 
-        const croppedFile = new File([blob], thumbnailImage.name, {
-          type: "image/jpeg",
-          lastModified: Date.now(),
-        });
+        const croppedFile = Object.assign(
+          new File([blob], thumbnailImage.name, {
+            type: "image/jpeg",
+            lastModified: Date.now(),
+          })
+        );
 
         const croppedPreview = URL.createObjectURL(croppedFile);
 
-        thumbnailSetter({ ...croppedFile, preview: croppedPreview });
+        const extendedFile: AcceptedFile = Object.assign(croppedFile, {
+          preview: croppedPreview,
+        });
+
+        // console.log("Cropped File: ", extendedFile);
+
+        thumbnailSetter(Object.assign(extendedFile));
       }, "image/jpeg");
     };
     handleToggleCrop(false);
@@ -77,7 +88,7 @@ export default function CropThumbnail({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-accent rounded-xl shadow-lg w-[90%] max-w-2xl p-6 relative">
+      <div className="bg-secondary rounded-xl shadow-lg w-[90%] max-w-2xl p-6 md:p-8 relative">
         <h2 className="text-xl font-semibold mb-2">Crop Thumbnail</h2>
         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
           <Cropper
@@ -93,6 +104,10 @@ export default function CropThumbnail({
             style={{
               containerStyle: {
                 border: "none",
+                backgroundColor: "transparent",
+                outline: "none",
+                boxShadow: "none",
+                overflow: "hidden",
               },
             }}
           />
@@ -103,20 +118,20 @@ export default function CropThumbnail({
               max={3}
               step={0.01}
               onValueChange={(value) => setZoom(value[0])}
-              className="w-64 bg-amber-500"
+              className="w-64"
               aria-label="Zoom"
             />
           </div>
         </div>
-        <div className="flex justify-between items-center mt-4 flex-wrap gap-2 md:flex-nowrap">
+        <div className="flex justify-between items-center mt-8 flex-wrap gap-2 md:flex-nowrap">
           <Button
-            className="cursor-pointer bg-primary text-md rounded-full px-6 py-2 flex-1 sm:flex-none sm:w-auto"
+            className="cursor-pointer bg-primary text-md rounded-full px-12 py-6 flex-1 sm:flex-none sm:w-auto"
             onClick={() => handleToggleCrop(false)}
           >
             Cancel
           </Button>
           <Button
-            className="cursor-pointer bg-primary text-md rounded-full px-6 py-2 flex-1 sm:flex-none sm:w-auto"
+            className="cursor-pointer bg-primary text-md rounded-full px-12 py-6 flex-1 sm:flex-none sm:w-auto"
             onClick={handleCropImage}
           >
             Crop

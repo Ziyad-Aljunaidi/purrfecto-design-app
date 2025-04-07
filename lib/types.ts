@@ -21,3 +21,9 @@ export interface CreateShotTag {
   removeTag: (tag: string) => void;
   maxTags: number;
 }
+
+export type todoType = {
+  id: number;
+  text: string;
+  done: boolean;
+};

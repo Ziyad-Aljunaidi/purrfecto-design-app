@@ -3,14 +3,15 @@ import { useState, useEffect } from "react";
 import ShotTitle from "./shot-title";
 import MediaPicker from "./media-picker";
 import { Button } from "../ui/button";
-import { AcceptedFile, ShotItem } from "@/lib/types";
+import { AcceptedFile, ShotItem, ShotData } from "@/lib/types";
 // import Image from "next/image";
 // import Tiptap from "../Tiptap";
 import SortableShotList from "./sortable-shot-list";
 import clsx from "clsx";
 import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
-import { uploadFile } from "@/lib/do-spaces-operations";
+import { uploadThumbnail } from "@/lib/do-spaces-operations";
+import { submitShotAction } from "@/actions/submitShotAction";
 
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
@@ -44,9 +45,27 @@ export default function CreateShotWrapper() {
   async function handleShotSubmit() {
     console.log("Shot Title: ", shotTitle);
     console.log("Shot Slug: ", shotTitleSlug);
-    const url = await uploadFile(thumbnail!);
+    const thumbnail_url = await uploadThumbnail(thumbnail!, shotTitleSlug!);
+    // const media_urls = mediaFiles.map((file) => {
+    try {
+      const ShotData: ShotData = {
+        id: "1234567850abddef1234567890abcdef", // Replace with actual ID generation logic
+        userId: "1234567890abcdef1234567890abcdef", // Replace with actual user ID
+        slug: shotTitleSlug,
+        title: shotTitle,
+        description: "", // Add description if needed
+        thumbnailUrl: thumbnail_url!,
+        views: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      submitShotAction(ShotData);
+      console.log("Shot Data: ", ShotData);
+    }catch (error) {
+      console.error("Error submitting shot: ", error);
+    }
     
-    console.log("Thumbnail URL: ", url);
+    console.log("Thumbnail URL: ", thumbnail_url);
   }
 
   return (

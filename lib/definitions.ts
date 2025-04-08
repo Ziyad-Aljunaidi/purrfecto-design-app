@@ -21,3 +21,5 @@ export type Item = {
   id: number;
   content: string | JSX.Element;
 }
+
+export const userIdTest = "1234567890abcdef1234567890abcdef"; // Example user ID for testing purposes

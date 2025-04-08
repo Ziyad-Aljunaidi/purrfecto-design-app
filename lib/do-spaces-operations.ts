@@ -3,9 +3,12 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/do-spaces-config";
 import { AcceptedFile } from "./types";
 
-export async function uploadFile(file: AcceptedFile ) {
+// testing UserId
+import { userIdTest } from "./definitions";
+
+export async function uploadThumbnail(file: AcceptedFile, shotSlug: string) {
   const bucketName = process.env.DO_SPACES_BUCKET_NAME!;
-  const key = `${Date.now()}.${file.name.split(".").pop()}`; // Unique key for the file
+  const key = `${userIdTest}/${shotSlug}-${Date.now()}-thumbnail.${file.name.split(".").pop()}`; // Unique key for the file
   console.log("Buffer: ", file);
   if (file.type === "image/jpeg" || file.type === "image/png") {
     
@@ -28,7 +31,7 @@ export async function uploadFile(file: AcceptedFile ) {
       await s3Client.send(command);
 
       // Return the public URL of the uploaded file
-      return `https://${bucketName}.lon1.digitaloceanspaces.com/${key}`;
+      return `${process.env.DO_SPACES_CDN_URL}/${key}`;
     } catch (error) {
       console.error("Error uploading file:", error);
       // throw new Error("Failed to upload file.");

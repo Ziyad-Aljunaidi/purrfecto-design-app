@@ -46,7 +46,7 @@ export const shots = pgTable('shots', {
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
   description: text('description'),
-  thumbnailUrl: text('image_url').notNull(),
+  thumbnailUrl: text('thumbnail_url').notNull(),
   // media:[text('media_url').notNull()],
   views: integer('views').default(0),
   createdAt: timestamp('created_at').defaultNow(),
@@ -70,6 +70,7 @@ export const attachments = pgTable('attachments', {
 export const tags = pgTable('tags', {
   id: serial('id').primaryKey(),
   name: text('name').notNull().unique(),
+  taged: integer('taged').default(0),
 });
 
 //

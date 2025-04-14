@@ -1,8 +1,21 @@
-import {useState, ChangeEvent} from "react";
-import { CreateShotTag } from "@/lib/types";
+import {useState, useEffect, ChangeEvent} from "react";
+import { CreateShotTag, CreateShotErrors } from "@/lib/types";
 
-export const TagField = ({ tags, addTag, removeTag, maxTags }: CreateShotTag) => {
+interface ExtendedCreateShotTag extends CreateShotTag {
+  errorSetter: React.Dispatch<React.SetStateAction<CreateShotErrors | null>>;
+  error: CreateShotErrors | null;
+  tagsSetter: React.Dispatch<React.SetStateAction<string[]>>;
+}
+export const TagField = ({ tags, addTag, removeTag, maxTags, tagsSetter, errorSetter, error }: ExtendedCreateShotTag) => {
   const [userInput, setUserInput] = useState<string>("");
+
+  useEffect(() => {
+    errorSetter({ tagsError: "" });
+    if (tags.length > 0 && tags.length < 5) {
+      errorSetter({ tagsError: "You must add at least 5 tags" });
+    }
+    tagsSetter(tags);
+  }, [tags, tagsSetter, errorSetter]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.target.value);
@@ -16,15 +29,18 @@ export const TagField = ({ tags, addTag, removeTag, maxTags }: CreateShotTag) =>
         userInput.trim() !== "" &&
         userInput.length <= 12 &&
         tags.length < maxTags
+
       ) {
         addTag(userInput);
         setUserInput(""); // Clear the input after adding a tag
+        errorSetter({ tagsError: "" });
       }
     }
   };
 
   return (
     <div className="flex flex-col w-auto m-4">
+      <h1 className={`my-4 font-bold text-primary text-2xl ${error?.tagsError && "text-red-500"}`}>Add Tags</h1>
       <input
         name="keyword_tags"
         type="text"
@@ -59,6 +75,7 @@ export const TagField = ({ tags, addTag, removeTag, maxTags }: CreateShotTag) =>
           </span>
         ))}
       </div>
+      {error && <p className="text-red-500">{error.tagsError}</p>}
     </div>
   );
 };

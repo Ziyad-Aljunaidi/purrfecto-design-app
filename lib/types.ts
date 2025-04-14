@@ -13,6 +13,8 @@ export interface CreateShotErrors {
   shotTitleError?: string;
   mediaFilesError?: string;
   thumbnailError?: string;
+  descriptionError?: string;
+  tagsError?: string;
 }
 
 export interface CreateShotTag {
@@ -20,6 +22,8 @@ export interface CreateShotTag {
   addTag: (tag: string) => void;
   removeTag: (tag: string) => void;
   maxTags: number;
+  // errorSetter: React.Dispatch<React.SetStateAction<CreateShotErrors | null>>;
+  // error: CreateShotErrors | null;
 }
 
 

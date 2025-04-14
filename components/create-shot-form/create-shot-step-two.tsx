@@ -1,24 +1,37 @@
-import {useState} from "react";
-import { AcceptedFile } from "@/lib/types";
+import { useState } from "react";
+import { AcceptedFile, CreateShotErrors } from "@/lib/types";
 import Image from "next/image";
 import { Pen } from "lucide-react";
 import { TagField } from "@/components/tags-input";
 import useTagInput from "@/hooks/useTag";
-import Tiptap from "../Tiptap";
+// import Tiptap from "../Tiptap";
 import CropThumbnail from "@/components/create-shot-form/crop-thumbnail";
-
-
+import DescriptionTextarea from "@/components/create-shot-form/description-textarea";
 
 export default function CreateShotStepTwo({
   thumbnailImage,
   thumbnailSetter,
+  shotDescriptionSetter,
+  shotTagsSetter,
+  errors,
+  errorsSetter,
 }: {
   thumbnailImage: AcceptedFile;
   thumbnailSetter: React.Dispatch<React.SetStateAction<AcceptedFile | null>>;
+  shotTagsSetter: React.Dispatch<React.SetStateAction<string[]>>;
+  shotDescriptionSetter: React.Dispatch<React.SetStateAction<string>>;
+  errors: CreateShotErrors | null;
+  errorsSetter: React.Dispatch<React.SetStateAction<CreateShotErrors | null>>;
 }) {
-
   const { tags, handleAddTag, handleRemoveTage } = useTagInput(25);
   const [isCropOpen, setIsCropOpen] = useState(false);
+
+  // useEffect(() => {
+  //   if(tags.length > 0 && tags.length < 5) {
+  //     errorsSetter({tagsError:" must be at least 5 tags long"});
+  //   }
+  //   shotTagsSetter(tags);
+  // }, [tags, shotTagsSetter]);
 
   function handleToggleCrop(isCropOpenBool: boolean) {
     setIsCropOpen(isCropOpenBool);
@@ -47,21 +60,32 @@ export default function CreateShotStepTwo({
           </h3>
         </div>
         <div className="w-full md:w-2/3 bg-accent/30 rounded-lg ">
-          <h2 className="m-4 font-bold text-primary text-lg">Add Tags</h2>
           <TagField
             tags={tags}
             addTag={handleAddTag}
             removeTag={handleRemoveTage}
             maxTags={25}
+            tagsSetter={shotTagsSetter}
+            errorSetter={errorsSetter}
+            error={errors}
           />
         </div>
         {isCropOpen && (
-          <CropThumbnail thumbnailImage={thumbnailImage} thumbnailSetter={thumbnailSetter} handleToggleCrop={handleToggleCrop} />
+          <CropThumbnail
+            thumbnailImage={thumbnailImage}
+            thumbnailSetter={thumbnailSetter}
+            handleToggleCrop={handleToggleCrop}
+          />
         )}
       </div>
       <div className=" bg-accent/30 rounded-xl p-4">
-        <h2 className="m-4 font-bold text-primary text-lg">Add Description</h2>
-        <Tiptap description="" onChange={() => {}} />
+        {/* <h2 className="my-4 lg:m-4 font-bold text-primary text-lg">Add Description</h2> */}
+        {/* <Tiptap description="" onChange={() => {}} /> */}
+        <DescriptionTextarea
+          descriptionSetter={shotDescriptionSetter}
+          error={errors}
+          errorSetter={errorsSetter}
+        />
       </div>
     </main>
   );

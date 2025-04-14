@@ -1,3 +1,5 @@
+// FUTURE FEATURE UNDER DEVELOPMENT
+// This component is a WYSIWYG editor using Tiptap.
 'use client';
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -7,9 +9,6 @@ import ListItem from "@tiptap/extension-list-item";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import TextAlign from "@tiptap/extension-text-align";
-
-
-
 
 export default function Tiptap({
   description,

@@ -9,10 +9,16 @@ export default async function MainHeader() {
   return (
     <header className="w-full bg-background  border-b px-4 py-3 flex items-center justify-between">
       <Link href="/" className="flex items-center">
-        <div className="w-10 h-10 " aria-label="Logo">
-          <Image src="/logo.png" alt="Logo" width={35} height={35} className="w-full h-full" />
+        <div className="flex " aria-label="Logo">
+          {/* {currentTheme === 'dark' ? (
+            <Image src="/white-text-logo.png" alt="Logo" width={40} height={40} className="w-full items-center aspect-auto" />
+          ) : <Image src="/text-logo.png" alt="Logo" width={40} height={40} className="w-full items-center aspect-auto" />} */}
+          {/* <Image src="/logo2.png" alt="Logo" width={40} height={40} className=" w-full items-center aspect-auto mx-4" /> */}
+          {/* <Image src="/white-text-logo.png" alt="Logo" width={40} height={40} className="hidden dark:block w-full items-center aspect-auto" /> */}
+          {/* <Image src="/text-logo.png" alt="Logo" width={40} height={40} className="block dark:hidden w-full items-center aspect-auto antialiased" /> */}
+          <Image src="/circle-logo.svg" alt="Logo" width={50} height={50} className="items-center aspect-auto mx-4" />
         </div>
-        <span className="ml-2 font-semibold hidden sm:inline-block">Purrfecto</span>
+        {/* <span className="ml-2 font-semibold hidden sm:inline-block">Purrfecto</span> */}
       </Link>
 
       <div className="flex items-center gap-4">

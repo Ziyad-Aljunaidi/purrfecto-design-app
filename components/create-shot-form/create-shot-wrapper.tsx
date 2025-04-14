@@ -4,8 +4,6 @@ import ShotTitle from "./shot-title";
 import MediaPicker from "./media-picker";
 import { Button } from "../ui/button";
 import { AcceptedFile, ShotItem, ShotData } from "@/lib/types";
-// import Image from "next/image";
-// import Tiptap from "../Tiptap";
 import SortableShotList from "./sortable-shot-list";
 import clsx from "clsx";
 import { CreateShotErrors } from "@/lib/types";
@@ -16,6 +14,8 @@ import { submitShotAction } from "@/actions/submitShotAction";
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
   const [shotTitleSlug, setShotTitleSlug] = useState<string>("");
+  const [shotDescription, setShotDescription] = useState<string>("");
+  const [shotTags, setShotTags] = useState<string[]>([]);
   const [mediaFiles, setMediaFiles] = useState<AcceptedFile[]>([]);
   const [thumbnail, setThumbnail] = useState<AcceptedFile | null>(null);
   const [shotItems, setShotItems] = useState<ShotItem[]>([]);
@@ -37,14 +37,14 @@ export default function CreateShotWrapper() {
     setShotItems(updatedMediaFiles);
   }, [mediaFiles]);
 
-
-
   function ToggleSteps() {
     setIsStepOne(!isStepOne);
   }
   async function handleShotSubmit() {
     console.log("Shot Title: ", shotTitle);
     console.log("Shot Slug: ", shotTitleSlug);
+    console.log("Shot Description: ", shotDescription);
+    console.log("Shot Tags: ", shotTags);
     const thumbnail_url = await uploadThumbnail(thumbnail!, shotTitleSlug!);
     // const media_urls = mediaFiles.map((file) => {
     try {
@@ -61,16 +61,16 @@ export default function CreateShotWrapper() {
       };
       submitShotAction(ShotData);
       console.log("Shot Data: ", ShotData);
-    }catch (error) {
+    } catch (error) {
       console.error("Error submitting shot: ", error);
     }
-    
+
     console.log("Thumbnail URL: ", thumbnail_url);
   }
 
   return (
     <main className="font-[family-name:var(--font-noto-sans)]">
-      <div className={`space-y-8 ${clsx(isStepOne ? 'block' : 'hidden')}`}>
+      <div className={`space-y-8 ${clsx(isStepOne ? "block" : "hidden")}`}>
         <ShotTitle
           // ShotTitleHandler={handleShotTitleChange}
           // ShotTitleError={errors?.shotTitleError || ""}
@@ -90,20 +90,49 @@ export default function CreateShotWrapper() {
         <SortableShotList ShotItems={shotItems} />
       </div>
 
-      <div className={`space-y-8 ${clsx(isStepOne ? 'hidden' : 'block')}`}>
-        {thumbnail && <CreateShotStepTwo thumbnailImage={thumbnail} thumbnailSetter={setThumbnail} />}
+      <div className={`space-y-8 ${clsx(isStepOne ? "hidden" : "block")}`}>
+        {thumbnail && (
+          <CreateShotStepTwo
+            thumbnailImage={thumbnail}
+            thumbnailSetter={setThumbnail}
+            shotDescriptionSetter={setShotDescription}
+            shotTagsSetter={setShotTags}
+            errorsSetter={setErrors}
+            errors={errors}
+          />
+        )}
       </div>
-      <nav className={`flex flex-wrap gap-4 md:flex-nowrap ${(isStepOne ? 'justify-end' : 'justify-between')}`}>
+      <nav
+        className={`flex flex-wrap gap-4 md:flex-nowrap ${
+          isStepOne ? "justify-end" : "justify-between"
+        }`}
+      >
         <Button
           className="font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer"
           onClick={ToggleSteps}
-          disabled={!!errors?.shotTitleError || !!errors?.mediaFilesError || !!errors?.thumbnailError || !shotTitle || !mediaFiles.length || !thumbnail}
+          disabled={
+            !!errors?.shotTitleError ||
+            !!errors?.mediaFilesError ||
+            !!errors?.thumbnailError ||
+            !shotTitle ||
+            !mediaFiles.length ||
+            !thumbnail
+          }
         >
           {isStepOne ? "Next" : "Back"}
         </Button>
         <Button
-          className={`font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(isStepOne ? 'hidden' : 'flex')}`}
+          className={`font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(
+            isStepOne ? "hidden" : "flex"
+          )}`}
           onClick={handleShotSubmit}
+          disabled={
+            !!errors?.shotTitleError ||
+            !!errors?.mediaFilesError ||
+            !!errors?.thumbnailError ||
+            !!errors?.descriptionError ||
+            !!errors?.tagsError
+          }
         >
           Submit
         </Button>

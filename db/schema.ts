@@ -7,7 +7,8 @@ import {
   timestamp,
   serial,
   jsonb,
-  primaryKey
+  primaryKey,
+  
 } from 'drizzle-orm/pg-core';
 
 //

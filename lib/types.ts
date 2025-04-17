@@ -28,25 +28,12 @@ export interface CreateShotTag {
 
 
 export interface ShotData{
-  // export const shots = pgTable('shots', {
-  //   id: uuid('id').defaultRandom().primaryKey(),
-  //   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  //   title: text('title').notNull(),
-  //   description: text('description'),
-  //   thumbnailUrl: text('image_url').notNull(),
-  //   // media:[text('media_url').notNull()],
-  //   views: integer('views').default(0),
-  //   createdAt: timestamp('created_at').defaultNow(),
-  //   updatedAt: timestamp('updated_at').defaultNow(),
-  // });
-
-  id: string;
-  userId: string;
   slug: string;
   title: string;
   description: string;
   thumbnailUrl: string;
-  views: number;
+  tags: string[];
+  isPublished: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

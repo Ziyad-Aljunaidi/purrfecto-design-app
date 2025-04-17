@@ -16,7 +16,7 @@ export default async function MainHeader() {
           {/* <Image src="/logo2.png" alt="Logo" width={40} height={40} className=" w-full items-center aspect-auto mx-4" /> */}
           {/* <Image src="/white-text-logo.png" alt="Logo" width={40} height={40} className="hidden dark:block w-full items-center aspect-auto" /> */}
           {/* <Image src="/text-logo.png" alt="Logo" width={40} height={40} className="block dark:hidden w-full items-center aspect-auto antialiased" /> */}
-          <Image src="/circle-logo.svg" alt="Logo" width={50} height={50} className="items-center aspect-auto mx-4" />
+          <Image src="/logo.svg" alt="Logo" width={100} height={50} className="items-center aspect-auto mx-4" />
         </div>
         {/* <span className="ml-2 font-semibold hidden sm:inline-block">Purrfecto</span> */}
       </Link>

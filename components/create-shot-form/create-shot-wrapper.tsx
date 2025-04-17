@@ -8,8 +8,10 @@ import SortableShotList from "./sortable-shot-list";
 import clsx from "clsx";
 import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
-import { uploadThumbnail } from "@/lib/do-spaces-operations";
+import { uploadToSpaces } from "@/lib/do-spaces-upload";
 import { submitShotAction } from "@/actions/submitShotAction";
+import { desc } from "drizzle-orm";
+import { AnimatedCircularProgressBar } from "@/components/magicui/animated-circular-progress-bar";
 
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
@@ -45,27 +47,28 @@ export default function CreateShotWrapper() {
     console.log("Shot Slug: ", shotTitleSlug);
     console.log("Shot Description: ", shotDescription);
     console.log("Shot Tags: ", shotTags);
-    const thumbnail_url = await uploadThumbnail(thumbnail!, shotTitleSlug!);
-    // const media_urls = mediaFiles.map((file) => {
+    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!);
+
     try {
       const ShotData: ShotData = {
-        id: "1234567850abddef1234567890abcdef", // Replace with actual ID generation logic
-        userId: "1234567890abcdef1234567890abcdef", // Replace with actual user ID
+        // Replace with actual user ID
         slug: shotTitleSlug,
         title: shotTitle,
-        description: "", // Add description if needed
+        description: shotDescription, // Add description if needed
         thumbnailUrl: thumbnail_url!,
-        views: 0,
+        tags: shotTags,
+        isPublished: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
       submitShotAction(ShotData);
       console.log("Shot Data: ", ShotData);
     } catch (error) {
+      throw new Error("Error submitting shot: " + error);
       console.error("Error submitting shot: ", error);
     }
 
-    console.log("Thumbnail URL: ", thumbnail_url);
+    // console.log("Thumbnail URL: ", thumbnail_url);
   }
 
   return (
@@ -121,21 +124,27 @@ export default function CreateShotWrapper() {
         >
           {isStepOne ? "Next" : "Back"}
         </Button>
-        <Button
-          className={`font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(
-            isStepOne ? "hidden" : "flex"
-          )}`}
-          onClick={handleShotSubmit}
-          disabled={
-            !!errors?.shotTitleError ||
-            !!errors?.mediaFilesError ||
-            !!errors?.thumbnailError ||
-            !!errors?.descriptionError ||
-            !!errors?.tagsError
-          }
-        >
-          Submit
-        </Button>
+        {!!mediaFiles.length &&
+        !!thumbnail &&
+        !!shotTitle &&
+        shotDescription &&
+        !!shotTags.length ? (
+          <Button
+            className={`font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(
+              isStepOne ? "hidden" : "flex"
+            )}`}
+            onClick={handleShotSubmit}
+            disabled={
+              !!errors?.shotTitleError ||
+              !!errors?.mediaFilesError ||
+              !!errors?.thumbnailError ||
+              !!errors?.descriptionError ||
+              !!errors?.tagsError
+            }
+          >
+            Submit
+          </Button>
+        ) : null}
       </nav>
     </main>
   );

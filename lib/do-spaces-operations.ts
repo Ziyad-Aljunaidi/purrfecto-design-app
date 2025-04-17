@@ -22,7 +22,7 @@ export async function uploadSignedUrl(
       // ACL: "public-read",
       // ContentType: isVideo ? "video/mp4" : "image/jpeg",
     });
-
+    console.log('isVideo: ', isVideo);
     const url = await getSignedUrl(s3Client, command, { expiresIn: 100 });
     return url;
   } catch (error) {

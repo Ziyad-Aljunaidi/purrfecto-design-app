@@ -1,4 +1,4 @@
-import { seedShots } from "@/db/seed";
+// import { seedShots } from "@/db/seed";
 
 export async function GET() {
   // try{

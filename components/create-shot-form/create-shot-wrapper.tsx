@@ -10,8 +10,6 @@ import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
 import { uploadToSpaces } from "@/lib/do-spaces-upload";
 import { submitShotAction } from "@/actions/submitShotAction";
-import { desc } from "drizzle-orm";
-import { AnimatedCircularProgressBar } from "@/components/magicui/animated-circular-progress-bar";
 
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");

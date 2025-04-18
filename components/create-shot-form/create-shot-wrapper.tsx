@@ -45,8 +45,14 @@ export default function CreateShotWrapper() {
     console.log("Shot Slug: ", shotTitleSlug);
     console.log("Shot Description: ", shotDescription);
     console.log("Shot Tags: ", shotTags);
-    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!);
-
+    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!, true);
+    const attachments_urls = await Promise.all(
+      shotItems.map((item) =>
+        uploadToSpaces(item.content, shotTitleSlug!, false)
+      )
+    )
+    console.log("Attachments URLs: ", attachments_urls);
+    console.log("Thumbnail URL: ", thumbnail_url);
     try {
       const ShotData: ShotData = {
         // Replace with actual user ID
@@ -88,7 +94,7 @@ export default function CreateShotWrapper() {
           errorsGetter={errors}
         />
         {/* <Tiptap description="" onChange={() => {}} /> */}
-        <SortableShotList ShotItems={shotItems} />
+        <SortableShotList ShotItems={shotItems}  ShotItemsSetter={setShotItems} />
       </div>
 
       <div className={`space-y-8 ${clsx(isStepOne ? "hidden" : "block")}`}>

@@ -1,6 +1,3 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import SortableShotItem from "@/components/create-shot-form/sortable-shot-item";
 import { ShotItem } from "@/lib/types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
@@ -11,37 +8,35 @@ import clsx from "clsx";
 
 export default function SortableShotList({
   ShotItems,
+  ShotItemsSetter,
 }: {
   ShotItems: ShotItem[];
+  ShotItemsSetter: React.Dispatch<React.SetStateAction<ShotItem[]>>;
 }) {
-  const [items, setItems] = useState<ShotItem[]>(ShotItems);
-
-  useEffect(() => {
-    setItems(ShotItems);
-  }, [ShotItems]);
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      setItems((items) => {
+      ShotItemsSetter((items) => {
         const prevIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
         return arrayMove(items, prevIndex, newIndex);
       });
     }
-    console.log(JSON.stringify(items));
+    // console.log(JSON.stringify(items));
   };
 
   const moveItemUp = (index: number) => {
     if (index > 0) {
-      setItems((items) => arrayMove(items, index, index - 1));
+      ShotItemsSetter((items) => arrayMove(items, index, index - 1));
     }
+    // console.log("items: ", ShotItems);
   };
 
   const moveItemDown = (index: number) => {
-    if (index < items.length - 1) {
-      setItems((items) => arrayMove(items, index, index + 1));
+    if (index < ShotItems.length - 1) {
+      ShotItemsSetter((items) => arrayMove(items, index, index + 1));
     }
+    // console.log("items: ", ShotItems);
   };
 
   return (
@@ -51,8 +46,8 @@ export default function SortableShotList({
         onDragEnd={handleDragEnd}
         modifiers={[restrictToVerticalAxis]}
       >
-        <SortableContext items={items}>
-          {items.map((item, index) => (
+        <SortableContext items={ShotItems}>
+          {ShotItems.map((item, index) => (
             <div key={item.id} className="flex items-center relative">
               <SortableShotItem item={item} />
               {index === 0 ? null : (
@@ -68,10 +63,12 @@ export default function SortableShotList({
                 </button>
               )}
 
-              {index === items.length - 1 ? null : (
+              {index === ShotItems.length - 1 ? null : (
                 <button
                   onClick={() => moveItemDown(index)}
-                  className={`ml-2 p-2 bg-primary shadow-md rounded-md text-white absolute ${clsx(index === 0 ? "top-4" : "top-16")} right-4`}
+                  className={`ml-2 p-2 bg-primary shadow-md rounded-md text-white absolute ${clsx(
+                    index === 0 ? "top-4" : "top-16"
+                  )} right-4`}
                 >
                   <ChevronDown
                     size={24}

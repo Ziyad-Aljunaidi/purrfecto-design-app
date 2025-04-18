@@ -24,7 +24,7 @@ export const uploadToSpaces = async (
       body: file,
     })
     console.log( url);
-    const fileUrl = `${process.env.NEXT_PUBLIC_DO_SPACES_CDN_URL}/${userId}/${attachmentsId}-${shotSlug}.${fileType}`;
+    const fileUrl = `${process.env.NEXT_PUBLIC_DO_SPACES_CDN_URL}/${userId}/${attachmentsId}-${shotSlug}${isThumbnail ? "-thumbnail" : ""}.${fileType}`;
     return fileUrl;
   }catch (error) {
     console.error("Error uploading file to Spaces:", error);

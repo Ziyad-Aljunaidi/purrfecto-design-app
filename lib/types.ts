@@ -5,7 +5,7 @@ export interface AcceptedFile extends File {
 
 export interface ShotItem {
   id: number
-  type: 'text' | 'image' | 'video';
+  type: 'text' | 'heading' | 'image' | 'video' | 'cta' ;
   content: AcceptedFile;
 }
 

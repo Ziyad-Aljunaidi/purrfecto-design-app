@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 
 export const attachments = pgTable("attachments", {
@@ -8,5 +8,5 @@ export const attachments = pgTable("attachments", {
   attachments: jsonb('attachments').$type<{ type: string, source: string }[]>(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull().$onUpdateFn(() => new Date()),
-  is_published: text("is_published").default("false"),
+  is_published: boolean("is_published").default(false),
 });

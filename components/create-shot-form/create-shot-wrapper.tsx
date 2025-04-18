@@ -10,6 +10,7 @@ import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
 import { uploadToSpaces } from "@/lib/do-spaces-upload";
 import { submitShotAction } from "@/actions/submitShotAction";
+import { nanoid } from "nanoid";
 
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
@@ -45,12 +46,18 @@ export default function CreateShotWrapper() {
     console.log("Shot Slug: ", shotTitleSlug);
     console.log("Shot Description: ", shotDescription);
     console.log("Shot Tags: ", shotTags);
-    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!, true);
+    const userId = nanoid(); // Replace with actual user ID, This is just a placeholder for testing :)
+    const attachmentsId = nanoid();
+    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!, true, userId,attachmentsId);
     const attachments_urls = await Promise.all(
       shotItems.map((item) =>
-        uploadToSpaces(item.content, shotTitleSlug!, false)
+        uploadToSpaces(item.content, shotTitleSlug!, false, userId, attachmentsId)
       )
     )
+    const attachmentsJson = attachments_urls.map((url, index) => ({
+      type: shotItems[index].type,
+      source: url,
+    }));
     console.log("Attachments URLs: ", attachments_urls);
     console.log("Thumbnail URL: ", thumbnail_url);
     try {
@@ -62,6 +69,8 @@ export default function CreateShotWrapper() {
         thumbnailUrl: thumbnail_url!,
         tags: shotTags,
         isPublished: true,
+        attachmentsId: attachmentsId,
+        attachments: attachmentsJson,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

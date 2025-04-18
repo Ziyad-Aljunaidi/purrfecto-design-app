@@ -2,16 +2,16 @@
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { shots } from "@/db/schema/shots";
+import { attachments } from "@/db/schema/attachments";
 import { AcceptedFile, ShotData } from "@/lib/types";
 import { nanoid } from "nanoid";
-// import { uploadThumbnail } from "@/lib/do-spaces-operations";
-import { userIdTest } from "@/lib/definitions";
+
 export const submitShotAction = async (
   shotData: ShotData,
   // thumbnail: AcceptedFile
 ) => {
   const shotId = nanoid();
-  const attachmentsId = nanoid();
+  // const attachmentsId = nanoid();
   const commentsId = nanoid();
   const reactsId = nanoid();
   const viewsId = nanoid();
@@ -32,7 +32,7 @@ export const submitShotAction = async (
         title: shotData.title,
         description: shotData.description,
         thumbnail_url: shotData.thumbnailUrl,
-        attachments_id: attachmentsId,
+        attachments_id: shotData.attachmentsId,
         comments_id: commentsId,
         reacts_id: reactsId,
         views_id: viewsId,
@@ -41,10 +41,26 @@ export const submitShotAction = async (
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+      await db.insert(attachments).values({
+        id: shotData.attachmentsId,
+        shot_id: shotId,
+        attachments: shotData.attachments,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        is_published: shotData.isPublished,
+      });
     // }
     return {"success": true};
   } catch (error) {
     console.error("Error submitting shot: ", error);
   }
+  
+  // try {
+
+  //   console.log("Attachments submitted successfully: ", shotData.attachmentsId);
+  //   return {"success": true};
+  // }catch (error) {
+  //   console.error("Error submitting attachments: ", error);
+  // }
   revalidatePath("/");
 };

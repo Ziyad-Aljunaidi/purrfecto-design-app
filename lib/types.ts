@@ -1,14 +1,11 @@
 export interface AcceptedFile extends File {
   preview: string;
 }
-
-
 export interface ShotItem {
-  id: number
-  type: 'text' | 'heading' | 'image' | 'video' | 'cta' ;
+  id: number;
+  type: "text" | "heading" | "image" | "video" | "cta";
   content: AcceptedFile;
 }
-
 export interface CreateShotErrors {
   shotTitleError?: string;
   mediaFilesError?: string;
@@ -16,7 +13,6 @@ export interface CreateShotErrors {
   descriptionError?: string;
   tagsError?: string;
 }
-
 export interface CreateShotTag {
   tags: string[];
   addTag: (tag: string) => void;
@@ -26,19 +22,20 @@ export interface CreateShotTag {
   // error: CreateShotErrors | null;
 }
 
-
-export interface ShotData{
+export interface Attachments {
+  type: string;
+  source: string;
+}
+export interface ShotData {
   slug: string;
   title: string;
   description: string;
   thumbnailUrl: string;
   tags: string[];
   isPublished: boolean;
+  attachmentsId: string;
+  attachments: Attachments[];
   createdAt: Date;
   updatedAt: Date;
 }
-export type todoType = {
-  id: number;
-  text: string;
-  done: boolean;
-};
+

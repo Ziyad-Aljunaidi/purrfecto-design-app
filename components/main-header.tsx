@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { getThemeFromCookie} from "@/actions/themeActions";
-import ThemeToggle from "./theme-toggle";
+
+import ThemeToggle from "@/components/theme-toggle";
 import Link from "next/link";
 import Image from "next/image";
 
 export default async function MainHeader() {
-  const currentTheme = await getThemeFromCookie() || "dark";
+
   return (
-    <header className="w-full bg-background  border-b px-4 py-3 flex items-center justify-between">
+    <header className="w-full bg-background  border-b px-4 py-3 flex items-center justify-between sticky top-0 z-50">
       <Link href="/" className="flex items-center">
         <div className="flex " aria-label="Logo">
           {/* {currentTheme === 'dark' ? (
@@ -23,7 +23,7 @@ export default async function MainHeader() {
       </Link>
 
       <div className="flex items-center gap-4">
-        <nav className="hidden md:flex items-center gap-6">
+        {/* <nav className="hidden md:flex items-center gap-6">
           <Link href="#" className="text-sm font-medium hover:text-primary">
             Home
           </Link>
@@ -33,8 +33,8 @@ export default async function MainHeader() {
           <Link href="#" className="text-sm font-medium hover:text-primary">
             About
           </Link>
-        </nav>
-        <ThemeToggle  currentTheme={currentTheme}/>
+        </nav> */}
+        <ThemeToggle/>
         <Button className="rounded-full font-[family-name:var(--font-geist-mono)]">Get Started</Button>
       </div>
     </header>

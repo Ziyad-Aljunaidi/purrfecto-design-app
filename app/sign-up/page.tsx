@@ -7,11 +7,7 @@ import SignUpForm from "@/components/auth-forms/sign-up";
 
 export default function SignUpPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Sign Up</h1>
-      <p className="text-sm text-muted-foreground">
-        Create an account to get started.
-      </p>
+    <div className="flex flex-col items-center justify-center w-full h-screen p-4 space-y-4">
       <SignUpForm />
     </div>
   );

@@ -9,8 +9,8 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import MainHeader from "@/components/main-header";
-import ApplyTheme from "@/components/apply-theme";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,18 +51,30 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: 
+Readonly<{
+children: React.ReactNode;
+}>
+) {
   return (
-    <ApplyTheme>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} ${inter.variable}  ${schibstedGrotesk.variable} ${notoSans.variable} antialiased`}
-      >
-        <MainHeader />
-        {children}
-        <Toaster />
-      </body>
-    </ApplyTheme>
+    <>
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} ${inter.variable}  ${schibstedGrotesk.variable} ${notoSans.variable} antialiased`}
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <MainHeader />
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
+    </>
   );
 }

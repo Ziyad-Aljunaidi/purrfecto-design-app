@@ -21,7 +21,7 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -32,8 +32,6 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 const signUpSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters long"),
-  name: z.string().min(3, "Name must be at least 3 characters long"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
@@ -45,13 +43,10 @@ async function onSubmit(
 ) {
   console.log(values);
 
-  const { data, error } = await authClient.signUp.email(
+  const { data, error } = await authClient.signIn.email(
     {
       email: values.email,
-      password: values.password,
-      name: values.name,
-      image: "https://assets.purrfecto.design/DefaultAvatars/Default-04.png", // User image URL (optional)
-      callbackURL: "/create", // A URL to redirect to after the user verifies their email (optional)
+      password: values.password
     },
     {
       onRequest: () => {
@@ -85,15 +80,13 @@ async function GoogleSignIn() {
   console.log(data);
 }
 
-export default function SignUpForm() {
+export default function SignInForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      username: "",
-      name: "",
       email: "",
       password: "",
     },
@@ -106,7 +99,7 @@ export default function SignUpForm() {
         
         <CardHeader>
           <CardTitle className="text-2xl font-bold">
-            Create An Account
+            Log in to your account
           </CardTitle>
           <CardDescription>
             Explore A world Of Creativity And Innovation & Share Your Ideas With
@@ -121,48 +114,14 @@ export default function SignUpForm() {
               )}
               className="space-y-8"
             >
-              <div className="lg:flex lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your Name" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is your public display name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Username" {...field} />
-                      </FormControl>
-                      <FormDescription>‎</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="email@example.com" {...field} />
+                    <FormControl >
+                      <Input placeholder="email@example.com" {...field}  className="border-red-600"/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -178,7 +137,7 @@ export default function SignUpForm() {
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Password must be at least 8 characters long"
+                        placeholder="Password"
                         {...field}
                       />
                     </FormControl>
@@ -193,14 +152,14 @@ export default function SignUpForm() {
                 {isLoading ? (
                   <LoaderCircle className="w-4 h-4 mr-2 animate-spin" />
                 ) : (
-                  "Create Account"
+                  "Log In"
                 )}
               </Button>
               <Link
-                href="/auth/signin"
+                href="/auth/signup"
                 className="text-sm font-medium text-primary hover:underline items-center justify-center flex"
               >
-                Already have an account? Sign In
+                Don&apos;t have an account? Sign Up
               </Link>
             </form>
           </Form>
@@ -219,21 +178,8 @@ export default function SignUpForm() {
           </Button>
         </CardContent>
       </Card>
-      <div className="text-center md:px-8">
-        <p className="text-sm text-gray-500">
-          By creating an account, you agree to our{" "}
-          <Link href="/terms" className="font-bold hover:underline">
-            Terms of Service
-          </Link>
-          {" "}and{" "}
-          <Link href="/privacy" className="font-bold hover:underline">
-            Privacy Policy
-          </Link>
-        </p>
-      </div>
-
       <div
-        className={`font-['JetBrains_Mono'] rounded-lg text-red-500 p-4 bg-red-50 flex items-center space-x-4 ${cn(
+        className={`font-['JetBrains_Mono'] rounded-lg text-red-400 p-4 bg-red-50 dark:bg-red-950 flex items-center space-x-4 ${cn(
           "w-full",
           message ? "block" : "hidden"
         )}`}

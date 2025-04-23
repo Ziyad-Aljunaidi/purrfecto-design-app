@@ -3,9 +3,6 @@ import {
   Geist,
   Geist_Mono,
   JetBrains_Mono,
-  Inter,
-  Schibsted_Grotesk,
-  Noto_Sans,
 } from "next/font/google";
 import "./globals.css";
 import MainHeader from "@/components/main-header";
@@ -21,28 +18,11 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-const jetbrainsMono = JetBrains_Mono({
+const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const schibstedGrotesk = Schibsted_Grotesk({
-  variable: "--font-schibsted-grotesk",
-  subsets: ["latin"],
-});
-
-const notoSans = Noto_Sans({
-  variable: "--font-noto-sans",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -57,16 +37,15 @@ children: React.ReactNode;
 }>
 ) {
   return (
-    <>
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} ${inter.variable}  ${schibstedGrotesk.variable} ${notoSans.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} ${jetBrainsMono.variable} antialiased`}
         >
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
+            // enableSystem
             disableTransitionOnChange
           >
             <MainHeader />
@@ -75,6 +54,5 @@ children: React.ReactNode;
           </ThemeProvider>
         </body>
       </html>
-    </>
   );
 }

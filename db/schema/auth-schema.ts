@@ -5,11 +5,12 @@ import {
   boolean,
   integer,
 } from "drizzle-orm/pg-core";
+import { nanoid } from "nanoid";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
+  profileId: text("profile_id").notNull().unique().default(nanoid()),
   name: text("name").notNull(),
-  // username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),

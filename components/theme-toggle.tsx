@@ -3,14 +3,24 @@
 import { Toggle } from "@/components/ui/toggle";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
   const {theme,setTheme} = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  // to avoid system theme flicker on first load
-  if(theme === "system") {
-    setTheme("light");
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Avoid hydration mismatch by not rendering anything until after client hydration
+    return null;
   }
+  // to avoid system theme flicker on first load
+  // if(theme === "system") {
+  //   setTheme("light");
+  // }
 
   return (
     <div>

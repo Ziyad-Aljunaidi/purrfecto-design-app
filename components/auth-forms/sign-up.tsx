@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Prettify } from "better-auth";
 
 const signUpSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters long"),

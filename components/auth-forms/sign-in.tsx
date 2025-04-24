@@ -46,7 +46,7 @@ async function onSubmit(
   const { data, error } = await authClient.signIn.email(
     {
       email: values.email,
-      password: values.password
+      password: values.password,
     },
     {
       onRequest: () => {
@@ -95,8 +95,8 @@ export default function SignInForm() {
   return (
     <main className="flex flex-col items-center justify-center max-w-[500px] w-full h-full md:p-4 space-y-4">
       <Card className="relative overflow-hidden max-w-[500px] w-full shadow-none border-none bg-accent/20">
-        {isLoading && (<BorderBeam duration={4} size={100} className="hidden md:block" />)}
-        
+        {isLoading && <BorderBeam duration={4} size={100} />}
+
         <CardHeader>
           <CardTitle className="text-2xl font-bold">
             Log in to your account
@@ -119,9 +119,19 @@ export default function SignInForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl >
-                      <Input placeholder="email@example.com" {...field}  className="border-red-600"/>
+                    <FormLabel className={`${message ? "text-destructive-foreground" : ""}`}>
+                      Email
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="email@example.com"
+                        {...field}
+                        className={`${
+                          message
+                            ? "border-2 border-offset-2 border-destructive-foreground"
+                            : ""
+                        }`}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -133,12 +143,19 @@ export default function SignInForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className={`${message ? "text-destructive-foreground" : ""}`}>
+                      Password
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         placeholder="Password"
                         {...field}
+                        className={`${
+                          message
+                            ? "border-2 border-offset-2 border-destructive-foreground"
+                            : ""
+                        }`}
                       />
                     </FormControl>
                     <FormMessage />

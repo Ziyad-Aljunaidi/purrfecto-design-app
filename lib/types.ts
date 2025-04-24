@@ -39,3 +39,14 @@ export interface ShotData {
   updatedAt: Date;
 }
 
+export interface richUser {
+  id: string;
+  name?: string;
+  email?: string;
+  emailVerified?: boolean;
+  image?: string | null;
+  username?: string;
+  displayUsername?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

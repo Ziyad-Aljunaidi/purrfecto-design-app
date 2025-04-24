@@ -3,9 +3,8 @@ import {
   text,
   timestamp,
   boolean,
-  integer
+  integer,
 } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -15,6 +14,8 @@ export const user = pgTable("user", {
   image: text("image"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
+  username: text("username").unique(),
+  displayUsername: text("display_username"),
 });
 
 export const session = pgTable("session", {
@@ -55,26 +56,4 @@ export const verification = pgTable("verification", {
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
-});
-
-export const profile = pgTable("profile", {
-  id: text('id').primaryKey(),
-  userId: text("user_id")
-  .notNull()
-  .references(() => user.id, { onDelete: "cascade" }),
-  username: text("username").notNull().default(""),
-  name: text("name").notNull(),
-  email: text("email").notNull().default(""),
-  links: text("links").array().notNull().default([]),
-  bio: text("bio").default(""),
-  avatar_url: text("avatar_url").notNull(),
-  banner_url: text("banner_url").default(""),
-  location: text("location"),
-  website: text("website").default(""),
-  is_verified: boolean("is_verified").default(false),
-  total_shots: integer("total_shots").default(0),
-  total_followers: integer("total_followers").default(0),
-  total_following: integer("total_following").default(0),
-  total_likes: integer("total_likes").default(0),
-  total_views: integer("total_views").default(0),
 });

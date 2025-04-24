@@ -5,8 +5,6 @@ import { z } from "zod";
 import { authClient } from "@/lib/auth-client";
 import { LoaderCircle, AlertCircle } from "lucide-react";
 import { useState } from "react";
-
-import { redirect } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -28,7 +26,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import Link from "next/link";
 
 const signUpSchema = z.object({
@@ -50,6 +47,7 @@ async function onSubmit(
       email: values.email,
       password: values.password,
       name: values.name,
+      username: values.username,
       image: "https://assets.purrfecto.design/DefaultAvatars/Default-04.png", // User image URL (optional)
       callbackURL: "/create", // A URL to redirect to after the user verifies their email (optional)
     },
@@ -59,10 +57,9 @@ async function onSubmit(
         setIsLoading(true);
       },
       onSuccess: () => {
-        //redirect to the dashboard or sign in page
         setIsLoading(false);
         setMessage("");
-        redirect("/create");
+
       },
       onError: (ctx) => {
         // display the error message
@@ -80,8 +77,8 @@ async function onSubmit(
 async function GoogleSignIn() {
   const data = await authClient.signIn.social({
     provider: "google",
-    // callbackURL: "/create",
-  });
+    callbackURL: "/create",
+  }).then((res) => {console.log(res)});
   console.log(data);
 }
 
@@ -102,8 +99,8 @@ export default function SignUpForm() {
   return (
     <main className="flex flex-col items-center justify-center max-w-[500px] w-full h-full md:p-4 space-y-4">
       <Card className="relative overflow-hidden max-w-[500px] w-full shadow-none border-none bg-accent/20">
-        {isLoading && (<BorderBeam duration={4} size={100} className="hidden md:block" />)}
-        
+        {isLoading && <BorderBeam duration={4} size={100} />}
+
         <CardHeader>
           <CardTitle className="text-2xl font-bold">
             Create An Account
@@ -224,8 +221,8 @@ export default function SignUpForm() {
           By creating an account, you agree to our{" "}
           <Link href="/terms" className="font-bold hover:underline">
             Terms of Service
-          </Link>
-          {" "}and{" "}
+          </Link>{" "}
+          and{" "}
           <Link href="/privacy" className="font-bold hover:underline">
             Privacy Policy
           </Link>

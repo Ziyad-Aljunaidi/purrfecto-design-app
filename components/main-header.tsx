@@ -2,6 +2,8 @@ import ThemeToggle from "@/components/theme-toggle";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
+import UserControlHeaderDesktop from "./auth-forms/user-control-header";
+
 
 export default async function MainHeader() {
   return (
@@ -35,6 +37,7 @@ export default async function MainHeader() {
           Get Started
           <ChevronRight className="w-4 h-4 ml-1" />
         </Link>
+        <UserControlHeaderDesktop />
       </div>
     </header>
   );

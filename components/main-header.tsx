@@ -13,7 +13,14 @@ export async function AuthUserServerComponent() {
   if (!session) {
     return null;
   }
-  return <UserControlHeaderDesktop user={session.user} />;
+  return (
+    <UserControlHeaderDesktop
+      user={{
+        ...session.user,
+        displayUsername: session.user.displayUsername ?? "Guest",
+      }}
+    />
+  );
 }
 
 export default async function MainHeader() {

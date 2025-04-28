@@ -23,4 +23,4 @@ export function generateCatID(): string {
 }
 
 // Example usage
-console.log(generateCatID());
+// console.log(generateCatID());

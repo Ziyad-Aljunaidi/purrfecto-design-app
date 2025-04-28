@@ -3,7 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import UserControlHeaderDesktop from "./auth-forms/user-control-header";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
+export async function AuthUserServerComponent() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    return null;
+  }
+  return <UserControlHeaderDesktop user={session.user} />;
+}
 
 export default async function MainHeader() {
   return (
@@ -26,7 +37,6 @@ export default async function MainHeader() {
           />
         </div>
       </Link>
-
       <div className="flex items-center gap-4">
         <ThemeToggle />
 
@@ -37,7 +47,7 @@ export default async function MainHeader() {
           Get Started
           <ChevronRight className="w-4 h-4 ml-1" />
         </Link>
-        <UserControlHeaderDesktop />
+        <AuthUserServerComponent />
       </div>
     </header>
   );

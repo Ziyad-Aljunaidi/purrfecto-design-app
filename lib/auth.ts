@@ -6,6 +6,7 @@ import { username } from "better-auth/plugins"; // your username table
 import onUserCreateProfileAction from "./on-user-created";
 import { generateCatID } from "./generate-cat-id";
 import { richUser} from "@/lib/types";
+import { nextCookies } from "better-auth/next-js";
 
 
 export const auth = betterAuth({
@@ -21,7 +22,8 @@ export const auth = betterAuth({
 
   }),
   plugins: [
-    username()
+    username(),
+    nextCookies(),
   ],
   databaseHooks: {
     user: {

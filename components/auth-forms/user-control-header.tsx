@@ -1,6 +1,13 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
-import { LogOut, Settings2 } from "lucide-react";
+import {
+  LogOut,
+  Settings2,
+  Plus,
+  UserRound,
+  MoonIcon,
+  SunIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation"; // Optional, if you need to use router for redirection
 import { Button } from "@/components/ui/button";
 import {
@@ -30,16 +37,21 @@ import {
 import { User } from "better-auth/types";
 
 interface AdditionalUserFields extends User {
-displayUsername: string;
+  displayUsername: string;
 }
 
-export default function UserControlHeaderDesktop({ user }: { user: AdditionalUserFields }) {
+export default function UserControlHeaderDesktop({
+  user,
+}: {
+  user: AdditionalUserFields;
+}) {
   const router = useRouter(); // Optional, if you need to use router for redirection
 
   const signUserOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          router.refresh(); // refresh the page to update the UI
           router.push("/auth/signin"); // redirect to login page
         },
       },
@@ -50,50 +62,85 @@ export default function UserControlHeaderDesktop({ user }: { user: AdditionalUse
       <div className="hidden md:flex items-center justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size={"icon"} className="p-0 rounded-full" >
-            <img
+            <Button variant="ghost" size={"icon"} className="p-0 rounded-full">
+              <img
                 src={
                   user.image
-                  ? user.image
-                  : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
+                    ? user.image
+                    : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
                 }
                 className="rounded-full w-8 h-8 cursor-pointer"
                 alt="User Avatar"
               />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
+          <DropdownMenuContent
+            className="w-auto max-w-96 min-w-56"
+            align="end"
+            sideOffset={5}
+          >
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                Profile
-                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                <div className="flex items-center gap-2 p-2">
+                  <img
+                    src={
+                      user.image
+                        ? user.image
+                        : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
+                    }
+                    className="rounded-full w-12 h-12 cursor-pointer"
+                    alt="User Avatar"
+                  />
+                  <div>
+                    <h2 className="text-sm font-semibold">{user.name}</h2>
+                    <h3 className="text-xs text-foreground">
+                      @{user.displayUsername}
+                    </h3>
+                  </div>
+                </div>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                Billing
-                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                Create
+                <DropdownMenuShortcut>
+                  <Plus className="inline mr-2" size={16} />
+                </DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 Settings
-                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                <DropdownMenuShortcut>
+                  <Settings2 className="inline mr-2" size={16} />
+                </DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                Keyboard shortcuts
-                <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+                Go to My Profile
+                <DropdownMenuShortcut>
+                  <UserRound className="inline mr-2" size={16} />
+                </DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>Team</DropdownMenuItem>
+              {/* <DropdownMenuItem>Theme</DropdownMenuItem> */}
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
-                    <DropdownMenuItem>Email</DropdownMenuItem>
-                    <DropdownMenuItem>Message</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>More...</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      Dark{" "}
+                      <DropdownMenuShortcut>
+                        <MoonIcon className="inline mr-2" size={16} />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      Light{" "}
+                      <DropdownMenuShortcut>
+                        <SunIcon className="inline mr-2" size={16} />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    {/* <DropdownMenuSeparator /> */}
+                    {/* <DropdownMenuItem>More...</DropdownMenuItem> */}
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
@@ -107,9 +154,11 @@ export default function UserControlHeaderDesktop({ user }: { user: AdditionalUse
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuItem disabled>API</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={signUserOut}>
               Log out
-              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+              <DropdownMenuShortcut>
+                <LogOut className="inline mr-2" size={16} />
+              </DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -118,12 +167,11 @@ export default function UserControlHeaderDesktop({ user }: { user: AdditionalUse
         <div className="md:hidden items-center justify-end">
           <Drawer>
             <DrawerTrigger>
-              {" "}
               <img
                 src={
                   user.image
-                  ? user.image
-                  : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
+                    ? user.image
+                    : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
                 }
                 className="rounded-full w-8 h-8 mr-4 cursor-pointer"
                 alt="User Avatar"
@@ -137,9 +185,11 @@ export default function UserControlHeaderDesktop({ user }: { user: AdditionalUse
                 <div>
                   <div className="flex items-center">
                     <img
-                      src={                  user.image
-                        ? user.image
-                        : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"}
+                      src={
+                        user.image
+                          ? user.image
+                          : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
+                      }
                       className="rounded-full w-30 h-30 mr-4"
                       alt="User Avatar"
                     />

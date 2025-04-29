@@ -5,8 +5,7 @@ import { z } from "zod";
 import { authClient } from "@/lib/auth-client";
 import { LoaderCircle, AlertCircle } from "lucide-react";
 import { useState } from "react";
-
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -17,7 +16,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BorderBeam } from "@/components/magicui/border-beam";
-
 import {
   Form,
   FormControl,
@@ -28,8 +26,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import Link from "next/link";
+
 
 const signUpSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -57,7 +55,7 @@ async function onSubmit(
         //redirect to the dashboard or sign in page
         setIsLoading(false);
         setMessage("");
-        redirect("/create");
+        // redirect("/create");
       },
       onError: (ctx) => {
         // display the error message
@@ -83,6 +81,7 @@ async function GoogleSignIn() {
 export default function SignInForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -110,7 +109,10 @@ export default function SignInForm() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit((values) =>
-                onSubmit(values, setIsLoading, setMessage)
+                onSubmit(values, setIsLoading, setMessage).then(() => {
+                  router.push("/create");
+                  router.refresh();
+                })
               )}
               className="space-y-8"
             >

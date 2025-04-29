@@ -4,9 +4,7 @@ import {
   LogOut,
   Settings2,
   Plus,
-  UserRound,
-  MoonIcon,
-  SunIcon,
+  UserRound
 } from "lucide-react";
 import { useRouter } from "next/navigation"; // Optional, if you need to use router for redirection
 import { Button } from "@/components/ui/button";
@@ -16,12 +14,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -34,7 +28,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+
 import { User } from "better-auth/types";
+import ThemeToggle from "../theme-toggle";
 
 interface AdditionalUserFields extends User {
   displayUsername: string;
@@ -51,8 +47,9 @@ export default function UserControlHeaderDesktop({
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          router.push("/auth/signin");
           router.refresh(); // refresh the page to update the UI
-          router.push("/auth/signin"); // redirect to login page
+           // redirect to login page
         },
       },
     });
@@ -79,8 +76,6 @@ export default function UserControlHeaderDesktop({
             align="end"
             sideOffset={5}
           >
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <div className="flex items-center gap-2 p-2">
@@ -101,12 +96,14 @@ export default function UserControlHeaderDesktop({
                   </div>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push("/create")}>
                 Create
                 <DropdownMenuShortcut>
                   <Plus className="inline mr-2" size={16} />
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>
                 Settings
                 <DropdownMenuShortcut>
@@ -114,7 +111,7 @@ export default function UserControlHeaderDesktop({
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                Go to My Profile
+                My Profile
                 <DropdownMenuShortcut>
                   <UserRound className="inline mr-2" size={16} />
                 </DropdownMenuShortcut>
@@ -122,38 +119,10 @@ export default function UserControlHeaderDesktop({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              {/* <DropdownMenuItem>Theme</DropdownMenuItem> */}
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      Dark{" "}
-                      <DropdownMenuShortcut>
-                        <MoonIcon className="inline mr-2" size={16} />
-                      </DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Light{" "}
-                      <DropdownMenuShortcut>
-                        <SunIcon className="inline mr-2" size={16} />
-                      </DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    {/* <DropdownMenuSeparator /> */}
-                    {/* <DropdownMenuItem>More...</DropdownMenuItem> */}
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-              <DropdownMenuItem>
-                New Team
-                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-              </DropdownMenuItem>
+              <DropdownMenuLabel className="flex flex-row justify-between items-center">
+                Theme <ThemeToggle />
+              </DropdownMenuLabel>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>GitHub</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
-            <DropdownMenuItem disabled>API</DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signUserOut}>
               Log out
               <DropdownMenuShortcut>
@@ -163,7 +132,7 @@ export default function UserControlHeaderDesktop({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {user && (
+      {/* {user && ( */}
         <div className="md:hidden items-center justify-end">
           <Drawer>
             <DrawerTrigger>
@@ -179,8 +148,6 @@ export default function UserControlHeaderDesktop({
             </DrawerTrigger>
             <DrawerContent className="h-1/2">
               <DrawerHeader>
-                {/* <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-        <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
                 <DrawerTitle>Are you absolutely sure?</DrawerTitle>
                 <div>
                   <div className="flex items-center">
@@ -216,7 +183,7 @@ export default function UserControlHeaderDesktop({
             </DrawerContent>
           </Drawer>
         </div>
-      )}
+      {/* )} */}
     </>
   );
 }

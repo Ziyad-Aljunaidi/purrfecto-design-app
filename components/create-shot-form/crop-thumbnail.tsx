@@ -88,7 +88,7 @@ export default function CropThumbnail({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-secondary rounded-xl shadow-lg w-[90%] max-w-2xl p-6 md:p-8 relative">
+      <div className="bg-background border-accent border-1 rounded-xl shadow-lg w-[90%] max-w-2xl p-6 md:p-8 relative">
         <h2 className="text-xl font-semibold mb-2">Crop Thumbnail</h2>
         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
           <Cropper

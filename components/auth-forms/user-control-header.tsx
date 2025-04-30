@@ -1,11 +1,6 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
-import {
-  LogOut,
-  Settings2,
-  Plus,
-  UserRound
-} from "lucide-react";
+import { LogOut, Settings2, Plus, UserRound } from "lucide-react";
 import { useRouter } from "next/navigation"; // Optional, if you need to use router for redirection
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +26,7 @@ import {
 
 import { User } from "better-auth/types";
 import ThemeToggle from "../theme-toggle";
+import { Separator } from "../ui/separator";
 
 interface AdditionalUserFields extends User {
   displayUsername: string;
@@ -49,7 +45,7 @@ export default function UserControlHeaderDesktop({
         onSuccess: () => {
           router.push("/auth/signin");
           router.refresh(); // refresh the page to update the UI
-           // redirect to login page
+          // redirect to login page
         },
       },
     });
@@ -66,7 +62,7 @@ export default function UserControlHeaderDesktop({
                     ? user.image
                     : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
                 }
-                className="rounded-full w-8 h-8 cursor-pointer"
+                className="rounded-full w-9 h-9 cursor-pointer"
                 alt="User Avatar"
               />
             </Button>
@@ -133,56 +129,81 @@ export default function UserControlHeaderDesktop({
         </DropdownMenu>
       </div>
       {/* {user && ( */}
-        <div className="md:hidden items-center justify-end">
-          <Drawer>
-            <DrawerTrigger>
-              <img
-                src={
-                  user.image
-                    ? user.image
-                    : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
-                }
-                className="rounded-full w-8 h-8 mr-4 cursor-pointer"
-                alt="User Avatar"
-              />
-            </DrawerTrigger>
-            <DrawerContent className="h-1/2">
-              <DrawerHeader>
-                <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-                <div>
-                  <div className="flex items-center">
-                    <img
-                      src={
-                        user.image
-                          ? user.image
-                          : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
-                      }
-                      className="rounded-full w-30 h-30 mr-4"
-                      alt="User Avatar"
-                    />
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-lg">{user.name}</span>
-                      <span className="text-md text-gray-500">
-                        @{user.displayUsername}
-                      </span>
-                    </div>
+
+      <div className="flex md:hidden items-center justify-center">
+        <Drawer>
+          <DrawerTrigger className="">
+            <img
+              src={
+                user.image
+                  ? user.image
+                  : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
+              }
+              className="rounded-full w-10 h-10 mr-2 cursor-pointer"
+              alt="User Avatar"
+            />
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle></DrawerTitle>
+              <div className="flex flex-col items-start ">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={
+                      user.image
+                        ? user.image
+                        : "https://assets.purrfecto.design/DefaultAvatars/Default-04.png"
+                    }
+                    className="rounded-full w-20 h-20 "
+                    alt="User Avatar"
+                  />
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-xl">{user.name}</span>
+                    <span className="text-lg text-accent-foreground">
+                      @{user.displayUsername}
+                    </span>
                   </div>
                 </div>
-              </DrawerHeader>
-              <DrawerFooter>
-                <Button>
-                  <Settings2 className="inline mr-2" size={16} />
-                  Account Settings
+              </div>
+              <Separator className="my-2" />
+              <Button
+                variant="ghost"
+                className="flex justify-between text-md"
+                onClick={() => router.push("/create")}
+              >
+                Create
+                <Plus className="inline mr-2" size={16} />
+              </Button>
+              <Separator className="my-2" />
+              <Button variant="ghost" className="flex justify-between text-md">
+                My Profile
+                <UserRound className="inline mr-2" size={16} />
+              </Button>
+              <Separator className="my-2" />
+
+              <Button variant="ghost" className="flex justify-between text-md">
+                Settings
+                <Settings2 className="inline mr-2" size={16} />
+              </Button>
+              <div className="flex flex-row justify-between items-center font-semibold px-3">
+                Theme
+                <ThemeToggle />
+                {/* <Separator className="my-2" /> */}
+              </div>
+              <Separator className="mt-2" />
+            </DrawerHeader>
+
+            <DrawerFooter className="pt-0">
+              <DrawerClose asChild>
+                <Button className="flex justify-between" onClick={signUserOut}>
+                  Log Out
+                  <LogOut className="inline mr-2" size={16} />
                 </Button>
-                <DrawerClose asChild>
-                  <Button variant="outline" onClick={signUserOut}>
-                    <LogOut className="inline mr-2" size={16} /> Log Out
-                  </Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        </div>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
       {/* )} */}
     </>
   );

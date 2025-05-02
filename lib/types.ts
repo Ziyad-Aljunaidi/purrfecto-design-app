@@ -27,6 +27,7 @@ export interface Attachments {
   source: string;
 }
 export interface ShotData {
+  creatorId: string;
   slug: string;
   title: string;
   description: string;

@@ -9,8 +9,12 @@ import clsx from "clsx";
 import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
 import { uploadToSpaces } from "@/lib/do-spaces-upload";
-import { submitShotAction } from "@/actions/submitShotAction";
+import  submitShotAction  from "@/actions/submitShotAction";
 import { nanoid } from "nanoid";
+import { getUserId } from "@/actions/UserAction";
+
+// const userId = await getUserId();
+
 
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
@@ -46,7 +50,11 @@ export default function CreateShotWrapper() {
     console.log("Shot Slug: ", shotTitleSlug);
     console.log("Shot Description: ", shotDescription);
     console.log("Shot Tags: ", shotTags);
-    const userId = nanoid(); // Replace with actual user ID, This is just a placeholder for testing :)
+    const userId = await getUserId();
+    if (!userId) {
+      console.error("User ID not found");
+      throw new Error("User ID not found");
+    }
     const attachmentsId = nanoid();
     const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!, true, userId,attachmentsId);
     const attachments_urls = await Promise.all(
@@ -62,10 +70,10 @@ export default function CreateShotWrapper() {
     console.log("Thumbnail URL: ", thumbnail_url);
     try {
       const ShotData: ShotData = {
-        // Replace with actual user ID
+        creatorId: userId,
         slug: shotTitleSlug,
         title: shotTitle,
-        description: shotDescription, // Add description if needed
+        description: shotDescription,
         thumbnailUrl: thumbnail_url!,
         tags: shotTags,
         isPublished: true,
@@ -78,18 +86,13 @@ export default function CreateShotWrapper() {
       console.log("Shot Data: ", ShotData);
     } catch (error) {
       throw new Error("Error submitting shot: " + error);
-      console.error("Error submitting shot: ", error);
     }
-
-    // console.log("Thumbnail URL: ", thumbnail_url);
   }
 
   return (
     <main className="font-[family-name:var(--font-noto-sans)]">
       <div className={`space-y-8 ${clsx(isStepOne ? "block" : "hidden")}`}>
         <ShotTitle
-          // ShotTitleHandler={handleShotTitleChange}
-          // ShotTitleError={errors?.shotTitleError || ""}
           shotTitleSetter={setShotTitle}
           shotTitleSlugSetter={setShotTitleSlug}
           errorsSetter={setErrors}
@@ -102,7 +105,6 @@ export default function CreateShotWrapper() {
           errorsSetter={setErrors}
           errorsGetter={errors}
         />
-        {/* <Tiptap description="" onChange={() => {}} /> */}
         <SortableShotList ShotItems={shotItems}  ShotItemsSetter={setShotItems} />
       </div>
 

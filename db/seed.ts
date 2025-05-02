@@ -1,6 +1,6 @@
 // seed.ts
 import { db } from '@/db/drizzle'; // your drizzle db instance
-import { shots } from './schema/shots'; // your schema file
+import { shots } from './schema/shot'; // your schema file
 import { nanoid } from 'nanoid';
 
 export async function seedShots() {

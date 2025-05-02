@@ -3,14 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Plus, ChevronRight } from "lucide-react";
 import UserControlHeaderDesktop from "./auth-forms/user-control-header";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getUserData } from "@/actions/UserAction";
 
 export async function AuthUserServerComponent() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) {
+  const user = await getUserData();
+  if (!user) {
     return (
       <>
         <ThemeToggle />
@@ -36,8 +33,8 @@ export async function AuthUserServerComponent() {
       </Link>
       <UserControlHeaderDesktop
         user={{
-          ...session.user,
-          displayUsername: session.user.displayUsername ?? "Guest",
+          ...user,
+          displayUsername: user.displayUsername ?? "Guest",
         }}
       />
     </>
@@ -46,7 +43,7 @@ export async function AuthUserServerComponent() {
 
 export default async function MainHeader() {
   return (
-    <header className="w-full bg-background  border-b px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+    <header className="w-full bg-background  border-b px-4 py-3 flex items-center justify-between sticky top-0 z-50 ">
       <Link href="/" className="flex items-center">
         <div className="flex " aria-label="Logo">
           <Image

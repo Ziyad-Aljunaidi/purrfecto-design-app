@@ -55,11 +55,11 @@ export default function CreateShotWrapper() {
       console.error("User ID not found");
       throw new Error("User ID not found");
     }
-    const attachmentsId = nanoid();
-    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!, true, userId,attachmentsId);
+    const attachmentId = nanoid();
+    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!, true, userId,attachmentId);
     const attachments_urls = await Promise.all(
       shotItems.map((item) =>
-        uploadToSpaces(item.content, shotTitleSlug!, false, userId, attachmentsId)
+        uploadToSpaces(item.content, shotTitleSlug!, false, userId, attachmentId)
       )
     )
     const attachmentsJson = attachments_urls.map((url, index) => ({
@@ -77,7 +77,7 @@ export default function CreateShotWrapper() {
         thumbnailUrl: thumbnail_url!,
         tags: shotTags,
         isPublished: true,
-        attachmentsId: attachmentsId,
+        attachmentId: attachmentId,
         attachments: attachmentsJson,
         createdAt: new Date(),
         updatedAt: new Date(),

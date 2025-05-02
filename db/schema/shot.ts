@@ -9,7 +9,7 @@ export const shot = pgTable("shot", {
   title: text("title").notNull(),
   description: text("description"),
   thumbnail_url: text("thumbnail_url").notNull(),
-  attachments_id: text("attachments_id").notNull(),
+  attachment_id: text("attachment_id").notNull(),
   comments_id: text("comments_id").notNull(),
   likes_id: text("likes_id").notNull(),
   views_id: text("views_id").notNull(),

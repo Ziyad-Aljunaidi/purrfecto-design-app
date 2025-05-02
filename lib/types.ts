@@ -34,7 +34,7 @@ export interface ShotData {
   thumbnailUrl: string;
   tags: string[];
   isPublished: boolean;
-  attachmentsId: string;
+  attachmentId: string;
   attachments: Attachments[];
   createdAt: Date;
   updatedAt: Date;

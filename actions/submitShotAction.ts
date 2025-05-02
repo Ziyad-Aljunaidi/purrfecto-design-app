@@ -19,7 +19,7 @@ export default async function submitShotAction(shotData: ShotData) {
       title: shotData.title,
       description: shotData.description,
       thumbnail_url: shotData.thumbnailUrl,
-      attachments_id: shotData.attachmentsId,
+      attachment_id: shotData.attachmentId,
       comments_id: commentsId,
       likes_id: likesId,
       views_id: viewsId,
@@ -29,7 +29,7 @@ export default async function submitShotAction(shotData: ShotData) {
       updatedAt: new Date(),
     });
     await db.insert(attachment).values({
-      id: shotData.attachmentsId,
+      id: shotData.attachmentId,
       shot_id: shotId,
       attachments: shotData.attachments,
       createdAt: new Date(),

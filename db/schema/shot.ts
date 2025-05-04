@@ -41,6 +41,7 @@ export const comments = pgTable("comments", {
 export const likes = pgTable("likes", {
   id: text("id").primaryKey().$defaultFn(() => nanoid()),
   shot_id: text("shot_id").notNull().references(() => shot.id, { onDelete: "cascade" }),
+  creator_id: text("creator_id").notNull(),
   user_id: text("user_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -49,6 +50,14 @@ export const views = pgTable("views", {
   id: text("id").primaryKey().$defaultFn(() => nanoid()),
   shot_id: text("shot_id").notNull().references(() => shot.id, { onDelete: "cascade" }),
   totalViews: integer("total_views").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const savedShots = pgTable("saved_shots", {
+  id: text("id").primaryKey().$defaultFn(() => nanoid()),
+  shot_id: text("shot_id").notNull().references(() => shot.id, { onDelete: "cascade" }),
+  creator_id: text("creator_id").notNull(),
+  user_id: text("user_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

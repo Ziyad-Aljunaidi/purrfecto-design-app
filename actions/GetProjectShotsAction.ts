@@ -1,7 +1,9 @@
 "use server";
-import { desc,eq } from "drizzle-orm";
+import { desc,eq, count, sql } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { shot } from "@/db/schema/shot";
+import { shot, likes, views, comments } from "@/db/schema/shot";
+import { profile } from "@/db/schema/profile";
+
 
 export const getLatestShots = async () => {
   try {
@@ -14,5 +16,43 @@ export const getLatestShots = async () => {
   } catch (error) {
     console.error("Error fetching project shots: ", error);
     throw new Error("Failed to fetch project shots");
+  }
+}
+
+export const getProjectMetrics = async (shotId: string) => {
+  try {
+    const [totalLikes] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(likes)
+    .where(eq(likes.shot_id, shotId));
+
+    const [totalViews] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(views)
+    .where(eq(views.shot_id, shotId));
+
+    const [totalComments] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(comments)
+    .where(eq(comments.shot_id, shotId));
+    return { totalLikes: totalLikes.count, totalViews: totalViews.count, totalComments: totalComments.count };
+
+    // return totalLikes.count;
+  }catch (error) {
+    console.error("Error fetching project metrics: ", error);
+    throw new Error("Failed to fetch project metrics");
+  }
+}
+
+export const getShotCreator = async (creatorId: string) => {
+  try {
+    const [creator] = await db
+      .select()
+      .from(profile)
+      .where(eq(profile.userId, creatorId));
+    return creator;
+  } catch (error) {
+    console.error("Error fetching project metrics: ", error);
+    throw new Error("Failed to fetch project metrics");
   }
 }

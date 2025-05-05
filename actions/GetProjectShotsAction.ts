@@ -1,7 +1,7 @@
 "use server";
 import { desc,eq, count, sql } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { shot, likes, views, comments } from "@/db/schema/shot";
+import { shot, likes, views, comments, attachment } from "@/db/schema/shot";
 import { profile } from "@/db/schema/profile";
 
 
@@ -55,4 +55,18 @@ export const getShotCreator = async (creatorId: string) => {
     console.error("Error fetching project metrics: ", error);
     throw new Error("Failed to fetch project metrics");
   }
+}
+
+export const getShotAttachment = async (shotId: string) => {
+  try {
+    const [attachments] = await db
+      .select()
+      .from(attachment)
+      .where(eq(shot.id, shotId));
+    return attachments;
+    } catch (error) {
+      console.error("Error fetching project attachments: ", error);
+      throw new Error("Error fetching project attachments:");
+    }
+
 }

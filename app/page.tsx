@@ -1,10 +1,11 @@
 // import CardContainer from "@/components/card-widgets/card-container";
 // import Image from "next/image";
-import { DesignCard } from "@/components/card-widgets/card-design";
+// import { DesignCard } from "@/components/card-widgets/card-design";
 import { getLatestShots, getProjectMetrics, getShotCreator } from "@/actions/GetProjectShotsAction";
 import { isShotLiked, isShotSaved } from "@/actions/ProjectShotMetricsAction";
 import { getUserId } from "@/actions/UserAction";
 
+import { DesignCard } from "@/components/shot-widgets/card-design";
 
 export default async  function Home() {
   const userId = await getUserId();

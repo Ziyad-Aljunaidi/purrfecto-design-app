@@ -4,7 +4,6 @@ import { useState, useOptimistic, startTransition } from "react";
 import { Bookmark, Heart, Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -126,6 +125,7 @@ export function DesignCard({
   }
 
   return (
+    
     <Card
       className={cn(
         "w-full max-w-md overflow-hidden shadow-none transition-all duration-300 rounded-xl border-none",
@@ -134,6 +134,7 @@ export function DesignCard({
       )}
       {...props}
     >
+
       <div
         className="relative aspect-[4/3] w-full overflow-hidden rounded-xl"
         onMouseEnter={() => setIsImageHovering(true)}
@@ -146,8 +147,6 @@ export function DesignCard({
           className="object-cover transition-transform duration-300 hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-
-        {/* Image overlay with title and save button */}
         <div
           className={cn(
             "absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-between transition-opacity duration-300",
@@ -155,26 +154,64 @@ export function DesignCard({
           )}
         >
           <div className="self-end">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-10 w-10 rounded-full bg-background backdrop-blur-sm"
-              onClick={handleSave}
-            >
-              <Bookmark
-                size={16}
-                className={cn(
-                  "h-4 w-4",
-                  optimisticSaved ? "fill-zinc-950 dark:fill-white" : ""
-                )}
-              />
-              <span className="sr-only">Save to collection</span>
-            </Button>
+            {userId && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 rounded-full bg-background backdrop-blur-sm"
+                onClick={handleSave}
+              >
+                <Bookmark
+                  size={16}
+                  className={cn(
+                    "h-4 w-4",
+                    optimisticSaved ? "fill-zinc-950 dark:fill-white" : ""
+                  )}
+                />
+                <span className="sr-only">Save to collection</span>
+              </Button>
+            )}
+            {!userId && (
+              <Dialog>
+                <DialogTrigger className="flex items-center gap-1 p-3 rounded-full bg-background backdrop-blur-sm hover:bg-accent">
+                  <Bookmark
+                    size={16}
+                    className={cn(
+                      "h-4 w-4",
+                      optimisticSaved ? "fill-zinc-950 dark:fill-white" : ""
+                    )}
+                  />
+                  <span className="sr-only">Save to collection</span>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="text-xl font-medium text-foreground">
+                      Want to Save this shot?
+                    </DialogTitle>
+                    <DialogDescription className="text-md text-foreground">
+                      You need to be Signed in to Save this shot. Please Sign in
+                      or Sign up to continue.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    {/* <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction>Continue</AlertDialogAction> */}
+                    <Button variant="outline" className="text-md" asChild>
+                      <Link href="/auth/signin">Sign in</Link>
+                    </Button>
+                    <Button variant="outline" className="text-md" asChild>
+                      <Link href="/auth/signup">Sign up</Link>
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
-
+          
           <h2 className="text-white font-medium text-lg">{title}</h2>
         </div>
       </div>
+
 
       <CardContent className="p-0 bg-white dark:bg-background">
         <div className="flex items-center justify-between">
@@ -223,20 +260,20 @@ export function DesignCard({
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle className="text-xl font-medium text-foreground">
-                      Want to like this shot?
+                      Want to Like this shot?
                     </DialogTitle>
                     <DialogDescription className="text-md text-foreground">
-                      You need to be logged in to like this shot. Please Sign in
+                      You need to be Signed in to Like this shot. Please Sign in
                       or Sign up to continue.
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
                     {/* <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction>Continue</AlertDialogAction> */}
-                    <Button variant="ghost" className="text-md" asChild>
+                    <Button variant="outline" className="text-md" asChild>
                       <Link href="/auth/signin">Sign in</Link>
                     </Button>
-                    <Button variant="ghost" className="text-md" asChild>
+                    <Button variant="outline" className="text-md" asChild>
                       <Link href="/auth/signup">Sign up</Link>
                     </Button>
                   </DialogFooter>
@@ -246,7 +283,7 @@ export function DesignCard({
 
             <div className="flex items-center gap-1 px-2">
               <Eye className="h-4 w-4" />
-              <span className="text-xs">{views}22k</span>
+              <span className="text-xs">{views}</span>
             </div>
           </div>
         </div>

@@ -321,7 +321,7 @@ export function DesignCard({
 
       {/* Drawer component separate from the card */}
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <DrawerContent className="max-h-[90vh]">
+        <DrawerContent className="max-h-[90vh] outline-none">
           <div className="mx-auto w-full max-w-7xl">
             <DrawerHeader className="sticky top-0 z-10 bg-background border-b space-y-2">
               <DrawerTitle className="font-medium text-2xl flex items-center justify-between">

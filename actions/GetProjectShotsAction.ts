@@ -57,16 +57,15 @@ export const getShotCreator = async (creatorId: string) => {
   }
 }
 
-export const getShotAttachment = async (shotId: string) => {
+export const getShotAttachment = async (attachmentId: string) => {
   try {
-    const [attachments] = await db
+    const attachments = await db
       .select()
       .from(attachment)
-      .where(eq(shot.id, shotId));
+      .where(eq(attachment.id, attachmentId));
     return attachments;
     } catch (error) {
       console.error("Error fetching project attachments: ", error);
       throw new Error("Error fetching project attachments:");
     }
-
 }

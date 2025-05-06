@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useRef, startTransition, useOptimistic } from "react";
-import { Bookmark, Heart, Eye, MessageCircle } from "lucide-react";
+import { Bookmark, Heart, Eye,  X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,7 +24,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
+  // DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -34,35 +34,43 @@ import {
   toggleShotSave,
 } from "@/actions/ProjectShotMetricsAction";
 
+import ShotAttachment from "./shot-attachments";
+
 type DesignCardProps = React.ComponentProps<typeof Card> & {
-  imageUrl?: string;
-  title?: string;
+  imageUrl: string;
+  title: string;
   shotId: string;
   creator_Id: string;
   authorName?: string;
-  // authorRole?: string;
+  authorUsername: string;
   authorAvatar?: string;
   likes?: number;
   views?: number;
+  description?: string | null;
+  tags?: string[];
   userId?: string | null;
   is_liked?: boolean;
   is_saved?: boolean;
+  attachment_id: string;
 };
 
 export function DesignCard({
   className,
   shotId,
   creator_Id,
-  imageUrl = "/placeholder.svg?height=400&width=600",
-  title = "Minimal Dashboard Design",
-  authorName = "Sarah Johnson",
-  // authorRole = "designer",
-  authorAvatar = "/placeholder.svg?height=40&width=40",
-  likes = 142,
-  views = 1024,
-  userId = null,
+  imageUrl,
+  title,
+  authorName,
+  authorUsername,
+  authorAvatar,
+  likes,
+  views,
+  userId,
+  description,
+  tags,
   is_liked,
   is_saved,
+  attachment_id,
   ...props
 }: DesignCardProps) {
   const [isImageHovering, setIsImageHovering] = useState(false);
@@ -143,6 +151,8 @@ export function DesignCard({
       setDrawerOpen(true);
     }
   };
+
+
 
   return (
     <>
@@ -313,78 +323,77 @@ export function DesignCard({
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
         <DrawerContent className="max-h-[90vh]">
           <div className="mx-auto w-full max-w-7xl">
-            <DrawerHeader className="sticky top-0 z-10 bg-background border-b">
-              <DrawerTitle className="font-medium text-2xl">
+            <DrawerHeader className="sticky top-0 z-10 bg-background border-b space-y-2">
+              <DrawerTitle className="font-medium text-2xl flex items-center justify-between">
                 {title}
+                <DrawerClose asChild>
+                  <Button variant="ghost" className="rounded-full">
+                    <X size={16} />
+                  </Button>
+                </DrawerClose>
               </DrawerTitle>
-              <DrawerDescription className="flex items-center gap-2 text-foreground font-medium">
-                <Avatar>
-                  <AvatarImage
-                    src={authorAvatar}
-                    alt={authorName}
-                  />
+              <div className="flex items-center gap-2 text-foreground font-medium">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={authorAvatar} alt={authorName} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                {authorName}
-              </DrawerDescription>
+                <div>
+                  <h2 className="text-md font-medium">{authorName}</h2>
+                  <p className="text-sm font-medium text-accent-foreground">
+                    @{authorUsername}
+                  </p>
+                </div>
+              </div>
             </DrawerHeader>
 
             <div className="overflow-y-auto max-h-[calc(90vh-10rem)]">
               <div className="p-4">
-                <div className="w-full bg-muted rounded-lg flex items-center justify-center mb-6">
-                  <Image
-                    src={imageUrl || "/placeholder.svg"}
-                    alt={title}
-                    width={1920}
-                    height={50}
-                    // fill
-                    className="object-cover  max-h-full w-full rounded-lg"
-                    onClick={() => console.log(imageUrl)}
-                  />
-                </div>
-                <div className="w-full bg-muted rounded-lg flex items-center justify-center mb-6">
-                  <Image
+                {/* <div className="  rounded-lg flex items-center justify-center mb-6"> */}
+                  <ShotAttachment attachmentId={attachment_id} />
+                {/* </div> */}
+                <div className="relative rounded-lg flex items-center justify-center mb-6">
+                  {/* <Image
                     src={imageUrl || "/placeholder.svg"}
                     alt={title}
                     width={800}
                     height={600}
                     // fill
-                    className="object-cover  max-h-full w-full rounded-lg"
-                  />
+                    className=" w-full rounded-lg "
+                  /> */}
                 </div>
 
                 {/* Description section */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-medium mb-2">Description</h3>
-                  <p className="text-muted-foreground">
-                    This is a detailed description of the design. It showcases
-                    the thought process, design decisions, and the overall
-                    concept behind this creative work. The designer has put
-                    careful consideration into every element to create a
-                    cohesive and functional design that meets the project
-                    requirements.
-                  </p>
+                  <h3 className="text-xl font-semibold mb-2">Description</h3>
+                  <h2 className="text-foreground text-lg font-medium mb-2">
+                    {description || "No description available"}
+                  </h2>
                 </div>
 
                 {/* Tools used section */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-medium mb-2">Tools Used</h3>
+                  <h3 className="text-lg font-medium mb-2">Tags</h3>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-muted rounded-full text-sm">
-                      Figma
-                    </span>
-                    <span className="px-3 py-1 bg-muted rounded-full text-sm">
-                      Photoshop
-                    </span>
-                    <span className="px-3 py-1 bg-muted rounded-full text-sm">
+                    {tags?.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 bg-muted rounded-full text-md font-semibold transition-all duration-50 ease-in-out hover:outline-2 hover:outline-accent-foreground cursor-pointer"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                    {/* <span className="px-3 py-1 bg-muted rounded-full text-sm">
                       Illustrator
-                    </span>
+                    </span> */}
                   </div>
                 </div>
 
                 {/* Comments section */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-medium mb-2 flex gap-2 items-center"><MessageCircle size={16} className="h-4 w-4" />Comments</h3>
+                {/* <div className="mb-8">
+                  <h3 className="text-lg font-medium mb-2 flex gap-2 items-center">
+                    <MessageCircle size={16} className="h-4 w-4" />
+                    Comments
+                  </h3>
                   <div className="space-y-4">
                     {[1, 2, 3].map((i) => (
                       <div key={i} className="flex gap-3">
@@ -401,7 +410,7 @@ export function DesignCard({
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
                 {/* More from this designer section */}
                 <div>
@@ -427,30 +436,111 @@ export function DesignCard({
                 </div>
               </div>
             </div>
-
-            <DrawerFooter className="sticky bottom-0 z-10 bg-background border-t">
-              <div className="flex justify-between w-full mb-2">
+            
+            <DrawerFooter className="sticky bottom-0 z-10 bg-background border-t  ">
+              <div className="flex justify-between w-full">
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-1"
-                  >
-                    <Heart className="h-4 w-4" />
-                    <span>Like</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-1"
-                  >
-                    <Bookmark className="h-4 w-4" />
-                    <span>Save</span>
-                  </Button>
+                  {userId && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-1 px-2"
+                      onClick={handleLike}
+                    >
+                      <Heart
+                        className={cn(
+                          "h-4 w-4",
+                          isLiked ? "fill-zinc-950 dark:fill-white" : ""
+                        )}
+                      />
+                      <span className="text-xs">{optimisticLikes}</span>
+                    </Button>
+                  )}
+                  {!userId && (
+                    <Dialog>
+                      <DialogTrigger className="flex items-center gap-1 px-2">
+                        <Heart
+                          className={cn(
+                            "h-4 w-4",
+                            isLiked ? "fill-zinc-950 dark:fill-white" : ""
+                          )}
+                        />
+                        <span className="text-xs">{likes}</span>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="text-xl font-medium text-foreground">
+                            Want to Like this shot?
+                          </DialogTitle>
+                          <DialogDescription className="text-md text-foreground">
+                            You need to be Signed in to Like this shot. Please
+                            Sign in or Sign up to continue.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button variant="outline" className="text-md" asChild>
+                            <Link href="/auth/signin">Sign in</Link>
+                          </Button>
+                          <Button variant="outline" className="text-md" asChild>
+                            <Link href="/auth/signup">Sign up</Link>
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                  {userId && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10 rounded-full bg-background backdrop-blur-sm"
+                      onClick={handleSave}
+                    >
+                      <Bookmark
+                        size={16}
+                        className={cn(
+                          "h-4 w-4",
+                          optimisticSaved ? "fill-zinc-950 dark:fill-white" : ""
+                        )}
+                      />
+                      <span className="sr-only">Save to collection</span>
+                    </Button>
+                  )}
+                  {!userId && (
+                    <Dialog>
+                      <DialogTrigger className="flex items-center gap-1 p-3 rounded-full bg-background backdrop-blur-sm hover:bg-accent">
+                        <Bookmark
+                          size={24}
+                          className={cn(
+                            "h-12 w-12",
+                            optimisticSaved
+                              ? "fill-zinc-950 dark:fill-white"
+                              : ""
+                          )}
+                        />
+                        <span className="sr-only">Save to collection</span>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="text-xl font-medium text-foreground">
+                            Want to Save this shot?
+                          </DialogTitle>
+                          <DialogDescription className="text-md text-foreground">
+                            You need to be Signed in to Save this shot. Please
+                            Sign in or Sign up to continue.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button variant="outline" className="text-md" asChild>
+                            <Link href="/auth/signin">Sign in</Link>
+                          </Button>
+                          <Button variant="outline" className="text-md" asChild>
+                            <Link href="/auth/signup">Sign up</Link>
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </div>
-                <DrawerClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DrawerClose>
               </div>
             </DrawerFooter>
           </div>

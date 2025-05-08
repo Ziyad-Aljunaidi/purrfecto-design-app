@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getShotAttachment } from "@/actions/GetProjectShotsAction";
 import Image from "next/image";
+import ShotAttachmentLoading from "../skeletons/shot-attachments-loading";
 
 type Attachment = {
   id: string;
@@ -40,7 +41,7 @@ export default function ShotAttachment({
     fetchAttachments();
   }, [attachmentId]);
 
-  if (loading) return <p>Loading attachments...</p>;
+  if (loading) return <ShotAttachmentLoading />;
   if (error) return <p>{error}</p>;
 
   return (

@@ -25,7 +25,7 @@ export async function toggleShotLike({shotId, userId, creator_Id}: { shotId: str
     console.error("Error liking project shot: ", error);
     return { success: false, error: "Failed to like project shot" };
   }
-
+  // throw new Error("Not implemented yet");
 }
 
 export async function isShotLiked({shotId, userId}: { shotId: string; userId: string | null; }) {

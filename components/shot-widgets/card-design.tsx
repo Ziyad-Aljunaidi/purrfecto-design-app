@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useRef, startTransition, useOptimistic } from "react";
-import { Bookmark, Heart, Eye,  X } from "lucide-react";
+import { Bookmark, Heart, Eye, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,16 +25,18 @@ import {
   DrawerClose,
   DrawerContent,
   // DrawerDescription,
-  DrawerFooter,
+  // DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   toggleShotLike,
   toggleShotSave,
 } from "@/actions/ProjectShotMetricsAction";
 
 import ShotAttachment from "./shot-attachments";
+import ShotLikeAndSave from "./shot-like-and-save";
 
 type DesignCardProps = React.ComponentProps<typeof Card> & {
   imageUrl: string;
@@ -109,16 +111,19 @@ export function DesignCard({
       setTotalLikes((prev) => Number(prev) + (isLiked ? -1 : 1));
       setOptimisticLikes(isLiked);
 
-      const { success, error } = await toggleShotLike({
-        shotId,
-        userId,
-        creator_Id,
-      });
-      if (!success) {
-        console.error("Error liking project shot: ", error);
+      try{
+         await toggleShotLike({
+          shotId,
+          userId,
+          creator_Id,
+        });
+
+      }catch(err){
+        console.error("Error liking project shot: ", err);
         setIsLiked(isLiked);
         setTotalLikes((prev) => Number(prev) + (isLiked ? +1 : -1));
       }
+
     });
   }
 
@@ -151,8 +156,6 @@ export function DesignCard({
       setDrawerOpen(true);
     }
   };
-
-
 
   return (
     <>
@@ -321,7 +324,7 @@ export function DesignCard({
 
       {/* Drawer component separate from the card */}
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <DrawerContent className="max-h-[90vh] outline-none">
+        <DrawerContent className=" outline-none ">
           <div className="mx-auto w-full max-w-7xl">
             <DrawerHeader className="sticky top-0 z-10 bg-background border-b space-y-2">
               <DrawerTitle className="font-medium text-2xl flex items-center justify-between">
@@ -332,24 +335,38 @@ export function DesignCard({
                   </Button>
                 </DrawerClose>
               </DrawerTitle>
-              <div className="flex items-center gap-2 text-foreground font-medium">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={authorAvatar} alt={authorName} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="text-md font-medium">{authorName}</h2>
-                  <p className="text-sm font-medium text-accent-foreground">
-                    @{authorUsername}
-                  </p>
+              
+              <div className="flex  items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-foreground font-medium">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src={authorAvatar} alt={authorName} />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h2 className="text-md font-medium">{authorName}</h2>
+                    <p className="text-sm font-medium text-accent-foreground">
+                      @{authorUsername}
+                    </p>
+                  </div>
                 </div>
+
+                <ShotLikeAndSave
+                  userId={userId}
+                  handleLike={handleLike}
+                  handleSave={handleSave}
+                  isLiked={isLiked}
+                  optimisticLikes={optimisticLikes}
+                  likes={likes}
+                  optimisticSaved={optimisticSaved}
+                />
               </div>
             </DrawerHeader>
-
-            <div className="overflow-y-auto max-h-[calc(90vh-10rem)]">
+            
+            <ScrollArea className="h-[calc(100vh-15rem)] ">
+            <div className="">
               <div className="p-4">
                 {/* <div className="  rounded-lg flex items-center justify-center mb-6"> */}
-                  <ShotAttachment attachmentId={attachment_id} />
+                <ShotAttachment attachmentId={attachment_id} />
                 {/* </div> */}
                 <div className="relative rounded-lg flex items-center justify-center mb-6">
                   {/* <Image
@@ -436,113 +453,8 @@ export function DesignCard({
                 </div>
               </div>
             </div>
-            
-            <DrawerFooter className="sticky bottom-0 z-10 bg-background border-t  ">
-              <div className="flex justify-between w-full">
-                <div className="flex items-center gap-2">
-                  {userId && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex items-center gap-1 px-2"
-                      onClick={handleLike}
-                    >
-                      <Heart
-                        className={cn(
-                          "h-4 w-4",
-                          isLiked ? "fill-zinc-950 dark:fill-white" : ""
-                        )}
-                      />
-                      <span className="text-xs">{optimisticLikes}</span>
-                    </Button>
-                  )}
-                  {!userId && (
-                    <Dialog>
-                      <DialogTrigger className="flex items-center gap-1 px-2">
-                        <Heart
-                          className={cn(
-                            "h-4 w-4",
-                            isLiked ? "fill-zinc-950 dark:fill-white" : ""
-                          )}
-                        />
-                        <span className="text-xs">{likes}</span>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle className="text-xl font-medium text-foreground">
-                            Want to Like this shot?
-                          </DialogTitle>
-                          <DialogDescription className="text-md text-foreground">
-                            You need to be Signed in to Like this shot. Please
-                            Sign in or Sign up to continue.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <DialogFooter>
-                          <Button variant="outline" className="text-md" asChild>
-                            <Link href="/auth/signin">Sign in</Link>
-                          </Button>
-                          <Button variant="outline" className="text-md" asChild>
-                            <Link href="/auth/signup">Sign up</Link>
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                  {userId && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-10 w-10 rounded-full bg-background backdrop-blur-sm"
-                      onClick={handleSave}
-                    >
-                      <Bookmark
-                        size={16}
-                        className={cn(
-                          "h-4 w-4",
-                          optimisticSaved ? "fill-zinc-950 dark:fill-white" : ""
-                        )}
-                      />
-                      <span className="sr-only">Save to collection</span>
-                    </Button>
-                  )}
-                  {!userId && (
-                    <Dialog>
-                      <DialogTrigger className="flex items-center gap-1 p-3 rounded-full bg-background backdrop-blur-sm hover:bg-accent">
-                        <Bookmark
-                          size={24}
-                          className={cn(
-                            "h-12 w-12",
-                            optimisticSaved
-                              ? "fill-zinc-950 dark:fill-white"
-                              : ""
-                          )}
-                        />
-                        <span className="sr-only">Save to collection</span>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle className="text-xl font-medium text-foreground">
-                            Want to Save this shot?
-                          </DialogTitle>
-                          <DialogDescription className="text-md text-foreground">
-                            You need to be Signed in to Save this shot. Please
-                            Sign in or Sign up to continue.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <DialogFooter>
-                          <Button variant="outline" className="text-md" asChild>
-                            <Link href="/auth/signin">Sign in</Link>
-                          </Button>
-                          <Button variant="outline" className="text-md" asChild>
-                            <Link href="/auth/signup">Sign up</Link>
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                </div>
-              </div>
-            </DrawerFooter>
+            </ScrollArea>
+            {/* DRAWER FOOTER PLACE */}
           </div>
         </DrawerContent>
       </Drawer>

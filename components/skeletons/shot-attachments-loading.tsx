@@ -1,9 +1,10 @@
+import { Image } from "lucide-react"
 export default function ShotAttachmentLoading(){
   return(
-  <div className="max-w-3xl  ">
-  <div className="max-w-3xl animate-pulse aspect-4/3 w-full bg-muted rounded-lg flex items-center justify-center">Loading</div>
-  <div className="animate-pulse py-1 my-1 bg-muted rounded-lg w-36"></div>
-  <div className="animate-pulse py-1 my-1 bg-muted rounded-lg w-48"></div>
+  <div className="max-w-3xl w-full mx-auto  py-4">
+  <div className="max-w-3xl animate-pulse aspect-square w-full bg-muted/50 rounded-lg flex items-center justify-center">
+    <Image className="h-10 w-10 opacity-25" />
+  </div>
   </div> 
   )
 }

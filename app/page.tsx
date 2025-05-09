@@ -23,21 +23,16 @@ export default async  function Home() {
             return (
               <DesignCard
                 key={shot.id}
-                shotId={shot.id}
-                creator_Id={shot.creator_id}
-                imageUrl={shot.thumbnail_url}
-                title={shot.title}
-                description={shot.description}
-                tags={shot.tags}
-                attachment_id={shot.attachment_id}
+                userId={userId}
+                shot={shot}
+                creator={creator}
+
                 likes={totalLikes}
+                views={totalViews}
                 is_liked={await isShotLiked({shotId: shot.id, userId: userId})}
                 is_saved={await isShotSaved({shotId: shot.id, userId: userId})}
-                views={totalViews}
-                authorName={creator.name}
-                authorUsername={creator.displayUsername}
-                authorAvatar={creator.avatar_url[0]}
-                userId={userId}
+                
+                
                 
                 
                

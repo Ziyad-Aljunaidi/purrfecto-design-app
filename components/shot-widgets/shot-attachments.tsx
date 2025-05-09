@@ -46,44 +46,45 @@ export default function ShotAttachment({
 
   return (
     <div>
-{!!attachments &&
-  attachments.flatMap((attachment) =>
-    attachment.attachments?.map((source) => {
-      if (source.type === "image") {
-        return (
-          <div
-            key={source.source}
-            className="w-full rounded-lg overflow-hidden max-w-3xl py-4 mx-auto"
-          >
-            <Image
-              src={source.source || "/placeholder.svg"}
-              alt={source.type || "Image"}
-              width={800}
-              height={600}
-              className="w-full h-auto object-cover rounded-lg"
-            />
-          </div>
-        );
-      } else if (source.type === "video") {
-        return (
-          <div
-            key={source.source}
-            className="w-full rounded-lg overflow-hidden max-w-3xl py-4 mx-auto"
-          >
-            <video
-              src={source.source || "/placeholder.svg"}
-              className="h-full w-full object-cover rounded-lg"
-              autoPlay
-              loop
-              muted
-            />
-          </div>
-        );
-      } else {
-        return null; // for non-image/video types
-      }
-    }) || [] // fallback if attachment.attachments is undefined
-  )}
+      {!!attachments &&
+        attachments.flatMap(
+          (attachment) =>
+            attachment.attachments?.map((source) => {
+              if (source.type === "image") {
+                return (
+                  <div
+                    key={source.source}
+                    className="w-full rounded-lg overflow-hidden max-w-3xl py-4 mx-auto"
+                  >
+                    <Image
+                      src={source.source || "/placeholder.svg"}
+                      alt={source.type || "Image"}
+                      width={800}
+                      height={600}
+                      className="w-full h-auto object-cover rounded-lg"
+                    />
+                  </div>
+                );
+              } else if (source.type === "video") {
+                return (
+                  <div
+                    key={source.source}
+                    className="w-full rounded-lg overflow-hidden max-w-3xl py-4 mx-auto"
+                  >
+                    <video
+                      src={source.source || "/placeholder.svg"}
+                      className="h-full w-full object-cover rounded-lg"
+                      autoPlay
+                      loop
+                      muted
+                    />
+                  </div>
+                );
+              } else {
+                return null; // for non-image/video types
+              }
+            }) || [] // fallback if attachment.attachments is undefined
+        )}
     </div>
   );
 }

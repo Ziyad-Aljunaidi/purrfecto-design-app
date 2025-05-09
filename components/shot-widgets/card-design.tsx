@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useRef, startTransition, useOptimistic } from "react";
-import { Bookmark, Heart, Eye, X } from "lucide-react";
+import { Bookmark, Heart, Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,59 +20,34 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  // DrawerDescription,
-  // DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import {
   toggleShotLike,
   toggleShotSave,
 } from "@/actions/ProjectShotMetricsAction";
 
-import ShotAttachment from "./shot-attachments";
-import ShotLikeAndSave from "./shot-like-and-save";
+import { Shot, Creator } from "@/lib/definitions";
+import ShotDrawer from "./shot-drawer";
 
 type DesignCardProps = React.ComponentProps<typeof Card> & {
-  imageUrl: string;
-  title: string;
-  shotId: string;
-  creator_Id: string;
-  authorName?: string;
-  authorUsername: string;
-  authorAvatar?: string;
+  userId?: string | null;
+  shot: Shot;
+  creator: Creator;
   likes?: number;
   views?: number;
-  description?: string | null;
-  tags?: string[];
-  userId?: string | null;
   is_liked?: boolean;
   is_saved?: boolean;
-  attachment_id: string;
 };
 
 export function DesignCard({
   className,
-  shotId,
-  creator_Id,
-  imageUrl,
-  title,
-  authorName,
-  authorUsername,
-  authorAvatar,
+  userId,
+  shot,
+  creator,
   likes,
   views,
-  userId,
-  description,
-  tags,
   is_liked,
   is_saved,
-  attachment_id,
   ...props
 }: DesignCardProps) {
   const [isImageHovering, setIsImageHovering] = useState(false);
@@ -111,19 +86,17 @@ export function DesignCard({
       setTotalLikes((prev) => Number(prev) + (isLiked ? -1 : 1));
       setOptimisticLikes(isLiked);
 
-      try{
-         await toggleShotLike({
-          shotId,
+      try {
+        await toggleShotLike({
+          shotId: shot.id,
           userId,
-          creator_Id,
+          creatorId: creator.id,
         });
-
-      }catch(err){
+      } catch (err) {
         console.error("Error liking project shot: ", err);
         setIsLiked(isLiked);
         setTotalLikes((prev) => Number(prev) + (isLiked ? +1 : -1));
       }
-
     });
   }
 
@@ -134,14 +107,14 @@ export function DesignCard({
     setIsSaved(!isSaved);
     startTransition(async () => {
       setOptimisticSaved(isSaved);
-
-      const { success, error } = await toggleShotSave({
-        shotId,
-        userId,
-        creator_Id,
-      });
-      if (!success) {
-        console.error("Error saving project shot: ", error);
+      try {
+        await toggleShotSave({
+          shotId: shot.id,
+          userId,
+          creatorId: creator.id,
+        });
+      } catch (err) {
+        console.error("Error saving project shot: ", err);
         setIsSaved(isSaved);
       }
     });
@@ -174,10 +147,10 @@ export function DesignCard({
           onClick={handleImageClick}
         >
           <Image
-            src={imageUrl || "/placeholder.svg"}
-            alt={title}
+            src={shot.thumbnail_url || "/placeholder.svg"}
+            alt={shot.title}
             fill
-            className="object-cover transition-transform duration-300 hover:scale-105"
+            className="object-cover transition-transform duration-300 hover:"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
 
@@ -243,7 +216,7 @@ export function DesignCard({
             </div>
 
             <h2 className="text-white font-medium text-lg pointer-events-none">
-              {title}
+              {shot.title}
             </h2>
           </div>
         </div>
@@ -253,13 +226,13 @@ export function DesignCard({
             <div className="flex items-center gap-3">
               <Avatar className="h-8 w-8 border ">
                 <AvatarImage
-                  src={authorAvatar || "/placeholder.svg"}
-                  alt={authorName}
+                  src={creator.avatar_url[0] || "/placeholder.svg"}
+                  alt={creator.name}
                 />
-                <AvatarFallback>{authorName?.charAt(0)}</AvatarFallback>
+                <AvatarFallback>{creator.name?.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="">
-                <h3 className="font-medium leading-none">{authorName}</h3>
+                <h3 className="font-medium leading-none">{creator.name}</h3>
               </div>
             </div>
 
@@ -322,142 +295,19 @@ export function DesignCard({
         </CardContent>
       </Card>
 
-      {/* Drawer component separate from the card */}
-      <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <DrawerContent className=" outline-none ">
-          <div className="mx-auto w-full max-w-7xl">
-            <DrawerHeader className="sticky top-0 z-10 bg-background border-b space-y-2">
-              <DrawerTitle className="font-medium text-2xl flex items-center justify-between">
-                {title}
-                <DrawerClose asChild>
-                  <Button variant="ghost" className="rounded-full">
-                    <X size={16} />
-                  </Button>
-                </DrawerClose>
-              </DrawerTitle>
-              
-              <div className="flex  items-center justify-between gap-2">
-                <div className="flex items-center gap-2 text-foreground font-medium">
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={authorAvatar} alt={authorName} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h2 className="text-md font-medium">{authorName}</h2>
-                    <p className="text-sm font-medium text-accent-foreground">
-                      @{authorUsername}
-                    </p>
-                  </div>
-                </div>
-
-                <ShotLikeAndSave
-                  userId={userId}
-                  handleLike={handleLike}
-                  handleSave={handleSave}
-                  isLiked={isLiked}
-                  optimisticLikes={optimisticLikes}
-                  likes={likes}
-                  optimisticSaved={optimisticSaved}
-                />
-              </div>
-            </DrawerHeader>
-            
-            <ScrollArea className="h-[calc(100vh-15rem)] ">
-            <div className="">
-              <div className="p-4">
-                {/* <div className="  rounded-lg flex items-center justify-center mb-6"> */}
-                <ShotAttachment attachmentId={attachment_id} />
-                {/* </div> */}
-                <div className="relative rounded-lg flex items-center justify-center mb-6">
-                  {/* <Image
-                    src={imageUrl || "/placeholder.svg"}
-                    alt={title}
-                    width={800}
-                    height={600}
-                    // fill
-                    className=" w-full rounded-lg "
-                  /> */}
-                </div>
-
-                {/* Description section */}
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold mb-2">Description</h3>
-                  <h2 className="text-foreground text-lg font-medium mb-2">
-                    {description || "No description available"}
-                  </h2>
-                </div>
-
-                {/* Tools used section */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-medium mb-2">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {tags?.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 bg-muted rounded-full text-md font-semibold transition-all duration-50 ease-in-out hover:outline-2 hover:outline-accent-foreground cursor-pointer"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                    {/* <span className="px-3 py-1 bg-muted rounded-full text-sm">
-                      Illustrator
-                    </span> */}
-                  </div>
-                </div>
-
-                {/* Comments section */}
-                {/* <div className="mb-8">
-                  <h3 className="text-lg font-medium mb-2 flex gap-2 items-center">
-                    <MessageCircle size={16} className="h-4 w-4" />
-                    Comments
-                  </h3>
-                  <div className="space-y-4">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex gap-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarFallback>U{i}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium">User {i}</div>
-                          <p className="text-sm text-muted-foreground">
-                            Great work! I love the attention to detail in this
-                            design.
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div> */}
-
-                {/* More from this designer section */}
-                <div>
-                  <h3 className="text-lg font-medium mb-2">
-                    More from {authorName}
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="relative aspect-[4/3] rounded-lg overflow-hidden"
-                      >
-                        <Image
-                          src={imageUrl}
-                          alt={`More work ${i}`}
-                          fill
-                          className="object-cover"
-                          // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-            </ScrollArea>
-            {/* DRAWER FOOTER PLACE */}
-          </div>
-        </DrawerContent>
-      </Drawer>
+      <ShotDrawer 
+        userId={userId}
+        shot={shot}
+        creator={creator}
+        likes={totalLikes}
+        isLiked={isLiked}
+        handleLike={handleLike}
+        handleSave={handleSave}
+        optimisticLikes={optimisticLikes}
+        optimisticSaved={optimisticSaved}
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+      />
     </>
   );
 }

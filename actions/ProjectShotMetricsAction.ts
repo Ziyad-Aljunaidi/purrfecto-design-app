@@ -5,7 +5,7 @@ import { shot, likes, views, comments, savedShots } from "@/db/schema/shot";
 import { user } from "@/db/schema/auth-schema";
 
 
-export async function toggleShotLike({shotId, userId, creator_Id}: { shotId: string; userId: string | null, creator_Id: string }) {
+export async function toggleShotLike({shotId, userId, creatorId}: { shotId: string; userId: string | null, creatorId: string }) {
   if(userId === null) {
     return { success: false, error: "User not logged in" };
   }
@@ -18,7 +18,7 @@ export async function toggleShotLike({shotId, userId, creator_Id}: { shotId: str
     if (isAlreadyLiked.length > 0) {
       await db.delete(likes).where(and (eq(likes.shot_id, shotId), eq(likes.user_id, userId)));
     } else {
-      await db.insert(likes).values({ shot_id: shotId, user_id: userId, creator_id: creator_Id });
+      await db.insert(likes).values({ shot_id: shotId, user_id: userId, creator_id: creatorId });
     }
     return { success: true };
   } catch (error) {
@@ -50,7 +50,7 @@ export async function isShotLiked({shotId, userId}: { shotId: string; userId: st
   }
 }
 
-export async function toggleShotSave({shotId, userId, creator_Id}: { shotId: string; userId: string | null, creator_Id: string }) {
+export async function toggleShotSave({shotId, userId, creatorId}: { shotId: string; userId: string | null, creatorId: string }) {
   if(userId === null) {
     return { success: false, error: "User not logged in" };
   }
@@ -63,14 +63,13 @@ export async function toggleShotSave({shotId, userId, creator_Id}: { shotId: str
     if (isAlreadySaved.length > 0) {
       await db.delete(savedShots).where(and (eq(savedShots.shot_id, shotId), eq(savedShots.user_id, userId)));
     } else {
-      await db.insert(savedShots).values({ shot_id: shotId, user_id: userId, creator_id: creator_Id });
+      await db.insert(savedShots).values({ shot_id: shotId, user_id: userId, creator_id: creatorId });
     }
     return { success: true };
   } catch (error) {
     console.error("Error Saving project shot: ", error);
     return { success: false, error: "Failed to Save project shot" };
   }
-
 }
 export async function isShotSaved({shotId, userId}: { shotId: string; userId: string | null; }) {
   if(userId === null) {

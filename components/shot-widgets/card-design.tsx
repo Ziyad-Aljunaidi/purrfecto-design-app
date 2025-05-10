@@ -134,7 +134,7 @@ export function DesignCard({
     <>
       <Card
         className={cn(
-          "w-full max-w-md overflow-hidden shadow-none transition-all duration-300 rounded-xl border-none p-0",
+          "w-full max-w-md overflow-hidden shadow-none transition-all duration-300 rounded-xl border-none p-0 gap-3",
           className
         )}
         {...props}
@@ -150,7 +150,7 @@ export function DesignCard({
             src={shot.thumbnail_url || "/placeholder.svg"}
             alt={shot.title}
             fill
-            className="object-cover transition-transform duration-300 hover:"
+            className="object-cover transition-transform duration-300 hover:scale-103"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
 
@@ -224,7 +224,7 @@ export function DesignCard({
         <CardContent className="p-0 bg-white dark:bg-background">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Avatar className="h-8 w-8 border ">
+              <Avatar className="h-7 w-7 border ">
                 <AvatarImage
                   src={creator.avatar_url[0] || "/placeholder.svg"}
                   alt={creator.name}

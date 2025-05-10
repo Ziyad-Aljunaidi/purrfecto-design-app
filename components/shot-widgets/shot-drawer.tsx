@@ -1,3 +1,4 @@
+
 import {
   Drawer,
   DrawerClose,
@@ -14,6 +15,7 @@ import ShotLikeAndSave from "@/components/shot-widgets/shot-like-and-save";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Creator, Shot } from "@/lib/definitions";
+import { useEffect } from "react";
 
 export default function ShotDrawer({
   userId,
@@ -43,6 +45,22 @@ export default function ShotDrawer({
   drawerOpen: boolean;
   setDrawerOpen: (open: boolean) => void;
 }) {
+
+  useEffect(() => {
+    const baseUrl = "/"; // your homepage
+
+    if (drawerOpen) {
+      const newUrl = `/shot/${shot.id}`;
+      if (window.location.pathname !== newUrl) {
+        window.history.pushState(null, "", newUrl); // ✅ push new URL without navigation
+      }
+    } else {
+      if (window.location.pathname.startsWith("/shot/")) {
+        window.history.pushState(null, "", baseUrl); // ✅ go back to home
+      }
+    }
+  }, [drawerOpen, shot.id]);
+
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerContent className=" outline-none h-full">

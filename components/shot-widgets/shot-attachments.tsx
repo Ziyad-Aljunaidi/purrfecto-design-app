@@ -4,15 +4,8 @@ import { useEffect, useState } from "react";
 import { getShotAttachment } from "@/actions/GetProjectShotsAction";
 import Image from "next/image";
 import ShotAttachmentLoading from "../skeletons/shot-attachments-loading";
+import { Attachment } from "@/lib/definitions";
 
-type Attachment = {
-  id: string;
-  shot_id: string;
-  attachments: { type: string; source: string }[] | null;
-  createdAt: Date;
-  updatedAt: Date;
-  is_published: boolean | null;
-};
 
 export default function ShotAttachment({
   attachmentId,
@@ -54,7 +47,7 @@ export default function ShotAttachment({
                 return (
                   <div
                     key={source.source}
-                    className="w-full rounded-lg overflow-hidden max-w-3xl py-4 mx-auto"
+                    className="w-full rounded-lg overflow-hidden max-w-[50vw] py-4 mx-auto"
                   >
                     <Image
                       src={source.source || "/placeholder.svg"}

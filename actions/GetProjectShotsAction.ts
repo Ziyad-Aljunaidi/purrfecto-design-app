@@ -19,6 +19,18 @@ export const getLatestShots = async () => {
   }
 }
 
+export const getShot= async (shotId: string) => {
+  try {
+    const projectShot = await db
+      .select()
+      .from(shot)
+      .where(eq(shot.id, shotId));
+    return projectShot[0];
+  } catch (error) {
+    console.error("Error fetching project shot: ", error);
+    throw new Error("Failed to fetch project shot");
+  }
+}
 export const getProjectMetrics = async (shotId: string) => {
   try {
     const [totalLikes] = await db

@@ -64,7 +64,7 @@ export default function ShotDrawer({
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerContent className=" outline-none h-full">
-        <div className="mx-auto h-full w-full max-w-7xl flex flex-col">
+        <div className="mx-auto h-full w-full max-w-[80vw] flex flex-col">
           <DrawerHeader className="sticky top-0 z-10 bg-background border-b space-y-2 flex-shrink-0">
             <DrawerTitle className="font-medium text-2xl flex items-center justify-between">
               {shot.title}
@@ -75,19 +75,19 @@ export default function ShotDrawer({
               </DrawerClose>
             </DrawerTitle>
 
-            <div className="flex  items-center justify-between gap-2">
-              <div className="flex items-center gap-2 text-foreground font-medium">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={creator.avatar_url[0]} alt={creator.name} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="text-md font-medium">{creator.name}</h2>
-                  <p className="text-sm font-medium text-accent-foreground">
-                    @{creator.displayUsername}
-                  </p>
-                </div>
-              </div>
+            <div className="flex  items-center justify-between gap-2 ">
+          <div className="flex items-center gap-4 ">
+            <Avatar className="h-16 w-16 border-2 border-primary">
+              <AvatarImage src={creator.avatar_url[0] || "/placeholder.svg"} alt={creator.name} />
+              <AvatarFallback className="text-lg font-bold">
+                {creator.name.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="text-3xl font-extrabold tracking-tight">{creator.name}</h2>
+              <p className="text-lg font-medium text-muted-foreground">@{creator.displayUsername}</p>
+            </div>
+          </div>
 
               <ShotLikeAndSave
                 userId={userId}

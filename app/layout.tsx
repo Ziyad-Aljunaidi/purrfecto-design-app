@@ -3,6 +3,7 @@ import {
   Geist,
   Geist_Mono,
   JetBrains_Mono,
+  Poppins
 } from "next/font/google";
 import "./globals.css";
 import MainHeader from "@/components/main-header";
@@ -22,6 +23,11 @@ const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 
 export const metadata: Metadata = {
@@ -40,7 +46,7 @@ children: React.ReactNode;
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${jetBrainsMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} ${jetBrainsMono.variable} ${poppins.variable} antialiased`}
         >
           <ThemeProvider
             attribute="class"

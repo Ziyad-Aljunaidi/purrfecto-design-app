@@ -38,3 +38,11 @@ export interface Creator {
   updatedAt: Date | null;
 }
 
+export interface Attachment  {
+  id: string;
+  shot_id: string;
+  attachments: { type: string; source: string }[] | null;
+  createdAt: Date;
+  updatedAt: Date;
+  is_published: boolean | null;
+};

@@ -1,6 +1,5 @@
 import { getShotCreator, getShot, getShotAttachment, getProjectMetrics } from "@/actions/GetProjectShotsAction";
 import ShotPageComp from "@/components/shot-widgets/shot-page-comp";
-import { get } from "http";
 import { notFound } from "next/navigation";
 
 

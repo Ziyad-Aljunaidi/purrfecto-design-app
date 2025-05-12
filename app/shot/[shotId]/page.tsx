@@ -24,8 +24,8 @@ export default async function ShotCreator({
   const shotMetrics = await getProjectMetrics(shotId);
 
   const likes = shotMetrics.totalLikes;
-  const views = shotMetrics.totalViews;
-  const comments = shotMetrics.totalComments;
+  // const views = shotMetrics.totalViews;
+  // const comments = shotMetrics.totalComments;
 
   return (
     <ShotPageComp
@@ -33,8 +33,6 @@ export default async function ShotCreator({
       shot={shot}
       shotAttachments={shotAttachments[0]}
       likes={likes}
-      views={views}
-      comments={comments}
     />
   );
 }

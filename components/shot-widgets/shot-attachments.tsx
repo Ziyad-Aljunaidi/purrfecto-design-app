@@ -47,7 +47,7 @@ export default function ShotAttachment({
                 return (
                   <div
                     key={source.source}
-                    className="w-full rounded-lg overflow-hidden max-w-[50vw] py-4 mx-auto"
+                    className="w-full rounded-lg overflow-hidden lg:max-w-[50vw] py-4 mx-auto"
                   >
                     <Image
                       src={source.source || "/placeholder.svg"}

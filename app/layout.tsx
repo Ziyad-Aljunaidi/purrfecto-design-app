@@ -1,30 +1,36 @@
 import type { Metadata } from "next";
 import {
-  Geist,
-  Geist_Mono,
-  JetBrains_Mono,
-  Poppins
+  // Geist,
+  // Geist_Mono,
+  // JetBrains_Mono,
+  // Poppins,
+  Inter
 } from "next/font/google";
 import "./globals.css";
 import MainHeader from "@/components/main-header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-});
-const poppins = Poppins({
-  variable: "--font-poppins",
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
+// const jetBrainsMono = JetBrains_Mono({
+//   variable: "--font-jetbrains-mono",
+//   subsets: ["latin"],
+// });
+// const poppins = Poppins({
+//   variable: "--font-poppins",
+//   subsets: ["latin"],
+//   weight: ["400", "500", "600", "700"],
+// });
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -46,7 +52,7 @@ children: React.ReactNode;
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${jetBrainsMono.variable} ${poppins.variable} antialiased`}
+          className={`${inter.className} antialiased`}
         >
           <ThemeProvider
             attribute="class"

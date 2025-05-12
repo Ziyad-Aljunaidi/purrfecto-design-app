@@ -90,7 +90,7 @@ export default function ShotLikeAndSave({
             onClick={handleSave}
           >
             <Bookmark
-              size={16}
+              // size={16}
               className={cn(
                 "h-4 w-4",
                 optimisticSaved ? "fill-zinc-950 dark:fill-white" : ""

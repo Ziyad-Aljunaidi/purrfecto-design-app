@@ -1,4 +1,3 @@
-
 import {
   Drawer,
   DrawerClose,
@@ -45,7 +44,6 @@ export default function ShotDrawer({
   drawerOpen: boolean;
   setDrawerOpen: (open: boolean) => void;
 }) {
-
   useEffect(() => {
     const baseUrl = "/"; // your homepage
 
@@ -64,10 +62,9 @@ export default function ShotDrawer({
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerContent className=" outline-none h-full">
-        <div className="mx-auto h-full w-full max-w-[80vw] flex flex-col">
-          <DrawerHeader className="sticky top-0 z-10 bg-background border-b space-y-2 flex-shrink-0">
-            <DrawerTitle className="font-medium text-2xl flex items-center justify-between">
-              {shot.title}
+        <div className="mx-auto h-full w-full lg:max-w-5xl flex flex-col">
+          <DrawerHeader className="sticky top-0 z-10 bg-background border-b space-y-2 flex-shrink-0 py-6  px-4">
+            <DrawerTitle className="font-medium text-2xl flex items-center justify-end">
               <DrawerClose asChild>
                 <Button variant="ghost" className="rounded-full">
                   <X size={16} />
@@ -75,21 +72,39 @@ export default function ShotDrawer({
               </DrawerClose>
             </DrawerTitle>
 
-            <div className="flex  items-center justify-between gap-2 ">
-          <div className="flex items-center gap-4 ">
-            <Avatar className="h-16 w-16 border-2 border-primary">
-              <AvatarImage src={creator.avatar_url[0] || "/placeholder.svg"} alt={creator.name} />
-              <AvatarFallback className="text-lg font-bold">
-                {creator.name.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h2 className="text-3xl font-extrabold tracking-tight">{creator.name}</h2>
-              <p className="text-lg font-medium text-muted-foreground">@{creator.displayUsername}</p>
-            </div>
-          </div>
+            <div className="flex  items-center justify-between gap-4 ">
+              <div className="flex items-center gap-4 ">
+                <Avatar className="h-14 w-14">
+                  <AvatarImage
+                    src={creator.avatar_url[0] || "/placeholder.svg"}
+                    alt={creator.name}
+                  />
+                  <AvatarFallback className="text-lg font-bold">
+                    {creator.name.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h2 className="text-md lg:text-xl font-extrabold tracking-tight">
+                    {creator.name}
+                  </h2>
+                  <p className="text-smlg:text-md font-medium text-muted-foreground">
+                    @{creator.displayUsername}
+                  </p>
+                </div>
+              </div>
 
-              <ShotLikeAndSave
+
+            </div>
+          </DrawerHeader>
+
+          <ScrollArea className="flex-grow overflow-auto">
+            <div className="flex items-center justify-between mt-8 mb-2 lg:mb-6">
+              <div className=" px-4 md:px-0">
+              <h1 className="text-4xl md:text-5xl font-black tracking-tighter break-words">
+                {shot.title}
+              </h1>
+            </div>
+                            <ShotLikeAndSave
                 userId={userId}
                 handleLike={handleLike}
                 handleSave={handleSave}
@@ -99,9 +114,7 @@ export default function ShotDrawer({
                 optimisticSaved={optimisticSaved}
               />
             </div>
-          </DrawerHeader>
-
-          <ScrollArea className="flex-grow overflow-auto">
+            
             <div className="p-4 mb-12">
               <ShotAttachment attachmentId={shot.attachment_id} />
 

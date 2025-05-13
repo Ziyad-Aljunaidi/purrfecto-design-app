@@ -13,8 +13,8 @@ export default async  function Home() {
   const shots = await getLatestShots();
   return (
     <main className="@container/main px-4 pt-4">
-      <div className="h-96   max-w-[1728px] w-auto m-auto rounded-xl bg-background ring-1 ring-accent my-2"></div>
-      <div className="grid grid-cols-1 gap-4 space-y-4 max-w-[1728px] w-auto m-auto  md:grid-cols-3 lg:grid-cols-4 my-6">
+      <div className="h-96   max-w-[1920px] w-auto m-auto rounded-xl bg-background ring-1 ring-accent my-2"></div>
+      <div className="grid grid-cols-1 gap-4 space-y-4 max-w-[1920px] w-auto m-auto  md:grid-cols-3 lg:grid-cols-4 my-6">
         {await Promise.all(
           shots.map(async (shot) => {
             const { totalLikes, totalViews} = await getProjectMetrics(shot.id);
@@ -32,10 +32,6 @@ export default async  function Home() {
                 is_liked={await isShotLiked({shotId: shot.id, userId: userId})}
                 is_saved={await isShotSaved({shotId: shot.id, userId: userId})}
                 
-                
-                
-                
-               
               />
             );
           })

@@ -85,7 +85,7 @@ export default function ShotPageComp({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeImageIndex, hasAttachments]);
+  }, [activeImageIndex, hasAttachments, ]);
 
   const navigateImage = (direction: "prev" | "next") => {
     if (activeImageIndex === null || !hasAttachments) return;

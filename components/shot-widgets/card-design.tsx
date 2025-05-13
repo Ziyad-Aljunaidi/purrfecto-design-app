@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useRef, startTransition, useOptimistic } from "react";
-import { Bookmark, Heart, Eye } from "lucide-react";
+import { Bookmark,  Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,6 +28,7 @@ import {
 
 import { Shot, Creator } from "@/lib/definitions";
 import ShotDrawer from "./shot-drawer";
+import { LikeButtonWrapper } from "../metrics-buttons/like-button-wrapper";
 
 type DesignCardProps = React.ComponentProps<typeof Card> & {
   userId?: string | null;
@@ -237,7 +238,7 @@ export function DesignCard({
             </div>
 
             <div className="flex items-center gap-0">
-              {userId && (
+              {/* {userId && (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -284,8 +285,8 @@ export function DesignCard({
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-              )}
-
+              )} */}
+              <LikeButtonWrapper shotId={shot.id} creatorId={creator.id} type="card" />
               <div className="flex items-center gap-1 px-2">
                 <Eye className="h-4 w-4" />
                 <span className="text-xs">{views}</span>

@@ -10,23 +10,19 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import LikeButton from "@/components/metrics-buttons/like-button";
 import { useState } from "react";
+import SaveButton from "./save-button";
 
-export function LikeButtonWrapper({
-  likes,
-  likesSetter,
-  isAlreadyLiked,
-  isAlreadyLikedSetter,
+export function SaveButtonWrapper({
+  isAlreadySaved,
+  isAlreadySavedSetter,
   userId,
   shotId,
   creatorId,
   type,
 }: {
-  likes: number | null | undefined;
-  likesSetter: React.Dispatch<React.SetStateAction<number >>;
-  isAlreadyLiked: boolean;
-  isAlreadyLikedSetter: React.Dispatch<React.SetStateAction<boolean>>;
+  isAlreadySaved: boolean;
+  isAlreadySavedSetter: React.Dispatch<React.SetStateAction<boolean >>;
   userId: string | null | undefined;
   shotId: string;
   creatorId: string;
@@ -38,15 +34,15 @@ export function LikeButtonWrapper({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className="flex items-center gap-1 px-2" asChild>
-        <LikeButton shotId={shotId} likes={likes} likesSetter={likesSetter} isAlreadyLiked={isAlreadyLiked} isAlreadyLikedSetter={isAlreadyLikedSetter} userId={userId} creatorId={creatorId} type={type} isOpenSetter={setIsOpen} />
+        <SaveButton shotId={shotId}  isAlreadySaved={isAlreadySaved} isAlreadySavedSetter={isAlreadySavedSetter} userId={userId} creatorId={creatorId} type={type} isOpenSetter={setIsOpen} />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-xl font-medium text-foreground">
-            Want to Like this shot?
+            Want to Save this shot?
           </DialogTitle>
           <DialogDescription className="text-md text-foreground">
-            You need to be Signed in to Like this shot. Please Sign in or Sign
+            You need to be Signed in to Save this shot. Please Sign in or Sign
             up to continue.
           </DialogDescription>
         </DialogHeader>
@@ -62,3 +58,4 @@ export function LikeButtonWrapper({
     </Dialog>
   );
 }
+

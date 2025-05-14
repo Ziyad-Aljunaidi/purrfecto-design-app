@@ -10,23 +10,23 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShotAttachment from "@/components/shot-widgets/shot-attachments";
-import ShotLikeAndSave from "@/components/shot-widgets/shot-like-and-save";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Creator, Shot } from "@/lib/definitions";
 import { useEffect } from "react";
-
+import { LikeButtonWrapper } from "../metrics-buttons/like-button-wrapper";
+import { SaveButtonWrapper } from "../metrics-buttons/save-button-wrapper";
 
 export default function ShotDrawer({
   userId,
   shot,
   creator,
   likes,
-  isLiked,
-  handleLike,
-  handleSave,
-  optimisticLikes,
-  optimisticSaved,
+  likesSetter,
+  isAlreadyLiked,
+  isAlreadyLikedSetter,
+  isAlreadySaved,
+  isAlreadySavedSetter,
   // Drawer Open State
   drawerOpen,
   setDrawerOpen,
@@ -34,12 +34,13 @@ export default function ShotDrawer({
   userId: string | null | undefined;
   shot: Shot;
   creator: Creator;
-  likes: number | null;
-  isLiked: boolean | null | undefined;
-  optimisticLikes: number;
-  optimisticSaved: boolean | null | undefined;
-  handleLike: () => void;
-  handleSave: () => void;
+  likes: number;
+  likesSetter: React.Dispatch<React.SetStateAction<number>>;
+  isAlreadyLiked: boolean;
+  isAlreadyLikedSetter: React.Dispatch<React.SetStateAction<boolean>>;
+  // isLiked: boolean | null | undefined;
+  isAlreadySaved: boolean;
+  isAlreadySavedSetter: React.Dispatch<React.SetStateAction<boolean>>;
 
   // Drawer Open State
   drawerOpen: boolean;
@@ -93,19 +94,17 @@ export default function ShotDrawer({
                   </p>
                 </div>
               </div>
-
-
             </div>
           </DrawerHeader>
 
           <ScrollArea className="flex-grow overflow-auto">
-            <div className="flex items-center justify-between mt-8 mb-2 lg:mb-6">
+            <div className="flex items-center justify-between mx-5 mt-8 mb-2 lg:mb-6">
               <div className=" px-4 md:px-0">
-              <h1 className="text-4xl md:text-5xl font-black tracking-tighter break-words">
-                {shot.title}
-              </h1>
-            </div>
-                            <ShotLikeAndSave
+                <h1 className="text-4xl md:text-5xl font-black tracking-tighter break-words">
+                  {shot.title}
+                </h1>
+              </div>
+              {/* <ShotLikeAndSave
                 userId={userId}
                 handleLike={handleLike}
                 handleSave={handleSave}
@@ -113,10 +112,29 @@ export default function ShotDrawer({
                 optimisticLikes={optimisticLikes}
                 likes={likes}
                 optimisticSaved={optimisticSaved}
-              />
-              
+              /> */}
+              <div className="flex items-center gap-2">
+                <LikeButtonWrapper
+                  likes={likes}
+                  likesSetter={likesSetter}
+                  isAlreadyLiked={isAlreadyLiked}
+                  isAlreadyLikedSetter={isAlreadyLikedSetter}
+                  userId={userId}
+                  shotId={shot.id}
+                  creatorId={creator.id}
+                  type="card"
+                />
+                <SaveButtonWrapper
+                  shotId={shot.id}
+                  creatorId={creator.id}
+                  type="card"
+                  isAlreadySaved={isAlreadySaved}
+                  isAlreadySavedSetter={isAlreadySavedSetter}
+                  userId={userId}
+                />
+              </div>
             </div>
-            
+
             <div className="p-4 mb-12">
               <ShotAttachment attachmentId={shot.attachment_id} />
 

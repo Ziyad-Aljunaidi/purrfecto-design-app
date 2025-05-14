@@ -16,6 +16,7 @@ import { X } from "lucide-react";
 import { Creator, Shot } from "@/lib/definitions";
 import { useEffect } from "react";
 
+
 export default function ShotDrawer({
   userId,
   shot,
@@ -113,6 +114,7 @@ export default function ShotDrawer({
                 likes={likes}
                 optimisticSaved={optimisticSaved}
               />
+              
             </div>
             
             <div className="p-4 mb-12">

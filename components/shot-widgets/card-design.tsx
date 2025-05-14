@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useRef, startTransition, useOptimistic } from "react";
-import { Bookmark,  Eye } from "lucide-react";
+import { Bookmark, Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -253,8 +253,16 @@ export function DesignCard({
                   />
                   <span className="text-xs">{optimisticLikes}</span>
                 </Button>
-              )}
-              {!userId && (
+              )} */}
+              <LikeButtonWrapper
+                likes={likes}
+                isAlreadyLiked={is_liked}
+                userId={userId}
+                shotId={shot.id}
+                creatorId={creator.id}
+                type="card"
+                />
+              {/* {!userId && (
                 <Dialog>
                   <DialogTrigger className="flex items-center gap-1 px-2">
                     <Heart
@@ -286,7 +294,7 @@ export function DesignCard({
                   </DialogContent>
                 </Dialog>
               )} */}
-              <LikeButtonWrapper shotId={shot.id} creatorId={creator.id} type="card" />
+              {/* <LikeButtonWrapper shotId={shot.id} creatorId={creator.id} type="card" /> */}
               <div className="flex items-center gap-1 px-2">
                 <Eye className="h-4 w-4" />
                 <span className="text-xs">{views}</span>

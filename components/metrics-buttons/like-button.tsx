@@ -1,27 +1,34 @@
 "use client";
 import {
-  isShotLiked,
-  getShotLikes,
+  // isShotLiked,
+  // getShotLikes,
   toggleShotLike,
 } from "@/actions/shotLikesAction";
-import { useState, useOptimistic, startTransition, useEffect } from "react";
-import { Heart } from "lucide-react";
+import { useState, useOptimistic, startTransition} from "react";
+import {  Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
+
 export default function LikeButton({
+  likes,
+  isAlreadyLiked,
+  userId,
   shotId,
   creatorId,
   type,
   isOpenSetter,
 }: {
+  likes: number | null | undefined;
+  isAlreadyLiked: boolean | null | undefined;
+  userId: string | null | undefined;
   shotId: string;
   creatorId: string;
   type: "card" | "drawer" | "page" | "card v2";
   isOpenSetter: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [totalLikes, setTotalLikes] = useState<number>(0);
+  const [isLiked, setIsLiked] = useState<boolean>(isAlreadyLiked || false);
+  const [totalLikes, setTotalLikes] = useState<number>(likes || 0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [optimisticLikes, setOptimisticLikes] = useOptimistic(
     totalLikes || 0,
@@ -35,31 +42,30 @@ export default function LikeButton({
   );
 
   // Fetch initial data (likes and isLiked) on mount
-  useEffect(() => {
-    async function fetchLikeData() {
-      try {
-        // TOTAL LIKES
-        const totalLikesResponse = await getShotLikes(shotId);
-        if (totalLikesResponse.success && totalLikesResponse.totalLikes) {
-          setTotalLikes(totalLikesResponse.totalLikes);
-        } else {
-          setTotalLikes(0);
-        }
-        // IS SHOT LIKED
-        const isShotLikedResponse = await isShotLiked({ shotId });
-        if (isShotLikedResponse.success) {
-          setIsLiked(true);
-        } else {
-          setIsLiked(false);
-        }
-      } catch (err) {
-        console.error("Error fetching like data:", err);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchLikeData() {
+  //     try {
+  //       // TOTAL LIKES
+  //       const totalLikesResponse = await getShotLikes(shotId);
+  //       if (totalLikesResponse.success && totalLikesResponse.totalLikes) {
+  //         setTotalLikes(totalLikesResponse.totalLikes);
+  //       } else {
+  //         setTotalLikes(0);
+  //       }
+  //       // IS SHOT LIKED
+  //       const isShotLikedResponse = await isShotLiked({ shotId });
+  //       if (isShotLikedResponse.success) {
+  //         setIsLiked(true);
+  //       } else {
+  //         setIsLiked(false);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching like data:", err);
+  //     }
+  //   }
 
-    fetchLikeData();
-  }, [shotId]);
-
+  //   fetchLikeData();
+  // }, [shotId]);
 
   function handleLike() {
     setIsLiked(!isLiked);
@@ -77,12 +83,10 @@ export default function LikeButton({
           creatorId,
         });
         if (!response.success) {
-
           console.log("Error liking project shot: ", response.message);
           setIsLiked(isLiked);
           setTotalLikes((prev) => Number(prev) + (isLiked ? +1 : -1));
           isOpenSetter(true);
-         
         }
       } catch (err) {
         console.error("Error liking project shot: ", err);
@@ -93,8 +97,6 @@ export default function LikeButton({
   }
 
 
-
-
   if (type === "page") {
     return (
       <motion.button
@@ -103,7 +105,7 @@ export default function LikeButton({
           "bg-transparent hover:bg-accent/50",
           "cursor-pointer"
         )}
-        onClick={handleLike}
+        onClick={userId? handleLike : () => isOpenSetter(true)}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -119,7 +121,7 @@ export default function LikeButton({
                 "w-8 h-8 transition-colors duration-300",
                 isLiked
                   ? "fill-rose-500 stroke-rose-500"
-                  : "stroke-zinc-400 hover:stroke-rose-400"
+                  : "stroke-rose-400 hover:stroke-rose-500"
               )}
             />
           </motion.div>
@@ -188,7 +190,7 @@ export default function LikeButton({
           "bg-transparent hover:bg-accent/50",
           "cursor-pointer"
         )}
-        onClick={handleLike}
+        onClick={userId? handleLike : () => isOpenSetter(true)}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -204,7 +206,7 @@ export default function LikeButton({
                 "w-4 h-4 transition-colors duration-300",
                 isLiked
                   ? "fill-rose-500 stroke-rose-500"
-                  : "stroke-zinc-400 hover:stroke-rose-400"
+                  : "stroke-rose-400 hover:stroke-rose-500"
               )}
             />
           </motion.div>
@@ -248,22 +250,20 @@ export default function LikeButton({
           </AnimatePresence>
         </div>
 
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center text-sm">
           {/* <AnimatePresence mode="wait"> */}
-          <motion.span
+          {/* <motion.span
             key={optimisticLikes}
             className="text-sm font-bold leading-none mb-0.5"
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 10, opacity: 0 }}
             transition={{ duration: 0.2 }}
-          >
+          > */}
             {optimisticLikes}
-          </motion.span>
+          {/* </motion.span> */}
         </div>
-        
       </motion.button>
     );
   }
-
 }

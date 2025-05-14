@@ -14,24 +14,27 @@ import LikeButton from "@/components/metrics-buttons/like-button";
 import { useState } from "react";
 
 export function LikeButtonWrapper({
+  likes,
+  isAlreadyLiked,
+  userId,
   shotId,
   creatorId,
   type,
 }: {
+  likes: number | null | undefined;
+  isAlreadyLiked: boolean | null | undefined;
+  userId: string | null | undefined;
   shotId: string;
   creatorId: string;
   type: "card" | "drawer" | "page" | "card v2";
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // const handleClose = () => {
-  //   setIsOpen(false);
-  // };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className="flex items-center gap-1 px-2" asChild>
-        <LikeButton shotId={shotId} creatorId={creatorId} type={type} isOpenSetter={setIsOpen} />
+        <LikeButton shotId={shotId} likes={likes} isAlreadyLiked={isAlreadyLiked} userId={userId} creatorId={creatorId} type={type} isOpenSetter={setIsOpen} />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -58,7 +58,7 @@ export function DesignCard({
     <>
       <Card
         className={cn(
-          "w-full max-w-md overflow-hidden shadow-none transition-all duration-300 rounded-xl border-none p-0 gap-3",
+          "w-full max-w-md overflow-hidden shadow-none transition-all duration-300 rounded-none border-none p-0 gap-3",
           className
         )}
         {...props}

@@ -1,7 +1,7 @@
 "use server";
-import { desc,eq, count, sql,and } from "drizzle-orm";
+import { eq,and } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { shot, likes, views, comments, savedShots } from "@/db/schema/shot";
+import {savedShots } from "@/db/schema/shot";
 import { getUserId } from "./UserAction";
 
 export async function toggleShotSave({shotId, creatorId}: { shotId: string;  creatorId: string }) {

@@ -3,7 +3,7 @@ import {
   // isShotLiked,
   // getShotLikes,
   toggleShotLike,
-} from "@/actions/shotLikesAction";
+} from "@/app/actions/shotLikesAction";
 import { useState, useOptimistic, startTransition} from "react";
 import {  Heart } from "lucide-react";
 import { cn } from "@/lib/utils";

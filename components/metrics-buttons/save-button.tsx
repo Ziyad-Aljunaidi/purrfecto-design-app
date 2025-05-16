@@ -1,5 +1,5 @@
 "use client";
-import { toggleShotSave } from "@/actions/shotSavesActions";
+import { toggleShotSave } from "@/app/actions/shotSavesActions";
 
 import { useState, useOptimistic, startTransition} from "react";
 import {  Bookmark } from "lucide-react";

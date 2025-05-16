@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
 import {
-  // Geist,
+  Geist,
   // Geist_Mono,
   // JetBrains_Mono,
   // Poppins,
-  Inter
+  Inter,
+  Outfit
 } from "next/font/google";
 import "./globals.css";
 import MainHeader from "@/components/main-header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
 // const geistMono = Geist_Mono({
 //   variable: "--font-geist-mono",
@@ -31,6 +32,11 @@ import { ThemeProvider } from "@/components/theme-provider";
 // });
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -52,7 +58,7 @@ children: React.ReactNode;
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
-          className={`${inter.className} antialiased`}
+          className={`${geistSans.variable} ${outfit.variable} ${inter.variable} antialiased`}
         >
           <ThemeProvider
             attribute="class"

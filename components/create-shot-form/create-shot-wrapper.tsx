@@ -9,9 +9,9 @@ import clsx from "clsx";
 import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
 import { uploadToSpaces } from "@/lib/do-spaces-upload";
-import  submitShotAction  from "@/actions/submitShotAction";
+import  submitShotAction  from "@/app/actions/submitShotAction";
 import { nanoid } from "nanoid";
-import { getUserId } from "@/actions/UserAction";
+import { getUserId } from "@/app/actions/UserAction";
 
 // const userId = await getUserId();
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getShotAttachment } from "@/actions/GetProjectShotsAction";
+import { getShotAttachment } from "@/app/actions/GetProjectShotsAction";
 import Image from "next/image";
 import ShotAttachmentLoading from "../skeletons/shot-attachments-loading";
 import { Attachment } from "@/lib/definitions";
@@ -47,14 +47,16 @@ export default function ShotAttachment({
                 return (
                   <div
                     key={source.source}
-                    className="w-full rounded-lg overflow-hidden lg:max-w-[50vw] py-4 mx-auto"
+                    className="w-full overflow-hidden py-2 mx-auto"
                   >
                     <Image
                       src={source.source || "/placeholder.svg"}
                       alt={source.type || "Image"}
                       width={800}
+
                       height={600}
-                      className="w-full h-auto object-cover rounded-lg"
+                      className="w-full h-auto object-cover "
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 );

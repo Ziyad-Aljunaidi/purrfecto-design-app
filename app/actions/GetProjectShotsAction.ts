@@ -1,5 +1,5 @@
 "use server";
-import { desc,eq, count, sql } from "drizzle-orm";
+import { desc,eq, sql } from "drizzle-orm";
 import { db } from "@/db/drizzle";
 import { shot, likes, views, comments, attachment } from "@/db/schema/shot";
 import { profile } from "@/db/schema/profile";

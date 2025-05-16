@@ -1,9 +1,7 @@
 "use server";
-import { desc,eq, count, sql,and } from "drizzle-orm";
+import { eq,and } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { shot, likes, views, comments, savedShots } from "@/db/schema/shot";
-import { user } from "@/db/schema/auth-schema";
-
+import { likes, savedShots } from "@/db/schema/shot";
 
 export async function toggleShotLike({shotId, userId, creatorId}: { shotId: string; userId: string | null, creatorId: string }) {
   if(userId === null) {

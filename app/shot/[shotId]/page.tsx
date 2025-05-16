@@ -3,7 +3,7 @@ import {
   getShot,
   getShotAttachment,
   getProjectMetrics,
-} from "@/actions/GetProjectShotsAction";
+} from "@/app/actions/GetProjectShotsAction";
 import ShotPageComp from "@/components/shot-widgets/shot-page-comp";
 import { notFound } from "next/navigation";
 

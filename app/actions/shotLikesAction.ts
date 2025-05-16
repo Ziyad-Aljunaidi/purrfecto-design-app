@@ -1,9 +1,8 @@
 "use server";
-import { desc, eq, count, sql, and } from "drizzle-orm";
+import { eq, sql, and } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { shot, likes, views, comments, savedShots } from "@/db/schema/shot";
-import { user } from "@/db/schema/auth-schema";
-import { getUserId } from "@/actions/UserAction";
+import { likes} from "@/db/schema/shot";
+import { getUserId } from "@/app/actions/UserAction";
 
 export async function toggleShotLike({
   shotId,
@@ -115,6 +114,7 @@ export async function isShotLiked({ shotId }: { shotId: string }) {
       return response;
     }
   } catch (error) {
+    console.error("Error checking if project shot is liked: ", error);
     const response = {
       success: false,
       code: 500,

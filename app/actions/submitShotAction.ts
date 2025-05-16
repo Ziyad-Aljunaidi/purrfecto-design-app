@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
-import { shot, comments, likes, views, attachment } from "@/db/schema/shot";
+import { shot, attachment } from "@/db/schema/shot";
 import { ShotData } from "@/lib/types";
 import { nanoid } from "nanoid";
 

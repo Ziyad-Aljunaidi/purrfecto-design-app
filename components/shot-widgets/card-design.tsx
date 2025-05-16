@@ -58,14 +58,14 @@ export function DesignCard({
     <>
       <Card
         className={cn(
-          "w-full max-w-md overflow-hidden shadow-none transition-all duration-300 rounded-none border-none p-0 gap-3",
+          "w-full max-w-md overflow-hidden shadow-none transition-all duration-300 rounded-none border-none p-0 gap-3 mx-auto",
           className
         )}
         {...props}
       >
         <div
           ref={imageRef}
-          className="relative aspect-[4/3] w-full overflow-hidden rounded-xl cursor-pointer"
+          className="relative aspect-[4/3] w-full overflow-hidden rounded-lg cursor-pointer"
           onMouseEnter={() => setIsImageHovering(true)}
           onMouseLeave={() => setIsImageHovering(false)}
           onClick={handleImageClick}

@@ -1,11 +1,12 @@
 import {
   getShotCreator,
   getShot,
-  getShotAttachment,
   getProjectMetrics,
 } from "@/app/actions/GetProjectShotsAction";
 import ShotPageComp from "@/components/shot-widgets/shot-page-comp";
 import { notFound } from "next/navigation";
+import { getUserId } from "@/app/actions/UserAction";
+import { isShotLiked, isShotSaved } from "@/app/actions/ProjectShotMetricsAction";
 
 export default async function ShotCreator({
   params,
@@ -20,19 +21,24 @@ export default async function ShotCreator({
   }
 
   const creator = await getShotCreator(shot.creator_id);
-  const shotAttachments = await getShotAttachment(shot.attachment_id);
   const shotMetrics = await getProjectMetrics(shotId);
-
+  const userId = await getUserId();
   const likes = shotMetrics.totalLikes;
+  
+
   // const views = shotMetrics.totalViews;
   // const comments = shotMetrics.totalComments;
+  
 
   return (
     <ShotPageComp
       creator={creator}
       shot={shot}
-      shotAttachments={shotAttachments[0]}
       likes={likes}
+      // views={0}
+      is_liked={await isShotLiked({shotId: shot.id, userId: userId})}
+      is_saved={await isShotSaved({shotId: shot.id, userId: userId})}
+      userId={userId}
     />
   );
 }

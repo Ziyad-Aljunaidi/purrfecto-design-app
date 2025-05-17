@@ -25,10 +25,8 @@ export default async function ShotCreator({
   const userId = await getUserId();
   const likes = shotMetrics.totalLikes;
   
-
   // const views = shotMetrics.totalViews;
   // const comments = shotMetrics.totalComments;
-  
 
   return (
     <ShotPageComp

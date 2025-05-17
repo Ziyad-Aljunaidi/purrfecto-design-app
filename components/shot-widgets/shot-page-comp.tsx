@@ -114,7 +114,7 @@ export default function ShotPageComp({
           <div className="my-8 px-4 md:px-0">
             <h3
               className={cn(
-                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500",
+                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#ff4aa0] decoration-4 underline-green-500",
                 chivo.className
               )}
             >
@@ -129,7 +129,7 @@ export default function ShotPageComp({
           <div className="my-8 px-4 md:px-0">
             <h3
               className={cn(
-                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500",
+                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#ff4aa0] decoration-4 underline-green-500",
                 chivo.className
               )}
             >

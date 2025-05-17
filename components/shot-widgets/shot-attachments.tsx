@@ -7,7 +7,6 @@ import ShotAttachmentLoading from "../skeletons/shot-attachments-loading";
 import { Attachment } from "@/lib/definitions";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
-
 export default function ShotAttachment({
   attachmentId,
 }: {
@@ -114,7 +113,11 @@ export default function ShotAttachment({
                 );
               } else if (source.type === "video") {
                 return (
-                  <div key={source.source} className="relative  w-full" onClick={() => openLightbox(index)}>
+                  <div
+                    key={source.source}
+                    className="relative  w-full"
+                    onClick={() => openLightbox(index)}
+                  >
                     <video
                       src={source.source || "/placeholder.svg"}
                       className="w-full h-full object-cover max"
@@ -149,11 +152,11 @@ export default function ShotAttachment({
                     : "opacity-0 pointer-events-none"
                 }`}
               >
-                <div className="relative w-[90%] h-[80%] md:w-[80%] md:h-[80%] flex items-center justify-center">
+                <div className="relative w-full max-w-[100vw] h-auto max-h-[100vh] flex items-center justify-center overflow-hidden">
                   {attachment.type === "video" ? (
                     <video
                       src={attachment.source || "/placeholder.svg"}
-                      className="w-full h-full aspect-video"
+                      className="w-full h-auto max-h-[80vh] object-contain"
                       autoPlay
                       loop
                       muted
@@ -164,7 +167,7 @@ export default function ShotAttachment({
                       alt={`Shot image ${index + 1}`}
                       width={1200}
                       height={0}
-                      className="object-cover "
+                      className="w-full h-auto max-h-[90vh] object-contain"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                     />
                   )}

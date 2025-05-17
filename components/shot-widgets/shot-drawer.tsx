@@ -17,7 +17,7 @@ import { useEffect } from "react";
 import { LikeButtonWrapper } from "../metrics-buttons/like-button-wrapper";
 import { SaveButtonWrapper } from "../metrics-buttons/save-button-wrapper";
 import { cn } from "@/lib/utils";
-import { poppins, chivo} from "@/components/fonts";
+import { outfit} from "@/components/fonts";
 
 export default function ShotDrawer({
   userId,
@@ -66,7 +66,7 @@ export default function ShotDrawer({
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerContent
-        className={` outline-none h-full ${poppins.className} bg-background`}
+        className={` outline-none h-full ${outfit.className} bg-background`}
       >
         <div className="mx-auto h-full w-full flex flex-col">
           <DrawerHeader className="sticky top-0 z-10">
@@ -108,7 +108,7 @@ export default function ShotDrawer({
               <div className="flex items-center justify-between mt-8 mb-2 lg:mb-6">
                 <div className=" px-4 md:px-0">
                   <h1
-                    className={`text-3xl md:text-5xl font-semibold tracking-tighter break-all ${chivo.className}`}
+                    className={`text-3xl md:text-5xl font-semibold tracking-tighter break-all`}
                   >
                     {shot.title}
                   </h1>
@@ -139,11 +139,10 @@ export default function ShotDrawer({
                 <ShotAttachment attachmentId={shot.attachment_id} />
 
                 {/* Description section */}
-                <div className="my-8 px-4 md:px-0">
+                <div className={cn("my-8 px-4 md:px-0")}>
                   <h3
                     className={cn(
-                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500",
-                      chivo.className
+                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500"
                     )}
                   >
                     About this shot
@@ -157,8 +156,7 @@ export default function ShotDrawer({
                 <div className="my-8 px-4 md:px-0">
                   <h3
                     className={cn(
-                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500",
-                      chivo.className
+                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500"
                     )}
                   >
                     Tags

@@ -11,6 +11,7 @@ import "./globals.css";
 import MainHeader from "@/components/main-header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import Footer from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,6 +70,7 @@ children: React.ReactNode;
             <MainHeader />
             {children}
             <Toaster />
+            <Footer />
           </ThemeProvider>
         </body>
       </html>

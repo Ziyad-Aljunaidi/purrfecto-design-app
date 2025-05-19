@@ -60,6 +60,8 @@ export default function ShotDrawer({
       if (window.location.pathname.startsWith("/shot/")) {
         window.history.pushState(null, "", baseUrl); // ✅ go back to home
       }
+
+      document.body.style.overflow = "auto"
     }
   }, [drawerOpen, shot.id]);
 
@@ -71,7 +73,7 @@ export default function ShotDrawer({
         <div className="mx-auto h-full w-full flex flex-col">
           <DrawerHeader className="sticky top-0 z-10">
             <DrawerTitle className="font-medium text-2xl flex items-center justify-end">
-              <DrawerClose asChild>
+              <DrawerClose asChild >
                 <Button variant="ghost" className="rounded-full">
                   <X size={16} className="stroke-3" />
                 </Button>
@@ -142,7 +144,7 @@ export default function ShotDrawer({
                 <div className={cn("my-8 px-4 md:px-0")}>
                   <h3
                     className={cn(
-                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500"
+                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#FA3C76] decoration-4"
                     )}
                   >
                     About this shot
@@ -156,7 +158,7 @@ export default function ShotDrawer({
                 <div className="my-8 px-4 md:px-0">
                   <h3
                     className={cn(
-                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-violet-500 decoration-4 underline-green-500"
+                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#FA3C76] decoration-4"
                     )}
                   >
                     Tags
@@ -165,7 +167,7 @@ export default function ShotDrawer({
                     {shot.tags?.map((tag: string) => (
                       <span
                         key={tag}
-                        className="px-4 mt-4 py-2 bg-muted rounded-full text-md font-semibold transition-all duration-50 ease-in-out hover:bg-violet-500/15 hover:text-violet-500 hover:outline-2 hover:outline-violet-500 cursor-pointer"
+                        className="px-4 mt-4 py-2 bg-muted rounded-lg text-md font-semibold transition-all duration-50 ease-in-out hover:bg-[#FA3C76]/15 hover:text-[#FA3C76] hover:outline-2 hover:outline-[#FA3C76] cursor-pointer"
                       >
                         {tag}
                       </span>

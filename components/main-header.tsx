@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Plus, ChevronRight } from "lucide-react";
 import UserControlHeaderDesktop from "./auth-forms/user-control-header";
 import { getUserData } from "@/app/actions/UserAction";
-import { chivo } from "./fonts";
+import { outfit } from "./fonts";
 
 export async function AuthUserServerComponent() {
   const user = await getUserData();
@@ -27,10 +27,10 @@ export async function AuthUserServerComponent() {
     <>
       <Link
         href="/create"
-        className={`${chivo.className} text-secondary font-medium rounded-lg px-4 py-1.5 bg-primary hover:bg-primary/90 transition-colors duration-200 flex items-center justify-center`}
+        className={`${outfit.className} tracking-wide place-items-center text-secondary font-medium rounded-lg px-4 py-1.5 bg-primary hover:bg-primary/90 transition-colors duration-200 flex items-center justify-center`}
       >
         Create
-        <Plus className="w-4 h-4 ml-1" />
+        <Plus className="w-3 h-3 ml-1 stroke-4" />
       </Link>
       <UserControlHeaderDesktop
         user={{

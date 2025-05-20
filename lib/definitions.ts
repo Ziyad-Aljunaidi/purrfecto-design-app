@@ -46,3 +46,28 @@ export interface Attachment  {
   updatedAt: Date;
   is_published: boolean | null;
 };
+
+export interface PublicProfile {
+  id: string;
+  userId: string;
+  username: string;
+  displayUsername: string;
+  name: string;
+  email: string;
+  links: string[] | null;
+  bio: string | null;
+  avatar_url: string[];
+  banner_url: string | null;  
+  location: { city: string | null; country: string | null } | null;
+  website: string | null;
+  is_verified: boolean | null;
+  total_shots:number | null;
+  total_views:number | null;
+  total_likes:number | null;
+  total_followers:number | null;
+  total_following:number | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  featured_shot_id: string | null;
+  badges: Array<{ badge_name: string|null; icon: string|null }> |null;
+}

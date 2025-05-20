@@ -2,6 +2,7 @@
 import { authClient } from "@/lib/auth-client";
 import { LogOut, Settings2, Plus, UserRound } from "lucide-react";
 import { useRouter } from "next/navigation"; // Optional, if you need to use router for redirection
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -74,6 +75,8 @@ export default function UserControlHeaderDesktop({
           >
             <DropdownMenuGroup>
               <DropdownMenuItem>
+                <Link href={`/profile/${user.id}`}>
+
                 <div className="flex items-center gap-2 p-2">
                   <img
                     src={
@@ -91,6 +94,7 @@ export default function UserControlHeaderDesktop({
                     </h3>
                   </div>
                 </div>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push("/create")}>

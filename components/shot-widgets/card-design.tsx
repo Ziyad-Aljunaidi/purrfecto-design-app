@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { Shot, Creator } from "@/lib/definitions";
+import { Shot } from "@/lib/definitions";
+import { SelectProfile } from "@/db/schema/profile";
 import ShotDrawer from "./shot-drawer";
 import { LikeButtonWrapper } from "../metrics-buttons/like-button-wrapper";
 import { SaveButtonWrapper } from "../metrics-buttons/save-button-wrapper";
@@ -19,7 +20,7 @@ import { SaveButtonWrapper } from "../metrics-buttons/save-button-wrapper";
 type DesignCardProps = React.ComponentProps<typeof Card> & {
   userId?: string | null;
   shot: Shot;
-  creator: Creator;
+  creator: SelectProfile;
   likes?: number;
   views?: number;
   is_liked?: boolean;

@@ -12,7 +12,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShotAttachment from "@/components/shot-widgets/shot-attachments";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { Creator, Shot } from "@/lib/definitions";
+import { Shot } from "@/lib/definitions";
+import { SelectProfile } from "@/db/schema/profile";
 import { useEffect } from "react";
 import { LikeButtonWrapper } from "../metrics-buttons/like-button-wrapper";
 import { SaveButtonWrapper } from "../metrics-buttons/save-button-wrapper";
@@ -35,7 +36,7 @@ export default function ShotDrawer({
 }: {
   userId: string | null | undefined;
   shot: Shot;
-  creator: Creator;
+  creator: SelectProfile;
   likes: number;
   likesSetter: React.Dispatch<React.SetStateAction<number>>;
   isAlreadyLiked: boolean;

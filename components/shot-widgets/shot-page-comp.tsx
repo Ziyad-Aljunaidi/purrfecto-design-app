@@ -4,7 +4,8 @@ import { useState} from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { chivo } from "@/components/fonts";
-import type { Creator, Shot} from "@/lib/definitions";
+import type {  Shot} from "@/lib/definitions";
+import { SelectProfile } from "@/db/schema/profile";
 import { notFound } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ export default function ShotPageComp({
   is_saved,
   userId,
 }: {
-  creator: Creator;
+  creator: SelectProfile;
   shot: Shot;
   likes: number;
   // views?: number;

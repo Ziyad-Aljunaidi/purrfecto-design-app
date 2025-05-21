@@ -30,7 +30,7 @@ export async function AuthUserServerComponent() {
         className={`${outfit.className} tracking-wide place-items-center text-secondary font-medium rounded-lg px-4 py-1.5 bg-primary hover:bg-primary/90 transition-colors duration-200 flex items-center justify-center`}
       >
         Create
-        <Plus className="w-3 h-3 ml-1 stroke-4" />
+       <Plus  className="ml-1 opacity-60" size={16} aria-hidden="true" />
       </Link>
       <UserControlHeaderDesktop
         user={{

@@ -1,4 +1,5 @@
-import { getUserPublicDataById } from "@/app/actions/UserAction";
+import { getUserPublicDataById, getUserId } from "@/app/actions/UserAction";
+
 import { Profile } from "@/components/public-profile-comp";
 
 
@@ -9,6 +10,8 @@ export default async function ProfilePage({
 }) {
   const { profileId } = await params;
   const response = await getUserPublicDataById(profileId);
+  const userId = await getUserId();
+  if(userId === response.data?.userId){console.log("SAME USER")}
   // console.log(response);
 
 

@@ -11,8 +11,9 @@ import {
   Instagram,
   Dribbble,
   Globe,
-  // Send,
-  // Plus
+  Send,
+  Plus
+  
 } from "lucide-react";
 // import { PublicProfile } from "@/lib/definitions";
 import { SelectProfile } from "@/db/schema/profile";
@@ -161,12 +162,14 @@ export const Profile: React.FC<ProfileProps> = ({
               <div className="flex flex-row flex-grow gap-2 mt-4">
                 <Button className="py-4 px-8 font-bold text-md grow md:flex-none">
                   Follow
+                  <Plus  className=" opacity-60" size={16} aria-hidden="true" />
                 </Button>
                 <Button
                   variant="outline"
                   className="py-4 px-8 font-bold text-md grow md:flex-none"
                 >
                   Message
+                  <Send  className=" opacity-60" size={16} aria-hidden="true" />
                 </Button>
                 <Button variant="outline" size={"icon"}>
                   <EllipsisVertical className="w-5 h-5" />
@@ -176,7 +179,7 @@ export const Profile: React.FC<ProfileProps> = ({
           </div>
 
           {/* Right Column (1/3 width on md+) */}
-          <div className="md:flex-[1] aspect-[4/3] bg-muted rounded-lg w-full md:w-auto"></div>
+          {/* <div className="md:flex-[1] aspect-[4/3] bg-muted rounded-lg w-full md:w-auto"></div> */}
         </div>
       </div>
     </main>

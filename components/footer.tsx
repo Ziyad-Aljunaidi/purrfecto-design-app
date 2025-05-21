@@ -68,7 +68,7 @@ const Footer = () => {
         </div>
         <div>
           <Link href="/">
-            <h3 className="text-lg font-semibold text-foreground mb-4 transition-all duration-200 hover:text-lime-400 hover:underline underline-offset-8 decoration-lime-400 decoration-4 cursor-pointer">
+            <h3 className="text-lg font-semibold text-foreground mb-4 transition-all duration-200 hover:dark:text-lime-400 hover:text-lime-500 hover:underline underline-offset-8 decoration-lime-400 decoration-4 cursor-pointer">
               Support
             </h3>
           </Link>

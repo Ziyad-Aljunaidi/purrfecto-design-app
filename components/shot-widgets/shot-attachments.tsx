@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getShotAttachment } from "@/app/actions/GetProjectShotsAction";
 import Image from "next/image";
 import ShotAttachmentLoading from "../skeletons/shot-attachments-loading";
@@ -51,6 +51,22 @@ export default function ShotAttachment({
     document.body.style.overflow = "auto";
   };
 
+const navigateImage = useCallback((direction: "prev" | "next") => {
+  if (activeImageIndex === null || !hasAttachments) return;
+
+  const attachmentsLength = attachments[0]?.attachments?.length;
+
+  if (direction === "prev") {
+    setActiveImageIndex((prev) =>
+      prev === 0 ? (attachmentsLength ?? 0) - 1 : (prev ?? 0) - 1
+    );
+  } else {
+    setActiveImageIndex((prev) =>
+      (prev ?? 0) === (attachmentsLength ?? 0) - 1 ? 0 : (prev ?? 0) + 1
+    );
+  }
+}, [activeImageIndex, hasAttachments, attachments]);
+
   // Add keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,23 +83,9 @@ export default function ShotAttachment({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeImageIndex, hasAttachments]);
+  }, [activeImageIndex, hasAttachments, navigateImage]);
 
-  const navigateImage = (direction: "prev" | "next") => {
-    if (activeImageIndex === null || !hasAttachments) return;
 
-    const attachmentsLength = attachments[0]?.attachments?.length;
-
-    if (direction === "prev") {
-      setActiveImageIndex((prev) =>
-        prev === 0 ? (attachmentsLength ?? 0) - 1 : (prev ?? 0) - 1
-      );
-    } else {
-      setActiveImageIndex((prev) =>
-        (prev ?? 0) === (attachmentsLength ?? 0) - 1 ? 0 : (prev ?? 0) + 1
-      );
-    }
-  };
 
   if (loading) return <ShotAttachmentLoading />;
   if (error) return <p>{error}</p>;
@@ -107,7 +109,7 @@ export default function ShotAttachment({
                       width={800}
                       height={600}
                       className="w-full h-auto object-cover "
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 );
@@ -168,7 +170,7 @@ export default function ShotAttachment({
                       width={1200}
                       height={0}
                       className="w-full h-auto max-h-[90vh] object-contain"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                      // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                     />
                   )}
                 </div>

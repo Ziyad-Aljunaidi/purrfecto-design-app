@@ -1,3 +1,4 @@
+"use server"
 import { eq } from "drizzle-orm";
 import { db } from "@/db/drizzle";
 import { InsertNewsletterEmail, newsletter } from "@/db/schema/newsletter";

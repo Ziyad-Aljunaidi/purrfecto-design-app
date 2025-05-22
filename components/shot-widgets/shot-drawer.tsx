@@ -83,8 +83,8 @@ export default function ShotDrawer({
           </DrawerHeader>
 
           <ScrollArea className="flex-grow overflow-auto">
-            <main className="max-w-5xl mx-auto">
-              <div className="flex mx-auto items-center justify-between gap-4 bg-background border-b space-y-2 flex-shrink-0 py-6 px-2 md:px-0">
+            <main className="lg:max-w-5xl mx-auto">
+              <div className="flex mx-auto items-center justify-between gap-4 bg-background border-b space-y-2 flex-shrink-0 py-6 px-2 md:px-6 lg:px-0">
                 <div className="flex items-center gap-4 justify-between">
                   <Avatar className="h-14 w-14">
                     <AvatarImage
@@ -99,7 +99,7 @@ export default function ShotDrawer({
                     <h2 className="text-md lg:text-xl font-extrabold tracking-tight">
                       {creator.name}
                     </h2>
-                    <p className="text-smlg:text-md font-medium text-foreground/50">
+                    <p className="text-sm lg:text-md font-medium text-foreground/50">
                       @{creator.displayUsername}
                     </p>
                   </div>
@@ -109,14 +109,14 @@ export default function ShotDrawer({
                 </Button>
               </div>
               <div className="flex items-center justify-between mt-8 mb-2 lg:mb-6">
-                <div className=" px-4 md:px-0">
+                <div className="px-4 md:px-6 lg:px-0">
                   <h1
                     className={`text-3xl md:text-5xl font-semibold tracking-tighter break-all`}
                   >
                     {shot.title}
                   </h1>
                 </div>
-                <div className="flex items-center gap-2 mr-2 md:mr-0">
+                <div className="flex items-center gap-2 mr-2 md:mr-4 lg:mr-0">
                   <LikeButtonWrapper
                     likes={likes}
                     likesSetter={likesSetter}
@@ -142,10 +142,10 @@ export default function ShotDrawer({
                 <ShotAttachment attachmentId={shot.attachment_id} />
 
                 {/* Description section */}
-                <div className={cn("my-8 px-4 md:px-0")}>
+                <div className={cn("my-8  px-4 md:px-6 lg:px-0")}>
                   <h3
                     className={cn(
-                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#FA3C76] decoration-4"
+                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-lime-400 decoration-4"
                     )}
                   >
                     About this shot
@@ -156,10 +156,10 @@ export default function ShotDrawer({
                 </div>
 
                 {/* Tagss used section */}
-                <div className="my-8 px-4 md:px-0">
+                <div className="my-8  px-4 md:px-6 lg:px-0">
                   <h3
                     className={cn(
-                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#FA3C76] decoration-4"
+                      "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-lime-400 decoration-4"
                     )}
                   >
                     Tags
@@ -168,7 +168,7 @@ export default function ShotDrawer({
                     {shot.tags?.map((tag: string) => (
                       <span
                         key={tag}
-                        className="px-4 mt-4 py-2 bg-muted rounded-lg text-md font-semibold transition-all duration-50 ease-in-out hover:bg-[#FA3C76]/15 hover:text-[#FA3C76] hover:outline-2 hover:outline-[#FA3C76] cursor-pointer"
+                        className="cursor-pointer text-sm mt-4 sm:text-base lg:text-lg font-bold px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-accent/50 hover:ring-2 active:ring-2 active:ring-lime-400 active:bg-lime-400/10 hover:ring-lime-400 rounded-md lg:rounded-lg hover:bg-lime-400/10 transition-all duration-100"
                       >
                         {tag}
                       </span>

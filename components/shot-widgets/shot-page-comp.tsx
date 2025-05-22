@@ -3,7 +3,7 @@
 import { useState} from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { chivo } from "@/components/fonts";
+import { outfit } from "@/components/fonts";
 import type {  Shot} from "@/lib/definitions";
 import { SelectProfile } from "@/db/schema/profile";
 import { notFound } from "next/navigation";
@@ -54,7 +54,7 @@ export default function ShotPageComp({
     <>
       <main className="max-w-5xl mx-auto">
         {/* Creator Header - Bold and prominent */}
-        <div className="flex mx-auto items-center justify-between gap-4 bg-background border-b space-y-2 flex-shrink-0 py-6 px-2 md:px-0">
+        <div className="flex mx-auto items-center justify-between gap-4 bg-background border-b space-y-2 flex-shrink-0 py-6 px-2 md:px-6 lg:px-0">
           <div className="flex items-center gap-4 justify-between">
             <Avatar className="h-14 w-14">
               <AvatarImage
@@ -79,14 +79,14 @@ export default function ShotPageComp({
           </Button>
         </div>
         <div className="flex items-center justify-between mt-8 mb-2 lg:mb-6">
-          <div className=" px-4 md:px-0">
+          <div className="px-2 md:px-6 lg:px-0">
             <h1
-              className={`text-3xl md:text-5xl font-semibold tracking-tighter break-all ${chivo.className}`}
+              className={`text-3xl md:text-5xl font-semibold tracking-tighter break-all ${outfit.className}`}
             >
               {shot.title}
             </h1>
           </div>
-          <div className="flex items-center gap-2 mr-2 md:mr-0">
+          <div className="flex items-center gap-2 mr-2 md:mr-4 lg:mr-0">
             <LikeButtonWrapper
               likes={totalLikes}
               likesSetter={setTotalLikes}
@@ -112,11 +112,11 @@ export default function ShotPageComp({
         <div className="p-0 mb-12">
           <ShotAttachment attachmentId={shot.attachment_id} />
           {/* Description section */}
-          <div className="my-8 px-4 md:px-0">
+          <div className="my-8 px-2 md:px-6 lg:px-0">
             <h3
               className={cn(
-                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#ff4aa0] decoration-4 underline-green-500",
-                chivo.className
+                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-lime-400 decoration-4 underline-green-500",
+                outfit.className
               )}
             >
               About this shot
@@ -127,11 +127,11 @@ export default function ShotPageComp({
           </div>
 
           {/* Tagss used section */}
-          <div className="my-8 px-4 md:px-0">
+          <div className="my-8 px-2 md:px-6 lg:px-0">
             <h3
               className={cn(
-                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-[#ff4aa0] decoration-4 underline-green-500",
-                chivo.className
+                "text-2xl font-semibold mb-2 underline underline-offset-8 decoration-lime-400 decoration-4 underline-green-500",
+                outfit.className
               )}
             >
               Tags
@@ -140,7 +140,7 @@ export default function ShotPageComp({
               {shot.tags?.map((tag: string) => (
                 <span
                   key={tag}
-                  className="px-4 mt-4 py-2 bg-muted rounded-full text-md font-semibold transition-all duration-50 ease-in-out hover:bg-violet-500/15 hover:text-violet-500 hover:outline-2 hover:outline-violet-500 cursor-pointer"
+                  className="cursor-pointer text-sm mt-4 sm:text-base lg:text-lg font-bold px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-accent/50 hover:ring-2 active:ring-2 active:ring-lime-400 active:bg-lime-400/10 hover:ring-lime-400 rounded-md lg:rounded-lg hover:bg-lime-400/10 transition-all duration-100"
                 >
                   {tag}
                 </span>

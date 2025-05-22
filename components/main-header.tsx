@@ -52,14 +52,14 @@ export default async function MainHeader() {
             alt="Logo"
             width={100}
             height={50}
-            className="hidden dark:block items-center aspect-auto mx-4"
+            className="hidden dark:block items-center aspect-auto "
           />
           <Image
             src="/LogoAndTextForWhiteMode.svg"
             alt="Logo"
             width={100}
             height={50}
-            className="block dark:hidden items-center aspect-auto mx-4"
+            className="block dark:hidden items-center aspect-auto "
           />
         </div>
       </Link>

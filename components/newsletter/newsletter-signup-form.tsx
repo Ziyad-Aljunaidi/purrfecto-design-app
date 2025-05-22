@@ -1,42 +1,98 @@
-import { useId } from "react";
+"use client"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { insertNewsletterEmail } from "@/app/actions/NewsLetterAction"
+// import { useToast } from "@/components/ui/use-toast"
+import { useState } from "react"
+import { LoaderCircle } from "lucide-react"
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "../ui/button";
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+})
 
 export default function NewsletterSignUpForm() {
-  const id = useId();
-  return (
-    <div>
-      <div className="hidden lg:block *:not-first:my-2">
-        <Label htmlFor={id}>Sign up for our newsletter</Label>
-        <div className="flex rounded-md">
-          <Input
-            id={id}
-            className="px-8 flex-1 rounded-e-none focus-visible:z-10 h-12 rounded-l-lg text-lg"
-            placeholder="Email"
-            type="email"
-          />
-          <button className="text-lg border-input bg-background text-foreground hover:bg-lime-400 hover:text-zinc-950 focus-visible:border-ring focus-visible:ring-ring/50 inline-flex items-center rounded-e-lg border px-8 font-medium transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50">
-            Join Now
-          </button>
-        </div>
-      </div>
+  // const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-      <div className="block lg:hidden  *:not-first:my-2">
-        <Label htmlFor={id}>Sign up for our newsletter</Label>
-        <div className="flex flex-col rounded-md gap-2">
-          <Input
-            id={id}
-            className=" focus-visible:z-10 h-11  rounded-lg text-lg"
-            placeholder="Email"
-            type="email"
-          />
-          <Button variant={"default"} className="text-lg hover:bg-lime-400 hover:text-zinc-950 focus-visible:border-ring active:text-zinc-950 active:bg-lime-400 focus-visible:ring-ring/50 inline-flex items-center rounded-lg border h-10 font-medium transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50">
-            Join Now
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+    },
+  })
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true)
+    try {
+      const response = await insertNewsletterEmail(values.email)
+      
+      // toast({
+      //   title: "Success!",
+      //   description: "You've been added to our newsletter.",
+      // })
+      console.log(response)
+      if (response.code === 200) {
+        form.reset()
+      }else if (response.code === 409) {
+        form.setError("email", { type: "manual", message: "Email already exists" })
+      }
+      // form.reset()
+    } catch (error) {
+      // toast({
+      //   title: "Error",
+      //   description: error instanceof Error ? error.message : "Failed to subscribe",
+      //   variant: "destructive",
+      // })
+      console.log(error)
+
+      form.setError("email", { type: "manual", message: "Something went wrong ;(" })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg">Join our newsletter</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="Email" 
+                  className="py-5 text-lg w-full bg-background" 
+                  {...field} 
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button 
+          type="submit" 
+          className="py-5 px-8 text-lg w-full md:w-34 "
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? <LoaderCircle className="animate-spin"/> : "Join Now"}
+        </Button>
+      </form>
+    </Form>
+  )
 }

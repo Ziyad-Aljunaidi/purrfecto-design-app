@@ -8,10 +8,11 @@ import type {  Shot} from "@/lib/definitions";
 import { SelectProfile } from "@/db/schema/profile";
 import { notFound } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import ShotAttachment from "@/components/shot-widgets/shot-attachments";
 import { SaveButtonWrapper } from "@/components/metrics-buttons/save-button-wrapper";
 import { LikeButtonWrapper } from "@/components/metrics-buttons/like-button-wrapper";
+import Link from "next/link";
 
 // Add keyframe animations for the lightbox
 // const fadeIn = `@keyframes fadeIn {
@@ -56,6 +57,7 @@ export default function ShotPageComp({
         {/* Creator Header - Bold and prominent */}
         <div className="flex mx-auto items-center justify-between gap-4 bg-background border-b space-y-2 flex-shrink-0 py-6 px-2 md:px-6 lg:px-0">
           <div className="flex items-center gap-4 justify-between">
+            <Link href={`/profile/${creator.userId}`} className="flex items-center gap-4">
             <Avatar className="h-14 w-14">
               <AvatarImage
                 src={creator.avatar_url[0] || "/placeholder.svg"}
@@ -73,10 +75,11 @@ export default function ShotPageComp({
                 @{creator.displayUsername}
               </p>
             </div>
+            </Link>
           </div>
-          <Button className="bg-primary py-2 px-4 text-md font-semibold text-primary-foreground rounded-full hover:bg-primary/90">
+          {/* <Button className="bg-primary py-2 px-4 text-md font-semibold text-primary-foreground rounded-full hover:bg-primary/90">
             Follow
-          </Button>
+          </Button> */}
         </div>
         <div className="flex items-center justify-between mt-8 mb-2 lg:mb-6">
           <div className="px-2 md:px-6 lg:px-0">

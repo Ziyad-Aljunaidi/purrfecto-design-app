@@ -4,11 +4,10 @@ import {
   // getShotLikes,
   toggleShotLike,
 } from "@/app/actions/shotLikesAction";
-import { useState, useOptimistic, startTransition} from "react";
-import {  Heart } from "lucide-react";
+import { useState, useOptimistic, startTransition } from "react";
+import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-
 
 export default function LikeButton({
   likes,
@@ -31,8 +30,6 @@ export default function LikeButton({
   type: "card" | "drawer" | "page" | "card v2";
   isOpenSetter: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  // const [isLiked, setIsLiked] = useState<boolean>(isAlreadyLiked || false);
-  // const [totalLikes, setTotalLikes] = useState<number>(likes || 0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [optimisticLikes, setOptimisticLikes] = useOptimistic(
     likes || 0,
@@ -44,32 +41,6 @@ export default function LikeButton({
       }
     }
   );
-
-  // Fetch initial data (likes and isLiked) on mount
-  // useEffect(() => {
-  //   async function fetchLikeData() {
-  //     try {
-  //       // TOTAL LIKES
-  //       const totalLikesResponse = await getShotLikes(shotId);
-  //       if (totalLikesResponse.success && totalLikesResponse.totalLikes) {
-  //         setTotalLikes(totalLikesResponse.totalLikes);
-  //       } else {
-  //         setTotalLikes(0);
-  //       }
-  //       // IS SHOT LIKED
-  //       const isShotLikedResponse = await isShotLiked({ shotId });
-  //       if (isShotLikedResponse.success) {
-  //         setIsLiked(true);
-  //       } else {
-  //         setIsLiked(false);
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching like data:", err);
-  //     }
-  //   }
-
-  //   fetchLikeData();
-  // }, [shotId]);
 
   function handleLike() {
     isAlreadyLikedSetter(!isAlreadyLiked);
@@ -100,7 +71,6 @@ export default function LikeButton({
     });
   }
 
-
   if (type === "page") {
     return (
       <motion.button
@@ -109,7 +79,7 @@ export default function LikeButton({
           "bg-transparent hover:bg-accent/50",
           "cursor-pointer"
         )}
-        onClick={userId? handleLike : () => isOpenSetter(true)}
+        onClick={userId ? handleLike : () => isOpenSetter(true)}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -194,7 +164,7 @@ export default function LikeButton({
           "bg-transparent hover:bg-accent/50",
           "cursor-pointer"
         )}
-        onClick={userId? handleLike : () => isOpenSetter(true)}
+        onClick={userId ? handleLike : () => isOpenSetter(true)}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -264,7 +234,7 @@ export default function LikeButton({
             exit={{ y: 10, opacity: 0 }}
             transition={{ duration: 0.2 }}
           > */}
-            {optimisticLikes}
+          {optimisticLikes}
           {/* </motion.span> */}
         </div>
       </motion.button>

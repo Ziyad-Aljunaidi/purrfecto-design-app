@@ -19,6 +19,8 @@ import { LikeButtonWrapper } from "../metrics-buttons/like-button-wrapper";
 import { SaveButtonWrapper } from "../metrics-buttons/save-button-wrapper";
 import { cn } from "@/lib/utils";
 import { outfit} from "@/components/fonts";
+import Link from "next/link";
+
 
 export default function ShotDrawer({
   userId,
@@ -86,6 +88,7 @@ export default function ShotDrawer({
             <main className="lg:max-w-5xl mx-auto">
               <div className="flex mx-auto items-center justify-between gap-4 bg-background border-b space-y-2 flex-shrink-0 py-6 px-2 md:px-6 lg:px-0">
                 <div className="flex items-center gap-4 justify-between">
+                  <Link href={`/profile/${creator.userId}`}>
                   <Avatar className="h-14 w-14">
                     <AvatarImage
                       src={creator.avatar_url[0] || "/placeholder.svg"}
@@ -103,10 +106,12 @@ export default function ShotDrawer({
                       @{creator.displayUsername}
                     </p>
                   </div>
+                  </Link>
                 </div>
-                <Button className="bg-primary py-2 px-4 text-md font-semibold text-primary-foreground rounded-full hover:bg-primary/90">
+                {/* <Button className="bg-primary py-2 px-4 text-md font-semibold text-primary-foreground rounded-full hover:bg-primary/90">
                   Follow
-                </Button>
+                </Button> */}
+
               </div>
               <div className="flex items-center justify-between mt-8 mb-2 lg:mb-6">
                 <div className="px-4 md:px-6 lg:px-0">

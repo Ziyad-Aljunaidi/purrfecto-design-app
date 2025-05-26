@@ -5,6 +5,8 @@ import { InsertNewsletterEmail, newsletter } from "@/db/schema/newsletter";
 import { nanoid } from "nanoid";
 
 export async function insertNewsletterEmail(email: string) {
+  email = email.toLowerCase();
+
   try {
     const isEmailExists = await db
       .select()

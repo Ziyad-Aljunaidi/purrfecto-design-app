@@ -4,6 +4,12 @@ import NewsletterLandingPage from "@/components/newsletter/newsletter-landing-pa
 import { Suspense } from "react";
 import { CardsSkeletonLoader } from "@/components/skeletons/cards-skeleton-loader";
 import { ShotList } from "@/components/shot-widgets/shot-list";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Purrfecto - Craft in the silence between worlds. Inspire. Evolve.',
+  description: 'Purrfecto is a platform for creators to share their work, connect with others, and evolve their craft. Join us to inspire and be inspired.',
+}
 
 export default async function Home() {
   const userId = await getUserId();

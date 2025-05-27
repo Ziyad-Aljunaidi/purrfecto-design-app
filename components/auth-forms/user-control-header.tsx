@@ -151,7 +151,7 @@ export default function UserControlHeaderDesktop({
             <DrawerHeader>
               <DrawerTitle></DrawerTitle>
               <div className="flex flex-col items-start ">
-                <div className="flex items-center gap-4">
+                <Link href={"/profile/" + user.id} className="flex items-center gap-4">
                   <img
                     src={
                       user.image
@@ -167,7 +167,7 @@ export default function UserControlHeaderDesktop({
                       @{user.displayUsername}
                     </span>
                   </div>
-                </div>
+                </Link>
               </div>
               <Separator className="my-2" />
               <Button

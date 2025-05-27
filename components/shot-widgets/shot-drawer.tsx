@@ -87,8 +87,8 @@ export default function ShotDrawer({
           <ScrollArea className="flex-grow overflow-auto">
             <main className="lg:max-w-5xl mx-auto">
               <div className="flex mx-auto items-center justify-between gap-4 bg-background border-b space-y-2 flex-shrink-0 py-6 px-2 md:px-6 lg:px-0">
-                <div className="flex items-center gap-4 justify-between">
-                  <Link href={`/profile/${creator.userId}`}>
+                {/* <div className="flex items-center gap-4 justify-between"> */}
+                  <Link className="flex items-center gap-4 justify-between" href={`/profile/${creator.userId}`}>
                   <Avatar className="h-14 w-14">
                     <AvatarImage
                       src={creator.avatar_url[0] || "/placeholder.svg"}
@@ -107,7 +107,7 @@ export default function ShotDrawer({
                     </p>
                   </div>
                   </Link>
-                </div>
+                {/* </div> */}
                 {/* <Button className="bg-primary py-2 px-4 text-md font-semibold text-primary-foreground rounded-full hover:bg-primary/90">
                   Follow
                 </Button> */}

@@ -9,12 +9,13 @@ import clsx from "clsx";
 import { CreateShotErrors } from "@/lib/types";
 import CreateShotStepTwo from "@/components/create-shot-form/create-shot-step-two";
 import { uploadToSpaces } from "@/lib/do-spaces-upload";
-import  submitShotAction  from "@/app/actions/submitShotAction";
+import submitShotAction from "@/app/actions/submitShotAction";
 import { nanoid } from "nanoid";
+// import { outfit } from "../fonts";
+import { cn } from "@/lib/utils";
 import { getUserId } from "@/app/actions/UserAction";
 
 // const userId = await getUserId();
-
 
 export default function CreateShotWrapper() {
   const [shotTitle, setShotTitle] = useState<string>("");
@@ -56,12 +57,24 @@ export default function CreateShotWrapper() {
       throw new Error("User ID not found");
     }
     const attachmentId = nanoid();
-    const thumbnail_url = await uploadToSpaces(thumbnail!, shotTitleSlug!, true, userId,attachmentId);
+    const thumbnail_url = await uploadToSpaces(
+      thumbnail!,
+      shotTitleSlug!,
+      true,
+      userId,
+      attachmentId
+    );
     const attachments_urls = await Promise.all(
       shotItems.map((item) =>
-        uploadToSpaces(item.content, shotTitleSlug!, false, userId, attachmentId)
+        uploadToSpaces(
+          item.content,
+          shotTitleSlug!,
+          false,
+          userId,
+          attachmentId
+        )
       )
-    )
+    );
     const attachmentsJson = attachments_urls.map((url, index) => ({
       type: shotItems[index].type,
       source: url,
@@ -90,7 +103,7 @@ export default function CreateShotWrapper() {
   }
 
   return (
-    <main className="font-[family-name:var(--font-noto-sans)]">
+    <main className={cn("font-[family-name:var(--font-outfit)]")}>
       <div className={`space-y-8 ${clsx(isStepOne ? "block" : "hidden")}`}>
         <ShotTitle
           shotTitleSetter={setShotTitle}
@@ -105,7 +118,10 @@ export default function CreateShotWrapper() {
           errorsSetter={setErrors}
           errorsGetter={errors}
         />
-        <SortableShotList ShotItems={shotItems}  ShotItemsSetter={setShotItems} />
+        <SortableShotList
+          ShotItems={shotItems}
+          ShotItemsSetter={setShotItems}
+        />
       </div>
 
       <div className={`space-y-8 ${clsx(isStepOne ? "hidden" : "block")}`}>
@@ -126,7 +142,8 @@ export default function CreateShotWrapper() {
         }`}
       >
         <Button
-          className="font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer"
+          variant={"outline"}
+          className="rounded-lg w-full md:w-auto p-5 px-12 text-lg cursor-pointer"
           onClick={ToggleSteps}
           disabled={
             !!errors?.shotTitleError ||
@@ -145,7 +162,7 @@ export default function CreateShotWrapper() {
         shotDescription &&
         !!shotTags.length ? (
           <Button
-            className={`font-[family-name:var(--font-schibsted-grotesk)] rounded-full w-full md:w-auto p-6 px-12 text-lg cursor-pointer ${clsx(
+            className={`rounded-lg w-full md:w-auto p-5 px-12 text-lg cursor-pointer ${clsx(
               isStepOne ? "hidden" : "flex"
             )}`}
             onClick={handleShotSubmit}

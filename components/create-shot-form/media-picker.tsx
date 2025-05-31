@@ -214,9 +214,10 @@ export default function MediaPicker({
                 <video
                   src={file.preview}
                   className="h-full w-full object-cover rounded-lg aspect-[4/3] absolute"
-                  autoPlay={true}
+                  autoPlay={false}
                   loop={true}
                   muted={true}
+                  
                 />
 
                 {file.name === thumbnail?.name && (
@@ -228,7 +229,7 @@ export default function MediaPicker({
             )}
             <button
               type="button"
-              className="absolute top-2 bg-white hover:bg-red-500 right-2 rounded-md p-1 cursor-pointer"
+              className="absolute top-2 bg-white hover:bg-rose-500 right-2 rounded-md p-1 cursor-pointer"
               onClick={() => removeFile(file.name)}
             >
               <X size={16} className="text-black"/>

@@ -108,6 +108,7 @@ const navigateImage = useCallback((direction: "prev" | "next") => {
                       alt={source.type || "Image"}
                       width={800}
                       height={600}
+                      quality={100}
                       className="w-full h-auto object-cover "
                       // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
@@ -169,6 +170,7 @@ const navigateImage = useCallback((direction: "prev" | "next") => {
                       alt={`Shot image ${index + 1}`}
                       width={1200}
                       height={0}
+                      quality={100}
                       className="w-full h-auto max-h-[90vh] object-contain"
                       // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                     />

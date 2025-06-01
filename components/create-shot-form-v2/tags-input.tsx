@@ -6,20 +6,23 @@ import { type Tag, TagInput } from "emblor";
 import { Label } from "@/components/ui/label";
 import { Check } from "lucide-react";
 import { useShotErrors } from "@/hooks/use-errors";
+// import { tags } from "@/db/schema";
 
 export function TagsInput({
   minTags,
   maxTags,
   heading,
   tagsSetter,
+  tagsGetter,
 }: {
   minTags: number;
   maxTags: number;
   heading?: string;
   tagsSetter: React.Dispatch<React.SetStateAction<Tag[]>>;
+  tagsGetter: Tag[];
 }) {
   const id = useId();
-  const [exampleTags, setExampleTags] = useState<Tag[]>([]);
+  const [exampleTags, setExampleTags] = useState<Tag[]>(tagsGetter);
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
   const [error, setError] = useState<string>("");
   const { setError: setParentError, clearError } = useShotErrors();
@@ -96,7 +99,7 @@ export function TagsInput({
         }
         onBlur={validateOnBlur}
         styleClasses={{
-          inlineTagsContainer: `border-2 border-input rounded-lg bg-background shadow-none transition-[color,box-shadow] focus-within:border-ring outline-none focus-within:ring-[3px] focus-within:ring-ring/50 min-h-[4rem] sm:min-h-[4.5rem] p-2 sm:p-3 gap-1.5 sm:gap-2 ${
+          inlineTagsContainer: `border-2 border-input rounded-xl bg-background shadow-none transition-[color,box-shadow] focus-within:border-ring outline-none focus-within:ring-[3px] focus-within:ring-ring/50 min-h-[4rem] sm:min-h-[4.5rem] p-2 sm:p-3 gap-1.5 sm:gap-2 ${
             error
               ? "border-rose-500 focus-within:border-rose-500 focus-within:ring-rose-500/50"
               : ""

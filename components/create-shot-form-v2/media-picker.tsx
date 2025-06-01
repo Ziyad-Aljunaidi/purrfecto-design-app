@@ -138,9 +138,9 @@ const getFilePreview = (file: {
 };
 
 export default function CreateFormMediaPicker({
-  mediaFileSetter,
+  mediaFilesSetter,
 }: {
-  mediaFileSetter: React.Dispatch<
+  mediaFilesSetter: React.Dispatch<
     React.SetStateAction<FileWithPreview[] | undefined>
   >;
 }) {
@@ -166,15 +166,16 @@ export default function CreateFormMediaPicker({
     multiple: true,
     maxFiles,
     maxSize,
-    // initialFiles,
+    // initialFiles: initialFiles()
   });
 
   const {setError, clearError} = useShotErrors();
   
   useEffect(() => {
-    mediaFileSetter(files);
+    mediaFilesSetter(files);
     // errorSetter({media:!!errors})
-  }, [mediaFileSetter, files]);
+    // console.log(files)
+  }, [mediaFilesSetter, files]);
 
   useEffect(() => {
     if(errors.length > 0){
@@ -285,20 +286,6 @@ export default function CreateFormMediaPicker({
           <span>{errors[0]}</span>
         </div>
       )}
-
-      {/* <p
-        aria-live="polite"
-        role="region"
-        className="text-muted-foreground mt-2 text-center text-xs"
-      >
-        Mixed content w/ card ∙{" "}
-        <a
-          href="https://github.com/origin-space/originui/tree/main/docs/use-file-upload.md"
-          className="hover:text-foreground underline"
-        >
-          API
-        </a>
-      </p> */}
     </div>
   );
 }

@@ -1,20 +1,23 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function ArrowButton({
   children,
   onClick,
   onSide,
   variant,
+  className
 }: {
   children: React.ReactNode;
   onClick: () => void;
   onSide: "left" | "right";
   variant?: "ghost" | "outline";
+  className?: string;
 }) {
   return (
-    <Button className="group" variant={variant || "default"} onClick={onClick}>
+    <Button className={cn(className, "group")} variant={variant || "default"} onClick={onClick}>
       {onSide === "left" ? (
         <>
           <ArrowLeftIcon

@@ -5,14 +5,14 @@ import { createContext, useContext, useState, ReactNode } from "react";
 type ShotErrors = {
   title:string;
   media:string;
-  desciption:string;
+  description:string;
   tags:string;
 }
 
 const initialShotErrors: ShotErrors = {
   title: "",
   media: "",
-  desciption: "",
+  description: "",
   tags: "",
 };
 

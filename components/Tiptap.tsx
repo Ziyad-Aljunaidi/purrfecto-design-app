@@ -17,6 +17,7 @@ export default function Tiptap({
   description: string;
   onChange: (richText: string) => void;
 }) {
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({}),
@@ -42,6 +43,7 @@ export default function Tiptap({
     ],
     content: description,
     immediatelyRender: false,
+    enableContentCheck:true,
     
     editorProps: {
       attributes: {
@@ -49,13 +51,13 @@ export default function Tiptap({
       },
     },
     onUpdate({ editor }) {
-      onChange(editor.getHTML());
-      console.log(editor.getHTML());
+      onChange(editor.getText());
+      console.log(editor.getText());
     },
   });
 
   return (
-    <div className="flex flex-col justify-stretch min-h-[250px]">
+    <div className="flex flex-col justify-stretch min-h-[250px] w-full">
       <Toolbar editor={editor} />
       <EditorContent editor={editor} />
     </div>
